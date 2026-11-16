@@ -1,5 +1,6 @@
 [Home](https://github.com/rejie-coder/amua_adapted/wiki)
 
+- [Windows x64](https://github.com/rejie-coder/amua_adapted/wiki/Windows)
 - [Installing](https://github.com/rejie-coder/amua_adapted/wiki/Installing)
 - [AI Workflow](https://github.com/rejie-coder/amua_adapted/wiki/AI-Workflow)
 - [Drug Example](https://github.com/rejie-coder/amua_adapted/wiki/Drug-Example)

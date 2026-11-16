@@ -1,6 +1,6 @@
 # Amua adapted wiki
 
-Amua 3.2.4 is an Intel Mac preview based on Amua by Zachary J. Ward, adapted and developed by Dr. Rejinten Jayawardhana. Download published installers from [Releases](https://github.com/rejie-coder/amua_adapted/releases). Native Apple Silicon and Windows packages are not included in this first release.
+Amua 3.2.4 has Intel Mac and Windows x64 previews based on Amua by Zachary J. Ward, adapted and developed by Dr. Rejinten Jayawardhana. Download published installers from [Releases](https://github.com/rejie-coder/amua_adapted/releases). Use [Windows installation/build guidance](https://github.com/rejie-coder/amua_adapted/wiki/Windows) for the portable Windows ZIP. Native Apple Silicon remains pending.
 
 - [Installing](https://github.com/rejie-coder/amua_adapted/wiki/Installing)
 - [AI Workflow](https://github.com/rejie-coder/amua_adapted/wiki/AI-Workflow)
@@ -13,4 +13,4 @@ Amua 3.2.4 is an Intel Mac preview based on Amua by Zachary J. Ward, adapted and
 - [Releasing](https://github.com/rejie-coder/amua_adapted/wiki/Releasing)
 - [Third Party](https://github.com/rejie-coder/amua_adapted/wiki/Third-Party)
 
-The preview is ad hoc signed, not notarized. Read installation, scientific validation and known limitations before using it. Source, tests and this complete documentation also live in the [main repository](https://github.com/rejie-coder/amua_adapted).
+The Intel preview is ad hoc signed, not notarized; the Windows preview is unsigned. Read installation, scientific validation and known limitations before using it. Source, tests and this complete documentation also live in the [main repository](https://github.com/rejie-coder/amua_adapted).

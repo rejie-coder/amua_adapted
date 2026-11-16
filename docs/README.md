@@ -2,7 +2,9 @@
 
 Start with [installation](Installing.md), then [AI Workflow](AI-Workflow.md) or the original [Amua modelling tutorials](https://github.com/zward/Amua/wiki).
 
-- [Installation and compatibility](Installing.md)
+- [Intel Mac installation and compatibility](Installing.md)
+- [Windows x64 installation and build](Windows.md)
+- [Windows release notes](Release-Notes-3.2.4-Windows.md)
 - [AI Workflow and source attachments](AI-Workflow.md)
 - [Drug A and Drug B example](Drug-Example.md)
 - [Model validation and interpretation](Model-Validation.md)

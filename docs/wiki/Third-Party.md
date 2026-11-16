@@ -14,3 +14,5 @@ Original copyright and licence notices remain in the source and bundled runtime 
 | Fonts and image resources | Original resource files and copyright headers are retained; font metadata identifies the corresponding Noto families. Adapted app artwork is included as source assets. |
 
 The release source archive contains application source, resources and build/release scripts. Runtime/dependency sources and licence exceptions remain under their vendors' terms; consult the retained distributions and upstream projects when redistributing or changing them. The original dependency container is downloaded with a pinned SHA256 rather than silently replaced by a newer binary.
+
+The Windows source tag additionally records SHA256-pinned Windows Java/Python runtime and Zig compiler inputs in `scripts/toolchains-windows.json`. Zig is a build tool, not bundled with the app. Windows OCR uses OS Windows.Media.Ocr and Windows.Data.Pdf components; these OS components are not redistributed. Runtime licenses remain inside the portable application.

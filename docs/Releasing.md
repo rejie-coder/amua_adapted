@@ -20,6 +20,6 @@ See [GitHub's wiki instructions](https://docs.github.com/en/communities/document
 
 ## Release order
 
-The current authorization is Intel Mac first. Windows follows; native Apple Silicon follows Windows. No Windows or native ARM build is published by this workflow.
+The Intel workflow preserves its existing release. The separate Windows workflow/tag publishes its own portable ZIP after native gates, source/package verification, uploaded asset digest checks and ZIP readback. See [Windows release/build guidance](Windows.md). Native Apple Silicon follows Windows and is not supplied by either package.
 
 Private CKD/D2P acceptance workbooks and images are not distributed. Tests requiring those inputs report explicit skips; generated public XLSX cases exercise transport and intake/error/persistence guards without disclosing the private material. Public CI counts therefore differ from the earlier local 124-provider/38-workflow evidence. Exact executed/skipped cases are retained in CI outputs and the release verification asset.

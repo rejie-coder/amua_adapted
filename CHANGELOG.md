@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.2.4 Windows x64 preview
+
+- Separate portable ZIP with bundled Java/Python, native GUI launcher and Windows Credential Manager.
+- Windows locks/process supervision, bounded in-memory OCR, read-only MCP liveness, confidential snapshot cleanup and Unicode/environment fixes.
+- Native Windows workflow gates publication on application/source checks, original-engine comparisons and platform regressions.
+- Dedicated source, audit, checksums and provenance accompany tag v3.2.4-windows; unsigned preview, clean Windows desktop/live-account acceptance pending.
+
+Build actions now use pinned Node.js 24 versions on both platforms. Existing Intel assets remain preserved.
+
 ## 3.2.4 Intel Mac preview
 
 - Correct desktop image-chat rejection caused by malformed clarification targets; preserve questions without writing values into guessed targets.

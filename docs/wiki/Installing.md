@@ -1,6 +1,6 @@
 # Install Amua on an Intel Mac
 
-Amua 3.2.4 targets **Intel x86_64 Macs with macOS 14 or later**. The launcher, Java runtime, Python runtime and OCR helper in this download are Intel binaries. Native Apple Silicon and Windows releases are not included.
+Amua 3.2.4 targets **Intel x86_64 Macs with macOS 14 or later**. The launcher, Java runtime, Python runtime and OCR helper in this download are Intel binaries. This page covers the Intel package; the separate [Windows x64 preview](https://github.com/rejie-coder/amua_adapted/wiki/Windows) has its own portable ZIP. Native Apple Silicon is still pending.
 
 ## Download and install
 

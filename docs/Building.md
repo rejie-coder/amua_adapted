@@ -33,3 +33,5 @@ Packaging requires successful verification. It checks Intel binary architecture 
 Local builds are ad hoc signed. Developer ID/notarization require a real signing identity and appropriate Apple account setup. The inherited `src/native-support/sign_distribution.py` prepares a separate distribution copy for that future workflow; no Developer ID identity or notarization is supplied here.
 
 Private CKD/D2P acceptance workbooks and images are not distributed. Tests requiring those inputs report explicit skips; generated public XLSX cases exercise transport and intake/error/persistence guards without disclosing the private material. Public CI counts therefore differ from the earlier local 124-provider/38-workflow evidence. Exact executed/skipped cases are retained in CI outputs and the release verification asset.
+
+For Windows, use the separately tagged Windows source archive and [Windows build instructions](Windows.md). Main retains the Intel source; Windows-specific native launcher/OS adapters are on `v3.2.4-windows`.
