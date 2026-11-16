@@ -8,4 +8,4 @@ This project is independent of the original author and OpenAI. Names identify th
 
 Third-party notices and source references are in [docs/Third-Party.md](docs/Third-Party.md), the upstream source, dependency notices and bundled Java/Python distributions. Adaptation version 3.2.4 uses engine 0.3.6.
 
-Windows3.3.1 includes a derived, unsigned copy of the bundled Java8 GUI launcher, named amua-javaw.exe. Only its DPI-awareness manifest and PE signature/checksum metadata are changed; the original javaw.exe is retained. Reproducible transformation source: scripts/windows_dpi.py. Upstream runtime licenses remain under Resources/runtime.
+Windows3.3.2 includes a derived, unsigned copy of the bundled Java8 GUI launcher, named amua-javaw.exe. Only its DPI-awareness manifest and PE signature/checksum metadata are changed; the original javaw.exe is retained. Reproducible transformation source: scripts/windows_dpi.py. Upstream runtime licenses remain under Resources/runtime.

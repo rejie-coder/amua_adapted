@@ -1,6 +1,7 @@
-Amua 3.3.1 Windows x64 preview
+Amua 3.3.2 Windows x64 preview
 Extract the entire ZIP into a new folder, then open Amua/Amua.exe. Windows 10/11 x64.
-Readability fix: the whole interface follows Windows Display > Scale; chat text is larger.
+Tree display correction: original compact OCD spacing/alignment and solid node colours are restored.
+The whole interface still follows Windows Display > Scale; chat text remains larger.
 Save/close the previous version before launching. Restart Amua after changing display scale.
 OS scaling may look softer; model zoom/calculations are unchanged.
 
@@ -20,4 +21,4 @@ it does not remotely revoke Google access. Use your Google account settings for 
 ChatGPT continues using Windows Credential Manager. Gemini tools, hooks and MCP are disabled.
 
 Unsigned preview; live Google sign-in/subscription and desktop acceptance pending.
-Source and release evidence: https://github.com/rejie-coder/amua_adapted/tree/windows-3.3.1
+Source and release evidence: https://github.com/rejie-coder/amua_adapted/tree/windows-3.3.2

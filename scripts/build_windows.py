@@ -52,7 +52,7 @@ def main():
  if (ROOT/'README-WINDOWS.txt').exists():shutil.copy2(ROOT/'README-WINDOWS.txt',stage/'README.txt')
  # PNG image payload inside a standard ICO; no artwork modification.
  icon=(ROOT/'src/upstream/src/images/logo_128.png').read_bytes();(BUILD/'Amua.ico').write_bytes(struct.pack('<HHHBBBBHHII',0,1,1,128,128,0,0,1,32,len(icon),22)+icon)
- rc=BUILD/'Amua.rc';rc.write_text('1 ICON "'+str(BUILD/'Amua.ico').replace('\\','/')+'"\n1 VERSIONINFO\nFILEVERSION 3,3,1,0\nPRODUCTVERSION 3,3,1,0\nFILEOS 0x40004L\nFILETYPE 0x1L\nBEGIN\n BLOCK "StringFileInfo"\n BEGIN\n BLOCK "040904b0"\n BEGIN\n VALUE "FileDescription", "Amua 3.3.1 for Windows"\n VALUE "ProductName", "Amua adapted"\n VALUE "FileVersion", "3.3.1"\n VALUE "OriginalFilename", "Amua.exe"\n END\n END\nEND\n')
+ rc=BUILD/'Amua.rc';rc.write_text('1 ICON "'+str(BUILD/'Amua.ico').replace('\\','/')+'"\n1 VERSIONINFO\nFILEVERSION 3,3,2,0\nPRODUCTVERSION 3,3,2,0\nFILEOS 0x40004L\nFILETYPE 0x1L\nBEGIN\n BLOCK "StringFileInfo"\n BEGIN\n BLOCK "040904b0"\n BEGIN\n VALUE "FileDescription", "Amua 3.3.2 for Windows"\n VALUE "ProductName", "Amua adapted"\n VALUE "FileVersion", "3.3.2"\n VALUE "OriginalFilename", "Amua.exe"\n END\n END\nEND\n')
  zig=next(TOOLS.glob('zig-*/zig.exe' if os.name=='nt' else 'zig-*/zig'));resource=BUILD/'Amua.res'
  run(zig,'rc','/fo',resource,'--',rc)
  run(zig,'cc','-target','x86_64-windows-gnu','-O2','-g0','-municode','-Wl,--subsystem,windows',ROOT/'src/native-support/windows/launcher.c',resource,'-o',stage/'Amua.exe','-lshell32','-luser32')
@@ -62,7 +62,7 @@ def main():
  if APP.exists():
   prior=BUILD/'Amua-previous';shutil.rmtree(prior,ignore_errors=True);APP.rename(prior)
  stage.rename(APP)
- manifest={'version':'3.3.1','platform':'Windows','architecture':'x86_64','authenticode_signed':False,'compiler':subprocess.check_output([str(javac),'-version'],stderr=subprocess.STDOUT,text=True).strip(),'source_sha256':{str(p.relative_to(ROOT)):sha(p) for p in (ROOT/'src').rglob('*') if p.is_file() and p.suffix in ['.py','.java','.js','.c'] and '__pycache__' not in p.parts},'files':{p.relative_to(APP).as_posix():sha(p) for p in APP.rglob('*') if p.is_file()},'jar_sha256':sha(APP/'Resources/Amua_0.3.6.jar')}
+ manifest={'version':'3.3.2','platform':'Windows','architecture':'x86_64','authenticode_signed':False,'compiler':subprocess.check_output([str(javac),'-version'],stderr=subprocess.STDOUT,text=True).strip(),'source_sha256':{str(p.relative_to(ROOT)):sha(p) for p in (ROOT/'src').rglob('*') if p.is_file() and p.suffix in ['.py','.java','.js','.c'] and '__pycache__' not in p.parts},'files':{p.relative_to(APP).as_posix():sha(p) for p in APP.rglob('*') if p.is_file()},'jar_sha256':sha(APP/'Resources/Amua_0.3.6.jar')}
  with zipfile.ZipFile(APP/'Resources/Amua_0.3.6.jar') as z:
   manifest['jar_payload_sha256']=hashlib.sha256(''.join(name+'\0'+hashlib.sha256(z.read(name)).hexdigest()+'\n' for name in sorted(z.namelist())).encode()).hexdigest()
  data=(APP/'Amua.exe').read_bytes();offset=struct.unpack_from('<I',data,0x3c)[0];count=struct.unpack_from('<H',data,offset+6)[0];section_offset=offset+24+struct.unpack_from('<H',data,offset+20)[0];sections={}

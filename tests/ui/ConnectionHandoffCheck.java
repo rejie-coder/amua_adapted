@@ -41,7 +41,7 @@ public class ConnectionHandoffCheck {
             SwingUtilities.invokeAndWait(()->{
                 check(ui.status.getText().startsWith("Using ChatGPT plan"),"Startup did not load saved connection");
                 check(ui.conversation.getText().indexOf("Connected to ChatGPT")<0,"Quiet startup polluted chat");
-                check(ui.app.frmMain.getTitle().equals("Amua (ReyJay) V 3.3.1 - Engine 0.3.6"),"Wrong title");
+                check(ui.app.frmMain.getTitle().equals("Amua (ReyJay) V 3.3.2 - Engine 0.3.6"),"Wrong title");
                 JPanel top=(JPanel)ui.getComponent(0);top.setSize(340,600);top.doLayout();
                 check(top.getComponent(0).getX()==ui.status.getX(),"Title/subtext left edges differ");
                 for(Component child:top.getComponents())if(child instanceof JComponent)check(((JComponent)child).getAlignmentX()==Component.LEFT_ALIGNMENT,"Sidebar child has mixed alignment");

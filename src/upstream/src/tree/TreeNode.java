@@ -155,17 +155,15 @@ public class TreeNode extends ModelNode{
 		textHighlights=new Color[]{null,null,null,null,null};
 	}
 
-	public int getMeasuredNameWidth(){
-        if(textName==null)return scale(150);
-        return Math.max(scale(150),Math.min(scale(600),textName.getFontMetrics(textName.getFont()).stringWidth(textName.getText())+scale(20)));
-    }
+    /** Keep the original compact label band; full names remain in tooltips. */
+    public int getMeasuredNameWidth(){return scale(150);}
     public void paintComponent(Graphics g){
         Graphics2D nodeGraphics=(Graphics2D)g.create();g=nodeGraphics;
         nodeGraphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
         try {
 		if(visible){
 			if(type==0){ //Decision 
-				gui.NodeAppearance.paint(g,new java.awt.geom.RoundRectangle2D.Double(xPos,yPos,width,height,Math.max(2,width*0.18),Math.max(2,height*0.18)),xPos,yPos,width,height,selected,collapsed,0);
+				gui.NodeAppearance.paint(g,new java.awt.geom.Rectangle2D.Double(xPos,yPos,width,height),xPos,yPos,width,height,selected,collapsed,0);
 				if(level!=0){
 					//Draw line to parent
 					g.drawLine(parentX, parentY, xPos-getMeasuredNameWidth(), yPos+(height/2));

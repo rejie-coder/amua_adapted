@@ -11,10 +11,10 @@ def support_path():
  if override:return Path(override).resolve()
  base=os.environ.get('LOCALAPPDATA')
  if not base:raise RuntimeError('User application storage is unavailable')
- return Path(base)/'Amua-v3.3.1'
+ return Path(base)/'Amua-v3.3.2'
 def alert(message):
  import ctypes
- ctypes.windll.user32.MessageBoxW(None,message,'Amua 3.3.1 for Windows',0x10)
+ ctypes.windll.user32.MessageBoxW(None,message,'Amua 3.3.2 for Windows',0x10)
 def activate(support):
  token=(support/'bridge.token').read_text();request={'method':'activate','params':{'files':[str(Path(p).resolve()) for p in sys.argv[1:] if Path(p).suffix.lower()=='.amua']},'token':token,'deadline':time.time()+30}
  target=support/'bridge'/(uuid.uuid4().hex+'.request.json');temporary=target.with_suffix('.tmp');temporary.write_text(json.dumps(request),encoding='utf-8');temporary.replace(target)

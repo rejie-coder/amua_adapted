@@ -220,7 +220,7 @@ public class MarkovNode extends ModelNode{
         try {
 		if(visible){
 			if(type==0){ //Decision 
-				gui.NodeAppearance.paint(g,new java.awt.geom.RoundRectangle2D.Double(xPos,yPos,width,height,Math.max(2,width*0.18),Math.max(2,height*0.18)),xPos,yPos,width,height,selected,collapsed,0);
+				gui.NodeAppearance.paint(g,new java.awt.geom.Rectangle2D.Double(xPos,yPos,width,height),xPos,yPos,width,height,selected,collapsed,0);
 				if(level!=0){
 					//Draw line to parent
 					g.drawLine(parentX, parentY, xPos-scale(150), yPos+(height/2));

@@ -32,9 +32,13 @@ def main():
   for name,digest in expected.items():
    if hashlib.sha256(z.read(name)).hexdigest()!=digest:changed.append(name)
   allowed.update(name for name in changed if name=='v21/WorkflowPanel.class' or name.startswith('v21/WorkflowPanel$'))
+  display=json.loads((ROOT/'scripts/expected-display-classes-3.3.2.json').read_text())
+  for name,digest in display.items():
+   if hashlib.sha256(z.read(name)).hexdigest()!=digest:raise RuntimeError('Unexpected display class bytes: '+name)
+  allowed.update(display)
   if set(changed)-allowed:raise RuntimeError('Unexpected native application code change: '+str(set(changed)-allowed))
-  numerical=[name for name in expected if name.split('/')[0] in ['tree','markov','math']]
+  numerical=[name for name in expected if name.split('/')[0] in ['tree','markov','math'] and name not in display]
   if any(name in changed for name in numerical):raise RuntimeError('Numerical class changed')
- report={'platform':'Windows x64','binaries':binaries,'bundled_sources_verified':len(required),'application_class_files_checked':len(expected),'expected_platform_class_changes':changed,'numerical_classes_byte_identical':len(numerical),'authenticode_signed':False}
+ report={'platform':'Windows x64','binaries':binaries,'bundled_sources_verified':len(required),'application_class_files_checked':len(expected),'expected_platform_class_changes':changed,'numerical_classes_byte_identical':len(numerical),'reviewed_display_classes':sorted(display),'authenticode_signed':False}
  (ROOT/'evidence/windows-package-verification.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
 if __name__=='__main__':main()

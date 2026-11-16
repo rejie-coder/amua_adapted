@@ -681,30 +681,20 @@ public class PanelTree extends ModelPanel{
     public boolean automaticLayout=false;
     public void reflowAfterEdit(){
         if(!automaticLayout)return;
-        layoutMeasured();resizeCanvas();revalidate();repaint();
+        layoutCompact(myModel.alignRight);resizeCanvas();revalidate();repaint();
     }
-    private void layoutMeasured(){
-        int size=tree.nodes.size();if(size==0)return;
+    /** Original Amua OCD geometry: compact columns/rows and terminal alignment. */
+    private void layoutCompact(boolean alignRight){
+        if(tree.nodes.isEmpty())return;
+        int maxLevel=0;
+        for(TreeNode node:tree.nodes)maxLevel=Math.max(maxLevel,node.level);
         TreeNode root=tree.nodes.get(0);
-        int[][] children=new int[size][];
-        int[] widths=new int[size], heights=new int[size];
-        for(int i=0;i<size;i++) {
-            TreeNode node=tree.nodes.get(i);
-            children[i]=new int[node.childIndices.size()];
-            for(int c=0;c<children[i].length;c++) children[i][c]=node.childIndices.get(c);
-            int nameWidth=node.textName==null?node.scale(150):node.getMeasuredNameWidth();
-            int resultWidth=node.textEV==null?node.scale(140):node.textEV.getFontMetrics(node.textEV.getFont()).stringWidth(node.textEV.getText());
-            widths[i]=nameWidth+Math.max(node.scale(170),resultWidth+node.scale(60));
-            heights[i]=node.scale(node.hasVarUpdates?150:110);
-        }
-        int[][] points=BalancedLayout.positions(children,widths,heights,root.scale(35),root.scale(20));
-        for(int i=0;i<size;i++) {TreeNode node=tree.nodes.get(i);node.xPos=points[i][0];node.yPos=points[i][1];}
-        for(TreeNode node:tree.nodes) for(int child:node.childIndices) {tree.nodes.get(child).parentX=node.xPos+node.width;tree.nodes.get(child).parentY=node.yPos+node.height/2;}
-		
+        maxY=root.scale(25);
+        alignNode(root,alignRight,maxLevel);
     }
     public void ocd(String actionName, boolean alignRight){
         xOffset=0;yOffset=0;saveSnapshot(actionName);
-        layoutMeasured();resizeCanvas();revalidate();repaint();
+        layoutCompact(alignRight);resizeCanvas();revalidate();repaint();
     }
 
 	private void alignNode(TreeNode node, boolean alignRight, int maxLevel){

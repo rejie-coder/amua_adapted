@@ -4,14 +4,15 @@ import hashlib,json,shutil,zipfile
 ROOT=Path(__file__).resolve().parents[1];APP=ROOT/'Amua';DIST=ROOT/'dist'
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def require_checks(results):
- required={'gemini-runtime','package-static','compile-output-guard-stub','compile-stop-guard-stub','windows-native','native-ocr-diagnostic','provider-regression','test_public_intake','test_mixed_formats','test_ocr','test_hardening','test_batch_precision','compile-native-tests','prepare-image-fixture','atomic-saves','image-sidebar','chat-clipboard-drop','progress-sidebar','approval-wire-types','windows-original-engine','baseline-original-engine','engine-equivalence'}
+ required={'compact-display-original','compact-display-fixed','compact-display-equivalence','native-node-painters','gemini-runtime','package-static','compile-output-guard-stub','compile-stop-guard-stub','windows-native','native-ocr-diagnostic','provider-regression','test_public_intake','test_mixed_formats','test_ocr','test_hardening','test_batch_precision','compile-native-tests','prepare-image-fixture','atomic-saves','image-sidebar','chat-clipboard-drop','progress-sidebar','approval-wire-types','windows-original-engine','baseline-original-engine','engine-equivalence'}
  if set(results)!=required:raise SystemExit('Incomplete/unexpected native Windows check groups')
  failed=[k for k,v in results.items() if v['exit_code']]
  if failed:raise SystemExit('Native Windows checks failed: '+str(failed))
+ if not results['compact-display-equivalence'].get('all_52_coordinates_match_original_for_left_and_right'):raise SystemExit('Missing original OCD geometry equivalence')
  if len(results['engine-equivalence'].get('exact_outputs',[]))!=8:raise SystemExit('Missing original-engine equivalence evidence')
 def main():
  results=json.loads((ROOT/'evidence/windows-checks.json').read_text());require_checks(results)
- DIST.mkdir(exist_ok=True);target=DIST/'Amua-3.3.1-Windows-x64.zip'
+ DIST.mkdir(exist_ok=True);target=DIST/'Amua-3.3.2-Windows-x64.zip'
  if target.exists():raise SystemExit('Preserve existing ZIP before making another build')
  with zipfile.ZipFile(target,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
   for p in sorted(APP.rglob('*')):

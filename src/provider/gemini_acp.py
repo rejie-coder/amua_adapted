@@ -65,7 +65,7 @@ class ACP:
         threading.Thread(target=self._read, daemon=True).start()
         try:
             self.info = self.call('initialize', {'protocolVersion': 1,
-                'clientInfo': {'name': 'amua', 'version': '3.3.1'},
+                'clientInfo': {'name': 'amua', 'version': '3.3.2'},
                 'clientCapabilities': {'fs': {'readTextFile': False, 'writeTextFile': False}, 'terminal': False}})
             if self.info.get('protocolVersion') != 1: raise BrokerError('gemini_protocol_version')
         except BaseException:

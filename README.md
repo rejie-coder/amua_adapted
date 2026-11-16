@@ -1,17 +1,9 @@
-# Windows 3.3.1 readability fix
+# Amua 3.3.2 for Windows x64
 
-The complete interface now follows Windows display scaling, with larger chat/source/control text. [Read the fix and remaining limitations](docs/Release-Notes-3.3.1-Windows.md). Previous release notes follow.
+Restores compact original OCD tree spacing, terminal alignment, and solid red/green/blue node symbols. The 3.3.1 Windows DPI scaling and larger fonts are retained.
 
-# Windows 3.3.0 development preview
+Download the complete portable ZIP from the [3.3.2 release](https://github.com/rejie-coder/amua_adapted/releases/tag/v3.3.2-windows), extract it to a new folder and open `Amua/Amua.exe`. Save and close older versions first.
 
-ChatGPT and experimental Gemini inside Amua’s chatbox, using account sign-in without API-key fallback. Claude remains unavailable. See [3.3.0 scope and limitations](docs/Release-Notes-3.3.0-Windows.md) and [Windows setup](README-WINDOWS.txt). Live Gemini account acceptance is pending. Earlier release documentation follows for provenance.
+See [release notes](docs/Release-Notes-3.3.2-Windows.md), [Windows setup](docs/Windows.md), [checks](TEST_REPORT.md), and [review](RED_TEAM.md). The package includes Java/Python and the original Amua engine. ChatGPT and experimental Gemini remain available in the AI Workflow sidebar; live account acceptance is a separate gate.
 
-# Amua 3.2.4 for Windows x64
-
-This folder contains the Windows port of the checked Amua 3.2.4 application, with bundled Java/Python, a native GUI executable, Windows Credential Manager integration and reviewed image-chat/clipboard support. The portable application is in **Amua/**; open **Amua.exe** after extracting the complete ZIP.
-
-Native Windows verification and the red-team correction report must pass before a Windows preview is published. Windows 10/11 x64 is the desktop target; native Apple Silicon work remains deferred. The Intel Mac release is preserved separately.
-
-Use README-WINDOWS.txt for operating instructions. The application is unsigned; clean-machine install and signed-in AI recognition require desktop acceptance. Scientific inputs and unresolved context still need review before original-engine validation/calculation. No real account quota is used in tests.
-
-[Windows installation/build documentation](docs/Windows.md), [verification scope](TEST_REPORT.md), [audit/corrections](RED_TEAM.md) and [Windows release](https://github.com/rejie-coder/amua_adapted/releases/tag/v3.2.4-windows). The portable ZIP and complete source archive are accompanied by SHA256SUMS and native build/check reports.
+This unsigned preview targets Windows 10/11 x64. Existing releases and user models are preserved. Missing scientific inputs must still be supplied and reviewed before interpreting a model.

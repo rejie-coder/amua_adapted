@@ -1,3 +1,9 @@
+# 3.3.2 display correction review
+
+The previous layout tests did not compare OCD geometry with original Amua or assert solid node colours. New release gates now run the original and candidate GUI against a synthetic 52-node fixture, compare every node and parent coordinate for both alignment modes, check repeat stability/content preservation and sample solid node fills. Shared tree/Markov painters retain graphics-state isolation. Exact compiled hashes pin the four reviewed display classes; other numerical class comparisons remain strict. Windows DPI and larger-font behavior continue to be checked.
+
+The following earlier platform review is retained as history. Current results are only those in this release's windows-checks.json.
+
 # 3.3.0 provider checks
 
 New controlled checks cover provider isolation, no API-key environment inheritance, stalled child termination, account-marker binding, private-thought filtering, and disabled agent tools. Bundled CLI handshake is checked without inference on native Windows. No claim of live Google subscription acceptance; Claude is unavailable. Historical 3.2.4 review follows.

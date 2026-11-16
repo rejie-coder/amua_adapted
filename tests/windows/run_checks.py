@@ -40,6 +40,14 @@ def main():
   java('chat-clipboard-drop','v21.ChatAttachmentsCheck',OUT/'windows-chat-attachments.png')
   java('progress-sidebar','v21.ModelProgressCheck',image/'reviewed.amua')
   java('approval-wire-types','v21.ApprovalPlanCheck')
+  # Real native GUI layout and pixel assertions; no accounts or user models.
+  for mode in ['original','fixed']:
+   run('compact-display-'+mode,[PYTHON,'-B',ROOT/'tests/windows/check_compact_display.py','--java',JAVA,'--classes',classes,'--mode',mode],90)
+  try:
+   equal=all((OUT/('compact-original-'+side+'.csv')).read_bytes()==(OUT/('compact-fixed-'+side+'.csv')).read_bytes() for side in ['left','right'])
+  except OSError:equal=False
+  RESULTS['compact-display-equivalence']={'exit_code':0 if equal else 1,'all_52_coordinates_match_original_for_left_and_right':equal}
+  java('native-node-painters','HeadlessPresentationCheck',ROOT/'evidence/engine-parity/decision-tree.amua',ROOT/'evidence/engine-parity/markov.amua')
   models=[ROOT/'evidence/engine-parity'/n for n in ['decision-tree.amua','markov.amua']]
   actual,c=java('windows-original-engine','HeadlessEngineCheck',*models)
   baseline,b=run('baseline-original-engine',[JAVA,'-Djava.awt.headless=true','-cp',str(ROOT/'src/dependencies/baseline-fat-dependencies.jar')+os.pathsep+str(classes),'HeadlessEngineCheck',*models])

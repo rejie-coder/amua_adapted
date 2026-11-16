@@ -110,7 +110,7 @@ public class frmAboutAmua {
 			lblAmua.setBounds(162, 10, 132, 42);
 			frmAboutAmua.getContentPane().add(lblAmua);
 			
-			JLabel lblVersion = new JLabel("Amua (ReyJay) V 3.3.1 - Engine "+version);
+			JLabel lblVersion = new JLabel("Amua (ReyJay) V 3.3.2 - Engine "+version);
 			//lblVersion.setFont(new Font("SansSerif", Font.PLAIN, 14));
 			lblVersion.setFont(language.font.deriveFont(14f));
 			lblVersion.setBounds(145, 50, 342, 26);
