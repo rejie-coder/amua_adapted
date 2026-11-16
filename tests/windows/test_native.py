@@ -48,6 +48,7 @@ class NativeWindows(unittest.TestCase):
   finally:
    if owner.poll() is None:owner.kill();owner.wait(5)
    if pid and processes.pid_alive(pid):subprocess.run(['taskkill.exe','/PID',str(pid),'/T','/F'],capture_output=True)
+   owner.stdout.close()
  def test_packaged_workflow_intake_unicode_and_save_reopen(self):
   source=self.folder/'Data ü.csv';source.write_text('p,cost,qaly\n0.7,1000,2.0\n',encoding='utf-8')
   result=self.helper('workflow_helper.py',{'action':'intake','paths':[str(source)]});self.assertTrue(result['ok'],result);project=result['project'];target=self.folder/'Draft ü.amuax'
@@ -91,6 +92,7 @@ class NativeWindows(unittest.TestCase):
   finally:
    if helper.poll() is None:helper.kill();helper.wait(5)
    if model and model.parent.exists():shutil.rmtree(model.parent,ignore_errors=True)
+   helper.stdout.close();helper.stderr.close()
  def test_native_app_front_door_and_single_instance(self):
   support=self.folder/'Private profile ü';environment={**os.environ,'AMUA_TEST_SUPPORT':str(support),'PYTHONUTF8':'1','PYTHONIOENCODING':'utf-8','PYTHONPATH':'X:/untrusted-must-be-cleared','PYTHONHOME':'X:/untrusted-must-be-cleared'}
   app=subprocess.Popen([str(APP/'Amua.exe')],env=environment);java_pid=None
@@ -108,6 +110,7 @@ class NativeWindows(unittest.TestCase):
     time.sleep(.2)
    log=(support/'Amua.log').read_text(encoding='utf-8',errors='replace') if (support/'Amua.log').exists() else ''
    self.assertTrue(state.get('ready'),log[-3000:]);java_pid=state['pid'];self.assertTrue(processes.pid_alive(java_pid))
+   self.assertFalse((support/'%SystemDrive%').exists(),'Windows cache path expanded into the app profile')
    # Verify via its actual read-only MCP protocol, then activate existing instance.
    safe_env={**os.environ,'AMUA_TEST_SUPPORT':str(support),'PYTHONUTF8':'1','PYTHONIOENCODING':'utf-8'}
    status=subprocess.run([str(PYTHON),str(RES/'amua_mcp.py'),'--call','status'],capture_output=True,text=True,encoding='utf-8',env=safe_env,timeout=20)
