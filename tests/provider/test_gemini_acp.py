@@ -51,7 +51,7 @@ class GeminiTests(unittest.TestCase):
   with patch.dict(os.environ,{'GEMINI_API_KEY':'secret','GOOGLE_API_KEY':'secret','NODE_OPTIONS':'bad','GOOGLE_GEMINI_BASE_URL':'bad','GOOGLE_APPLICATION_CREDENTIALS':'bad'}):
    env=ga.environment(Path('/isolated'),Path('/settings'))
    for key in ['GEMINI_API_KEY','GOOGLE_API_KEY','NODE_OPTIONS','GOOGLE_GEMINI_BASE_URL','GOOGLE_APPLICATION_CREDENTIALS']:self.assertNotIn(key,env)
-   self.assertEqual(env['GEMINI_CLI_HOME'],'/isolated')
+   self.assertEqual(env['GEMINI_CLI_HOME'],str(Path('/isolated')))
  def test_claude_and_unknown_never_fall_back(self):
   with patch.object(ph,'Broker') as broker:
    for provider,error in [('claude','claude_subscription_unavailable'),('other','unknown_provider')]:
