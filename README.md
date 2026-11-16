@@ -1,3 +1,7 @@
+# Windows 3.3.0 development preview
+
+ChatGPT and experimental Gemini inside Amua’s chatbox, using account sign-in without API-key fallback. Claude remains unavailable. See [3.3.0 scope and limitations](docs/Release-Notes-3.3.0-Windows.md) and [Windows setup](README-WINDOWS.txt). Live Gemini account acceptance is pending. Earlier release documentation follows for provenance.
+
 # Amua 3.2.4 for Windows x64
 
 This folder contains the Windows port of the checked Amua 3.2.4 application, with bundled Java/Python, a native GUI executable, Windows Credential Manager integration and reviewed image-chat/clipboard support. The portable application is in **Amua/**; open **Amua.exe** after extracting the complete ZIP.

@@ -1,3 +1,7 @@
+# 3.3.0 verification
+
+Local provider suite: 132 tests discovered, 130 passed, 2 existing private-fixture skips. Real Gemini CLI 0.68.0 ACP initialization and Google auth-method discovery passed on Mac; no sign-in or inference. Native Windows results are generated in evidence/windows-checks.json by Actions. Live Google account/evidence-to-tree and physical desktop acceptance remain pending. The following 3.2.4 evidence is historical, not a 3.3.0 test result.
+
 # Windows 3.2.4 verification
 
 The Windows release workflow builds and tests the complete portable application on `windows-2022`. It refuses publication unless every required group succeeds. `windows-checks.json`, `package-verification.json` and `build-provenance.json` accompanying the release identify the actual results and application file hashes; the workflow logs retain test counts and explicit skips.

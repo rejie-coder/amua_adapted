@@ -389,7 +389,7 @@ function dispatch(method,p) {
             model.filepath=String(destination.getAbsolutePath());model.unsavedChanges=false;
             app.recentFiles.updateList(model.filepath,model.type);
             app.setTabName(model.name,model.type);
-            app.frmMain.setTitle('Amua (ReyJay) V 3.2.4 - Engine 0.3.6 - '+model.name+' ('+model.filepath+')');
+            app.frmMain.setTitle('Amua (ReyJay) V 3.3.0 - Engine 0.3.6 - '+model.name+' ('+model.filepath+')');
         });
     }
     if(method==='validate_model') {
@@ -494,7 +494,7 @@ EventQueue.invokeLater(function() {
             mac.setAboutHandler(function(){field(app,'mntmAboutAmua').doClick(0);});
         } catch(e) {System.err.println('macOS application handlers: '+e);}
         Java.type('v21.WorkflowPanel').install(app);
-        app.frmMain.setTitle('Amua (ReyJay) V 3.2.4 - Engine 0.3.6');
+        app.frmMain.setTitle('Amua (ReyJay) V 3.3.0 - Engine 0.3.6');
         app.frmMain.setVisible(true);
         app.frmMain.toFront();
         try {Java.type('com.apple.eawt.Application').getApplication().requestForeground(true);}

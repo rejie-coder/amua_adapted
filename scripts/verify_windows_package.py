@@ -10,7 +10,7 @@ def pe(path):
  if machine!=0x8664:raise RuntimeError('Wrong Windows architecture: '+path.name)
  return {'machine':'x86_64','subsystem':subsystem,'sha256':sha(path)}
 def main():
- binaries={name:pe(APP/name) for name in ['Amua.exe','Resources/runtime/bin/java.exe','Resources/runtime/bin/javaw.exe','Resources/python/python.exe','Resources/python/pythonw.exe']}
+ binaries={name:pe(APP/name) for name in ['Amua.exe','Resources/runtime/bin/java.exe','Resources/runtime/bin/javaw.exe','Resources/python/python.exe','Resources/python/pythonw.exe','Resources/gemini/node.exe']}
  if binaries['Amua.exe']['subsystem']!=2:raise RuntimeError('Launcher must be a Windows GUI executable')
  required=[(ROOT/'src/dependencies/Amua.png',RES/'Amua.png'),(ROOT/'src/engine_helper.py',RES/'engine_helper.py'),(ROOT/'src/workflow_helper.py',RES/'workflow_helper.py'),(ROOT/'src/native-support/bootstrap.js',RES/'bootstrap.js'),(ROOT/'src/native-support/amua_mcp.py',RES/'amua_mcp.py'),(ROOT/'src/native-support/windows/launch.py',APP/'launch.py')]
  for p in (ROOT/'src/native-support/windows').glob('*.py'):
@@ -24,10 +24,12 @@ def main():
  for source,target in required:
   if not target.is_file() or sha(source)!=sha(target):raise RuntimeError('Stale/missing bundled source '+str(target.relative_to(APP)))
   if target.suffix=='.py':ast.parse(target.read_text(encoding='utf-8'))
- expected=json.loads((ROOT/'scripts/expected-classes-3.2.4.json').read_text());allowed={'base/AtomicModelSave.class','base/AtomicModelSave$1.class','base/AtomicModelSave$2.class','v21/McpAccess.class'};changed=[]
+ if sha(RES/'gemini/package/bundle/gemini.js')!=sha(ROOT/'build/toolchains/gemini/package/bundle/gemini.js'):raise RuntimeError('Stale Gemini bundle')
+ expected=json.loads((ROOT/'scripts/expected-classes-3.2.4.json').read_text());allowed={'base/AtomicModelSave.class','base/AtomicModelSave$1.class','base/AtomicModelSave$2.class','v21/McpAccess.class','gui/frmMain.class','gui/frmAboutAmua.class','v21/WorkflowText.class'};changed=[]
  with zipfile.ZipFile(RES/'Amua_0.3.6.jar') as z:
   for name,digest in expected.items():
    if hashlib.sha256(z.read(name)).hexdigest()!=digest:changed.append(name)
+  allowed.update(name for name in changed if name=='v21/WorkflowPanel.class' or name.startswith('v21/WorkflowPanel$'))
   if set(changed)-allowed:raise RuntimeError('Unexpected native application code change: '+str(set(changed)-allowed))
   numerical=[name for name in expected if name.split('/')[0] in ['tree','markov','math']]
   if any(name in changed for name in numerical):raise RuntimeError('Numerical class changed')

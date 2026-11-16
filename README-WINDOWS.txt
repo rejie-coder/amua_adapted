@@ -1,24 +1,20 @@
-Amua 3.2.4 for Windows x64 — preview
+Amua 3.3.0 Windows x64 preview
+Extract the entire ZIP, then open Amua/Amua.exe. Windows 10/11 x64.
 
-Extract the COMPLETE ZIP, then open Amua.exe in the extracted Amua folder.
-Keep Amua.exe, launch.py and Resources together. Java and Python are bundled.
-Target: 64-bit Windows 10/11; native checks run on Windows Server 2022. No administrator access is required for portable use.
-This preview is not Authenticode-signed; Windows may show a publisher warning.
+AI Workflow keeps conversation inside Amua. Select ChatGPT or Gemini and Connect account.
+Gemini opens a Google browser sign-in, then uses the bundled official Gemini CLI through ACP.
+Use your own eligible subscription account. No separately billed API-key fallback.
+Claude is explicitly unavailable under the subscription-only embedded-chat requirement.
 
-Manual decision-tree/Markov editing and original-engine calculations are included.
-AI Workflow requires your own eligible ChatGPT account/workspace and internet.
-Paste screenshots/files or drop files into the chatbox; review before Send.
-Review numerical inputs and missing assumptions, validate the whole model, then run.
-Native Windows English OCR depends on the OS OCR components/language availability;
-unknown confidence is reported as unknown, and unreadable pages remain unresolved.
+Select an evidence folder (optionally include subfolders), inspect sources and describe your model.
+Review the outgoing evidence and receiving provider before Send. Review and apply the native tree proposal.
+Use chat to request edits, Review workspace to critique a manual tree, and original Validate/Run controls.
+Missing scientific inputs remain questions. Never treat a structurally valid tree as scientific validation.
 
-User state: %LOCALAPPDATA%\Amua-v3.2.4
-Compatible provider registration state: %LOCALAPPDATA%\Amua-v2.1\provider
-Credentials use Windows Credential Manager, never a plaintext fallback.
-Clipboard images stay in the version's local chat-attachments folder after Clear.
-Save new .amua files separately; back up originals. Network/cloud-sync filesystem
-and abrupt power-loss durability are not established by file-save tests.
+Gemini has its own local profile beneath LOCALAPPDATA/Amua-v2.1/provider/gemini/profile.
+Its CLI manages credentials and may retain evidence/chat history. Disconnect disables the Amua connection;
+it does not remotely revoke Google access. Use your Google account settings for remote revocation.
+ChatGPT continues using Windows Credential Manager. Gemini tools, hooks and MCP are disabled.
 
-Original Amua by Zachary J. Ward.
-Adapted and developed by Dr. Rejinten Jayawardhana. GPLv3-or-later.
-Native Windows checks and remaining desktop acceptance are described in TEST_REPORT.md.
+Unsigned preview; live Google sign-in/subscription and desktop acceptance pending.
+Source and release evidence: https://github.com/rejie-coder/amua_adapted/tree/windows-3.3.0

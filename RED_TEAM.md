@@ -1,3 +1,7 @@
+# 3.3.0 provider checks
+
+New controlled checks cover provider isolation, no API-key environment inheritance, stalled child termination, account-marker binding, private-thought filtering, and disabled agent tools. Bundled CLI handshake is checked without inference on native Windows. No claim of live Google subscription acceptance; Claude is unavailable. Historical 3.2.4 review follows.
+
 # Windows audit and correction tracking
 
 This review challenges the assumption that a Java application becomes portable simply by replacing its runtime. The existing Windows prototype was incomplete. Findings below must be checked against actual Windows results before publication.

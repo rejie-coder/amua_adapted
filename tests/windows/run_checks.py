@@ -15,6 +15,7 @@ def main():
  run('compile-stop-guard-stub',[zig,'cc','-target','x86_64-windows-gnu','-DSLOW_ONLY','-O2',ROOT/'tests/windows/output_stub.c','-o',ROOT/'build/windows-slow-stub.exe'])
  run('windows-native',[PYTHON,'-B','-m','unittest','discover','-v','-s',ROOT/'tests/windows','-p','test_native.py'],180)
  run('native-ocr-diagnostic',[PYTHON,'-B',ROOT/'tests/windows/report_ocr.py'])
+ run('gemini-runtime',[PYTHON,'-B',ROOT/'tests/windows/test_gemini_runtime.py'],90)
  run('provider-regression',[PYTHON,'-B',ROOT/'tests/windows/run_provider.py'])
  for module in ['test_public_intake.py','test_mixed_formats.py','test_ocr.py','test_hardening.py','test_batch_precision.py']:
   run(module[:-3],[PYTHON,'-B','-m','unittest','discover','-v','-s',ROOT/'tests/workflow','-p',module])

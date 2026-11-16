@@ -20,7 +20,7 @@ static int quoted(const wchar_t *value){
  while(slash--)if(!put(L'\\')||!put(L'\\'))return 0;
  return put(L'"')&&put(L' ');
 }
-static int error(const wchar_t *message){MessageBoxW(NULL,message,L"Amua 3.2.4 for Windows",MB_OK|MB_ICONERROR);return 1;}
+static int error(const wchar_t *message){MessageBoxW(NULL,message,L"Amua 3.3.0 for Windows",MB_OK|MB_ICONERROR);return 1;}
 int WINAPI wWinMain(HINSTANCE instance,HINSTANCE previous,PWSTR ignored,int show){
  wchar_t folder[32768],python[32768],script[32768];
  DWORD n=GetModuleFileNameW(NULL,folder,32768);if(!n||n>=32000)return error(L"Move the extracted Amua folder to a shorter local path.");
