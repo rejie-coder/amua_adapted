@@ -110,6 +110,15 @@ class NativeWindows(unittest.TestCase):
     time.sleep(.2)
    log=(support/'Amua.log').read_text(encoding='utf-8',errors='replace') if (support/'Amua.log').exists() else ''
    self.assertTrue(state.get('ready'),log[-3000:]);java_pid=state['pid'];self.assertTrue(processes.pid_alive(java_pid))
+   # Verify the actual running GUI, not just a launch flag or resource string.
+   k=processes.api();handle=k.OpenProcess(0x1000,False,java_pid)
+   self.assertTrue(handle)
+   try:
+    shcore=C.WinDLL('shcore');query=shcore.GetProcessDpiAwareness
+    query.argtypes=[C.c_void_p,C.POINTER(C.c_int)];query.restype=C.c_long
+    awareness=C.c_int(-1);self.assertEqual(query(handle,C.byref(awareness)),0)
+    self.assertEqual(awareness.value,0,'GUI bypasses Windows display scaling')
+   finally:k.CloseHandle(handle)
    self.assertFalse((support/'%SystemDrive%').exists(),'Windows cache path expanded into the app profile')
    # Verify via its actual read-only MCP protocol, then activate existing instance.
    safe_env={**os.environ,'AMUA_TEST_SUPPORT':str(support),'PYTHONUTF8':'1','PYTHONIOENCODING':'utf-8'}

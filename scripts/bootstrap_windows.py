@@ -7,7 +7,7 @@ def get(item,target):
  target.parent.mkdir(parents=True,exist_ok=True)
  expected=item.get('sha256') or item.get('checksum') or item.get('shasum');url=item.get('url') or item.get('link') or item.get('tarball')
  if target.exists() and sha(target)==expected:return
- with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'Amua-Windows-build/3.3.0'}),timeout=90) as source,target.with_suffix('.download').open('wb') as output:shutil.copyfileobj(source,output)
+ with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'Amua-Windows-build/3.3.1'}),timeout=90) as source,target.with_suffix('.download').open('wb') as output:shutil.copyfileobj(source,output)
  partial=target.with_suffix('.download')
  if sha(partial)!=expected:partial.unlink();raise RuntimeError('Toolchain checksum mismatch')
  partial.replace(target)

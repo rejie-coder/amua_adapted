@@ -1,5 +1,8 @@
-Amua 3.3.0 Windows x64 preview
-Extract the entire ZIP, then open Amua/Amua.exe. Windows 10/11 x64.
+Amua 3.3.1 Windows x64 preview
+Extract the entire ZIP into a new folder, then open Amua/Amua.exe. Windows 10/11 x64.
+Readability fix: the whole interface follows Windows Display > Scale; chat text is larger.
+Save/close the previous version before launching. Restart Amua after changing display scale.
+OS scaling may look softer; model zoom/calculations are unchanged.
 
 AI Workflow keeps conversation inside Amua. Select ChatGPT or Gemini and Connect account.
 Gemini opens a Google browser sign-in, then uses the bundled official Gemini CLI through ACP.
@@ -17,4 +20,4 @@ it does not remotely revoke Google access. Use your Google account settings for 
 ChatGPT continues using Windows Credential Manager. Gemini tools, hooks and MCP are disabled.
 
 Unsigned preview; live Google sign-in/subscription and desktop acceptance pending.
-Source and release evidence: https://github.com/rejie-coder/amua_adapted/tree/windows-3.3.0
+Source and release evidence: https://github.com/rejie-coder/amua_adapted/tree/windows-3.3.1

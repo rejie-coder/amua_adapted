@@ -1,3 +1,7 @@
+# 3.3.1 readability verification
+
+The Windows gate now queries the actual running GUI with GetProcessDpiAwareness, requiring OS-managed scaling, and verifies the exact derived launcher bytes. Sidebar tests check 14-point chat/entry text and bounded layout. Native results and ZIP readback are provided with the release. Physical high-DPI laptop acceptance is pending. Earlier test evidence below belongs to the named older versions.
+
 # 3.3.0 verification
 
 Local provider suite: 133 tests discovered, 131 passed, 2 existing private-fixture skips. Real Gemini CLI 0.68.0 ACP initialization and Google auth-method discovery passed on Mac; no sign-in or inference. Native Windows results are generated in evidence/windows-checks.json by Actions. Live Google account/evidence-to-tree and physical desktop acceptance remain pending. The following 3.2.4 evidence is historical, not a 3.3.0 test result.

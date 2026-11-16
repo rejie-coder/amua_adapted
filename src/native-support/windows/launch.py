@@ -11,10 +11,10 @@ def support_path():
  if override:return Path(override).resolve()
  base=os.environ.get('LOCALAPPDATA')
  if not base:raise RuntimeError('User application storage is unavailable')
- return Path(base)/'Amua-v3.3.0'
+ return Path(base)/'Amua-v3.3.1'
 def alert(message):
  import ctypes
- ctypes.windll.user32.MessageBoxW(None,message,'Amua 3.3.0 for Windows',0x10)
+ ctypes.windll.user32.MessageBoxW(None,message,'Amua 3.3.1 for Windows',0x10)
 def activate(support):
  token=(support/'bridge.token').read_text();request={'method':'activate','params':{'files':[str(Path(p).resolve()) for p in sys.argv[1:] if Path(p).suffix.lower()=='.amua']},'token':token,'deadline':time.time()+30}
  target=support/'bridge'/(uuid.uuid4().hex+'.request.json');temporary=target.with_suffix('.tmp');temporary.write_text(json.dumps(request),encoding='utf-8');temporary.replace(target)
@@ -28,9 +28,9 @@ def main():
   log=support/'Amua.log'
   if log.exists() and log.stat().st_size>2*1024*1024:
    previous=support/'Amua.previous.log';previous.unlink(missing_ok=True);log.replace(previous)
-  java=RESOURCES/'runtime/bin/javaw.exe';jar=RESOURCES/'Amua_0.3.6.jar'
+  java=RESOURCES/'runtime/bin/amua-javaw.exe';jar=RESOURCES/'Amua_0.3.6.jar'
   if not java.is_file() or not jar.is_file():raise RuntimeError('The complete application must be extracted before launching')
-  args=[str(java),'-Xms64m','-Xmx2g','-XX:+UseG1GC','-Dsun.net.client.defaultConnectTimeout=4000','-Dsun.net.client.defaultReadTimeout=4000','-Damua.support='+str(support),'-Damua.resources='+str(RESOURCES),'-cp',str(jar),'jdk.nashorn.tools.Shell',str(RESOURCES/'bootstrap.js'),'--']+[str(Path(p).resolve()) for p in sys.argv[1:] if Path(p).suffix.lower()=='.amua']
+  args=[str(java),'-Dsun.java2d.dpiaware=false','-Xms64m','-Xmx2g','-XX:+UseG1GC','-Dsun.net.client.defaultConnectTimeout=4000','-Dsun.net.client.defaultReadTimeout=4000','-Damua.support='+str(support),'-Damua.resources='+str(RESOURCES),'-cp',str(jar),'jdk.nashorn.tools.Shell',str(RESOURCES/'bootstrap.js'),'--']+[str(Path(p).resolve()) for p in sys.argv[1:] if Path(p).suffix.lower()=='.amua']
   allowed=('SystemRoot','SystemDrive','WINDIR','ProgramData','ProgramFiles','ProgramFiles(x86)','CommonProgramFiles','CommonProgramFiles(x86)' ,'USERPROFILE','LOCALAPPDATA','APPDATA','TEMP','TMP','USERNAME','USERDOMAIN','PROCESSOR_ARCHITECTURE')
   environment={k:os.environ[k] for k in allowed if k in os.environ};environment['PATH']=str(Path(os.environ.get('SystemRoot','C:/Windows'))/'System32');environment['PYTHONUTF8']='1';environment['PYTHONIOENCODING']='utf-8';environment['PYTHONNOUSERSITE']='1';environment['PYTHONDONTWRITEBYTECODE']='1'
   with log.open('ab') as output:

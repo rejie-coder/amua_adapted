@@ -10,7 +10,9 @@ def pe(path):
  if machine!=0x8664:raise RuntimeError('Wrong Windows architecture: '+path.name)
  return {'machine':'x86_64','subsystem':subsystem,'sha256':sha(path)}
 def main():
- binaries={name:pe(APP/name) for name in ['Amua.exe','Resources/runtime/bin/java.exe','Resources/runtime/bin/javaw.exe','Resources/python/python.exe','Resources/python/pythonw.exe','Resources/gemini/node.exe']}
+ binaries={name:pe(APP/name) for name in ['Amua.exe','Resources/runtime/bin/java.exe','Resources/runtime/bin/javaw.exe','Resources/runtime/bin/amua-javaw.exe','Resources/python/python.exe','Resources/python/pythonw.exe','Resources/gemini/node.exe']}
+ from windows_dpi import derive
+ if (RES/'runtime/bin/amua-javaw.exe').read_bytes()!=derive((RES/'runtime/bin/javaw.exe').read_bytes()):raise RuntimeError('DPI launcher is not the exact derived runtime copy')
  if binaries['Amua.exe']['subsystem']!=2:raise RuntimeError('Launcher must be a Windows GUI executable')
  required=[(ROOT/'src/dependencies/Amua.png',RES/'Amua.png'),(ROOT/'src/engine_helper.py',RES/'engine_helper.py'),(ROOT/'src/workflow_helper.py',RES/'workflow_helper.py'),(ROOT/'src/native-support/bootstrap.js',RES/'bootstrap.js'),(ROOT/'src/native-support/amua_mcp.py',RES/'amua_mcp.py'),(ROOT/'src/native-support/windows/launch.py',APP/'launch.py')]
  for p in (ROOT/'src/native-support/windows').glob('*.py'):

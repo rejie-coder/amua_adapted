@@ -11,7 +11,7 @@ def require_checks(results):
  if len(results['engine-equivalence'].get('exact_outputs',[]))!=8:raise SystemExit('Missing original-engine equivalence evidence')
 def main():
  results=json.loads((ROOT/'evidence/windows-checks.json').read_text());require_checks(results)
- DIST.mkdir(exist_ok=True);target=DIST/'Amua-3.3.0-Windows-x64.zip'
+ DIST.mkdir(exist_ok=True);target=DIST/'Amua-3.3.1-Windows-x64.zip'
  if target.exists():raise SystemExit('Preserve existing ZIP before making another build')
  with zipfile.ZipFile(target,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
   for p in sorted(APP.rglob('*')):

@@ -3,11 +3,11 @@ from pathlib import Path
 import tarfile
 ROOT=Path(__file__).resolve().parents[1]
 def export():
- target=ROOT/'dist/Amua-3.3.0-Windows-source.tar.gz';target.parent.mkdir(exist_ok=True)
+ target=ROOT/'dist/Amua-3.3.1-Windows-source.tar.gz';target.parent.mkdir(exist_ok=True)
  entries=['src','scripts','tests','docs','.github','.gitattributes','.gitignore','LICENSE','NOTICE.md','README.md','README-WINDOWS.txt','RED_TEAM.md','TEST_REPORT.md','CONTRIBUTING.md','SECURITY.md','evidence/engine-parity']
  with tarfile.open(target,'w:gz') as archive:
   for name in entries:
-   archive.add(ROOT/name,arcname='amua_adapted-3.3.0-windows/'+name,filter=lambda item:None if any(p in {'.DS_Store','__pycache__','.git'} for p in Path(item.name).parts) else item)
+   archive.add(ROOT/name,arcname='amua_adapted-3.3.1-windows/'+name,filter=lambda item:None if any(p in {'.DS_Store','__pycache__','.git'} for p in Path(item.name).parts) else item)
  with tarfile.open(target) as archive:
   names=archive.getnames()
   for name in names:

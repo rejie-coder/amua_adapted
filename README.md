@@ -1,3 +1,7 @@
+# Windows 3.3.1 readability fix
+
+The complete interface now follows Windows display scaling, with larger chat/source/control text. [Read the fix and remaining limitations](docs/Release-Notes-3.3.1-Windows.md). Previous release notes follow.
+
 # Windows 3.3.0 development preview
 
 ChatGPT and experimental Gemini inside Amua’s chatbox, using account sign-in without API-key fallback. Claude remains unavailable. See [3.3.0 scope and limitations](docs/Release-Notes-3.3.0-Windows.md) and [Windows setup](README-WINDOWS.txt). Live Gemini account acceptance is pending. Earlier release documentation follows for provenance.
