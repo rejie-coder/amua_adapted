@@ -1,0 +1,15 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+/build/
+/dist/
+/Amua.app/
+/evidence/*
+!/evidence/engine-parity/
+/src/dependencies/baseline-fat-dependencies.jar
+_recentFiles
+.env
+.env.*
+*.key
+*.p12
+*.mobileprovision

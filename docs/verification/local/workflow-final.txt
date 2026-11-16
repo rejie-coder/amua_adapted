@@ -1,0 +1,13 @@
+..................................F...
+======================================================================
+FAIL: test_actual_english_scanned_pdf_local_ocr (test_ocr.OCRTests.test_actual_english_scanned_pdf_local_ocr)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/rejie/Desktop/Amua/3.2.4/tests/workflow/test_ocr.py", line 55, in test_actual_english_scanned_pdf_local_ocr
+    self.assertIn(page['status'],('ocr-extracted-unreviewed','ocr-low-confidence-unreviewed'))
+AssertionError: 'unreadable-scanned-page' not found in ('ocr-extracted-unreviewed', 'ocr-low-confidence-unreviewed')
+
+----------------------------------------------------------------------
+Ran 38 tests in 2.695s
+
+FAILED (failures=1)

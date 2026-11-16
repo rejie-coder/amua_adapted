@@ -1,0 +1,19 @@
+{
+  "architecture": "x86_64",
+  "minimum_macos": "14.0",
+  "baseline": {
+    "url": "https://github.com/zward/Amua/releases/download/v0.3.6/Amua_0.3.6.jar",
+    "sha256": "a302b61cf2a855804dcdadbe06b2b5fceff25eb835ed7b7c04b706a6a469fa18",
+    "target": "src/dependencies/baseline-fat-dependencies.jar"
+  },
+  "jdk": {
+    "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u512-b09/OpenJDK8U-jdk_x64_mac_hotspot_8u512b09.tar.gz",
+    "sha256": "314e8acc9dd87a63e13c05345fa4a78bda567b452f7e956c80abd4c629851eff",
+    "directory": "build/toolchains"
+  },
+  "python": {
+    "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20261110/cpython-3.12.16%2B20261110-x86_64-apple-darwin-install_only.tar.gz",
+    "sha256": "83f2922437e6d546d0fcdb8c11f150a8e52787e8d9ea8651b1974e20908eb1bc",
+    "directory": "build/toolchains"
+  }
+}

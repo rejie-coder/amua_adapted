@@ -1,0 +1,932 @@
+/**
+ * Amua - An open source modeling framework.
+ * Copyright (C) 2017 Zachary J. Ward
+ *
+ * This file is part of Amua. Amua is free software: you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * Amua is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Amua.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package gui;
+
+import java.awt.BasicStroke;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Paint;
+import java.awt.Polygon;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.ProgressMonitor;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
+
+import org.apache.commons.math3.geometry.euclidean.threed.Line;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.annotations.XYAnnotation;
+import org.jfree.chart.annotations.XYLineAnnotation;
+import org.jfree.chart.annotations.XYShapeAnnotation;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.DefaultDrawingSupplier;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.ValueMarker;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.Range;
+import org.jfree.data.xy.DefaultXYDataset;
+
+import base.AmuaModel;
+import filters.CSVFilter;
+import main.CEAHelper;
+import main.DimInfo;
+import main.Parameter;
+import math.Numeric;
+import surface.SurfaceModel;
+import surface.SurfacePanel;
+
+/**
+ *
+ */
+public class frmSensTwoWay {
+
+	frmSensTwoWay frmThis;
+	public JFrame frmSensTwoWay;
+	AmuaModel myModel;
+	DefaultTableModel modelParams;
+	private JTable tableParams;
+
+	DefaultXYDataset chartData;
+	JFreeChart chart;
+	Paint seriesPaints[];
+	
+	SurfacePanel surfacePanel;
+	
+	JComboBox<String> comboDimensions;
+	JComboBox<String> comboStrategy;
+	JComboBox<String> comboGroup;
+
+	//double dataEV[][][];
+	double dataSurface[][][];
+	int bestStrategy[][];
+	double param1Vals[][], param2Vals[][];
+	SurfaceModel surfaceModel;
+	private JTextField textIntervals;
+	JComboBox<String> comboMinMax;
+	JLabel lblCEThresh;
+	private JTextField textCEThresh;
+	Parameter curParam1, curParam2;
+	double baselineParamValue1, baselineParamValue2;
+
+	//plot dimensions/steps
+	int intervals;
+	double min1, min2;
+	double max1, max2;
+	double step1, step2;
+	
+	public frmSensTwoWay(AmuaModel model){
+		frmThis=this;
+		this.myModel=model;
+		myModel.getStrategies();
+		initialize();
+	}
+
+	/**
+	 * Initializes the contents of the frame, including ActionListeners for the Combo-boxes and buttons on the form.
+	 */
+	private void initialize() {
+		try{
+			frmSensTwoWay = new JFrame();
+			frmSensTwoWay.setTitle("Amua - "+myModel.language.analysis.getString("sens.two_way_sens_analysis")); //Two-way Sensitivity Analysis
+			frmSensTwoWay.setFont(myModel.language.font);
+			frmSensTwoWay.setIconImage(Toolkit.getDefaultToolkit().getImage(frmSensTwoWay.class.getResource("/images/twoWay_128.png")));
+			frmSensTwoWay.setBounds(100, 100, 1000, 500);
+			frmSensTwoWay.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			GridBagLayout gridBagLayout = new GridBagLayout();
+			gridBagLayout.columnWidths = new int[]{460, 0, 0};
+			gridBagLayout.rowHeights = new int[]{514, 0};
+			gridBagLayout.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+			gridBagLayout.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+			frmSensTwoWay.getContentPane().setLayout(gridBagLayout);
+
+			JPanel panel_1 = new JPanel();
+			GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+			gbc_panel_1.insets = new Insets(0, 0, 0, 5);
+			gbc_panel_1.fill = GridBagConstraints.BOTH;
+			gbc_panel_1.gridx = 0;
+			gbc_panel_1.gridy = 0;
+			frmSensTwoWay.getContentPane().add(panel_1, gbc_panel_1);
+			GridBagLayout gbl_panel_1 = new GridBagLayout();
+			gbl_panel_1.columnWidths = new int[]{455, 0};
+			gbl_panel_1.rowHeights = new int[]{466, 160, 0};
+			gbl_panel_1.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+			gbl_panel_1.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
+			panel_1.setLayout(gbl_panel_1);
+
+			modelParams=new DefaultTableModel(
+					new Object[][] {,},
+					new String[] {
+							myModel.language.base.getString("object.parameter"), //Parameter
+							myModel.language.base.getString("object.expression"), //Expression
+							myModel.language.math.getString("sum.min"), //Min
+							myModel.language.math.getString("sum.max")}) { //Max
+				boolean[] columnEditables = new boolean[] {false, false,true,true};
+				public boolean isCellEditable(int row, int column) {return columnEditables[column];}
+			};
+
+			String paramNames[]=new String[myModel.parameters.size()];
+
+			for(int i=0; i<myModel.parameters.size(); i++){
+				modelParams.addRow(new Object[]{null});
+				Parameter curParam=myModel.parameters.get(i);
+				modelParams.setValueAt(curParam.name, i, 0);
+				modelParams.setValueAt(curParam.expression, i, 1);
+				modelParams.setValueAt(curParam.sensMin, i, 2);
+				modelParams.setValueAt(curParam.sensMax, i, 3);
+				paramNames[i]=curParam.name;
+			}
+
+			JScrollPane scrollPaneParams = new JScrollPane();
+			GridBagConstraints gbc_scrollPaneParams = new GridBagConstraints();
+			gbc_scrollPaneParams.insets = new Insets(0, 0, 5, 0);
+			gbc_scrollPaneParams.fill = GridBagConstraints.BOTH;
+			gbc_scrollPaneParams.gridx = 0;
+			gbc_scrollPaneParams.gridy = 0;
+			panel_1.add(scrollPaneParams, gbc_scrollPaneParams);
+			tableParams = new JTable();
+			tableParams.setRowSelectionAllowed(false);
+			tableParams.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			tableParams.setShowVerticalLines(true);
+			tableParams.getTableHeader().setReorderingAllowed(false);
+			tableParams.getTableHeader().setFont(myModel.language.font);
+			tableParams.setFont(myModel.language.font);
+			tableParams.setModel(modelParams);
+			scrollPaneParams.setViewportView(tableParams);
+
+			JPanel panel_2 = new JPanel();
+			panel_2.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+			panel_2.setLayout(null);
+			GridBagConstraints gbc_panel_2 = new GridBagConstraints();
+			gbc_panel_2.fill = GridBagConstraints.BOTH;
+			gbc_panel_2.gridx = 0;
+			gbc_panel_2.gridy = 1;
+			panel_1.add(panel_2, gbc_panel_2);
+
+			final JLabel lblOutcome = new JLabel(myModel.language.analysis.getString("result.outcome")+":"); //Outcome
+			lblOutcome.setFont(myModel.language.font);
+			lblOutcome.setBounds(12, 69, 81, 16);
+			panel_2.add(lblOutcome);
+
+			DimInfo info=myModel.dimInfo;
+			String outcomes[] = null;
+			if(info.analysisType==0){ //EV
+				outcomes=new String[info.dimNames.length];
+				for(int d=0; d<info.dimNames.length; d++){
+					outcomes[d]=info.dimNames[d];
+				}
+			}
+			else{ //CEA or BCA
+				outcomes=new String[info.dimNames.length+1];
+				for(int d=0; d<info.dimNames.length; d++){
+					outcomes[d]=info.dimNames[d];
+				}
+				if(info.analysisType==1){ //CEA
+					outcomes[info.dimNames.length]=myModel.language.analysis.getString("cea.icer")+" ("+info.dimNames[info.costDim]+"/"+info.dimNames[info.effectDim]+")"; //ICER
+				}
+				else if(info.analysisType==2){ //BCA
+					outcomes[info.dimNames.length]=myModel.language.analysis.getString("bca.nmb")+" ("+info.dimNames[info.effectDim]+"-"+info.dimNames[info.costDim]+")"; //NMB
+				}
+			}
+
+			comboDimensions = new JComboBox<String>(new DefaultComboBoxModel<String>(outcomes));
+			comboDimensions.setFont(myModel.language.font);
+			comboDimensions.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if(myModel.dimInfo.analysisType==1){ //CEA
+						if(comboDimensions.getSelectedIndex()==comboDimensions.getItemCount()-1){ //CEA or BCA
+							comboMinMax.setEnabled(false);
+							lblCEThresh.setEnabled(true);
+							textCEThresh.setEnabled(true);
+						}
+						else{
+							comboMinMax.setEnabled(true);
+							lblCEThresh.setEnabled(false);
+							textCEThresh.setEnabled(false);
+						}
+					}
+				}
+			});
+			comboDimensions.setBounds(94, 64, 227, 26);
+			panel_2.add(comboDimensions);
+
+			JButton btnRun = new JButton(myModel.language.base.getString("menu.run")); //Run
+			btnRun.setFont(myModel.language.font);
+			btnRun.setBounds(353, 27, 90, 28);
+			panel_2.add(btnRun);
+
+			final JButton btnExport = new JButton(myModel.language.base.getString("menu.export")); //Export
+			btnExport.setFont(myModel.language.font);
+			btnExport.setEnabled(false);
+			btnExport.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try{
+						//Show save as dialog
+						JFileChooser fc=new JFileChooser(myModel.filepath);
+						fc.setAcceptAllFileFilterUsed(false);
+						fc.setFileFilter(new CSVFilter(myModel.language));
+
+						fc.setDialogTitle(myModel.language.base.getString("title.export_graph_data")); //Export Graph Data
+						fc.setApproveButtonText(myModel.language.base.getString("menu.export")); //Export
+						myModel.language.setFontRecursively(fc); //set font
+						
+						int returnVal = fc.showSaveDialog(frmSensTwoWay);
+						if (returnVal == JFileChooser.APPROVE_OPTION) {
+							File file = fc.getSelectedFile();
+							String path=file.getAbsolutePath();
+							path=path.replaceAll(".csv", "");
+							//Open file for writing
+							FileWriter fstream = new FileWriter(path+".csv"); //Create new file
+							BufferedWriter out = new BufferedWriter(fstream);
+							//Headers
+							out.write(chart.getXYPlot().getDomainAxis().getLabel()+","); //Param1 name
+							out.write(chart.getXYPlot().getRangeAxis().getLabel()); //Param2 name
+							String outcome=(String) comboDimensions.getSelectedItem();
+							int numStrat=myModel.strategyNames.length;
+							for(int s=0; s<numStrat; s++){out.write(","+outcome+"-"+myModel.strategyNames[s]);}
+							out.newLine();
+							
+							//Chart data
+							for(int i=0; i<param1Vals.length; i++){
+								for(int j=0; j<param1Vals[0].length; j++) {
+									out.write(param1Vals[i][j]+","+param2Vals[i][j]);
+									for(int s=0; s<numStrat; s++) {
+										out.write(","+dataSurface[s][i][j]);
+									}
+									out.newLine();
+								}
+								
+							}
+							out.close();
+
+							JOptionPane.showMessageDialog(frmSensTwoWay, myModel.language.message.getString("info.exported")); //Exported!
+						}
+
+
+					}catch(Exception ex){
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(frmSensTwoWay, ex.getMessage());
+						myModel.errorLog.recordError(ex);
+					}
+				}
+			});
+			btnExport.setBounds(353, 125, 90, 28);
+			panel_2.add(btnExport);
+
+			JLabel lblParameter = new JLabel(myModel.language.base.getString("object.parameter")+" 1:"); //Parameter 1
+			lblParameter.setFont(myModel.language.font);
+			lblParameter.setBounds(12, 9, 81, 16);
+			panel_2.add(lblParameter);
+
+			final JComboBox<String> comboParam1 = new JComboBox<String>(new DefaultComboBoxModel<String>(paramNames));
+			comboParam1.setFont(myModel.language.font);
+			comboParam1.setBounds(94, 4, 227, 26);
+			panel_2.add(comboParam1);
+			if(paramNames.length>0){comboParam1.setSelectedIndex(0);}
+
+			JLabel lblParameter_1 = new JLabel(myModel.language.base.getString("object.parameter")+" 2:"); //Parameter 2
+			lblParameter_1.setFont(myModel.language.font);
+			lblParameter_1.setBounds(12, 39, 81, 16);
+			panel_2.add(lblParameter_1);
+
+			final JComboBox<String> comboParam2 = new JComboBox<String>(new DefaultComboBoxModel<String>(paramNames));
+			comboParam2.setFont(myModel.language.font);
+			comboParam2.setBounds(94, 34, 227, 26);
+			panel_2.add(comboParam2);
+			if(paramNames.length>1){comboParam2.setSelectedIndex(1);}
+
+			comboMinMax = new JComboBox<String>();
+			comboMinMax.setFont(myModel.language.font);
+			comboMinMax.setModel(new DefaultComboBoxModel<String>(new String[] {
+					myModel.language.math.getString("sum.min"), //Min
+					myModel.language.math.getString("sum.max")})); //Max
+			comboMinMax.setSelectedIndex(1);
+			comboMinMax.setBounds(353, 64, 90, 26);
+			panel_2.add(comboMinMax);
+
+			JLabel lblIntervals = new JLabel(myModel.language.base.getString("plot.intervals")+":"); //Intervals
+			lblIntervals.setFont(myModel.language.font);
+			lblIntervals.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblIntervals.setBounds(313, 100, 73, 16);
+			panel_2.add(lblIntervals);
+
+			textIntervals = new JTextField();
+			textIntervals.setHorizontalAlignment(SwingConstants.CENTER);
+			textIntervals.setText("10");
+			textIntervals.setBounds(388, 94, 55, 28);
+			panel_2.add(textIntervals);
+			textIntervals.setColumns(10);
+
+			lblCEThresh = new JLabel(myModel.language.analysis.getString("cea.cea_threshold")+":"); //Cost-Effectiveness Threshold
+			lblCEThresh.setFont(myModel.language.font);
+			lblCEThresh.setEnabled(false);
+			lblCEThresh.setBounds(12, 100, 171, 16);
+			panel_2.add(lblCEThresh);
+
+			textCEThresh = new JTextField();
+			textCEThresh.setEnabled(false);
+			textCEThresh.setBounds(181, 94, 122, 28);
+			panel_2.add(textCEThresh);
+			textCEThresh.setColumns(10);
+
+			JLabel lblGroup = new JLabel(myModel.language.analysis.getString("result.group")+":"); //Group
+			lblGroup.setFont(myModel.language.font);
+			lblGroup.setEnabled(false);
+			lblGroup.setBounds(12, 131, 55, 16);
+			panel_2.add(lblGroup);
+
+			comboGroup = new JComboBox<String>(new DefaultComboBoxModel(new String[]{myModel.language.analysis.getString("result.overall")})); //Overall
+			comboGroup.setFont(myModel.language.font);
+			comboGroup.setEnabled(false);
+			comboGroup.setBounds(94, 126, 227, 26);
+			panel_2.add(comboGroup);
+
+			if(myModel.simType==1 && myModel.reportSubgroups){
+				int numGroups=myModel.subgroupNames.size();
+				String groups[]=new String[numGroups+1];
+				groups[0]=myModel.language.analysis.getString("result.overall"); //Overall
+				for(int i=0; i<numGroups; i++){groups[i+1]=myModel.subgroupNames.get(i);}
+				comboGroup.setModel(new DefaultComboBoxModel(groups));
+				comboGroup.setEnabled(true);
+				lblGroup.setEnabled(true);
+			}
+
+			final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+			tabbedPane.setFont(myModel.language.font);
+
+			btnRun.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					//final ProgressMonitor progress=new ProgressMonitor(frmSensTwoWay, myModel.language.base.getString("menu.two_way"), myModel.language.message.getString("info.running")+"...", 0, 100); //Two-way, Running
+					final frmProgressMonitor progress=new frmProgressMonitor(frmSensTwoWay, myModel.language.base.getString("menu.two_way"), myModel.language.message.getString("info.running"), 0, 100, myModel.language); //Two-way, Running
+					SwingUtilities.invokeLater(progress::show);  //dialog is created/shown on EDT
+					
+					Thread SimThread = new Thread(){ //Non-UI
+						public void run(){
+							try{
+								int row1=comboParam1.getSelectedIndex();
+								int row2=comboParam2.getSelectedIndex();
+								boolean proceed=true;
+								if(row1==row2){
+									proceed=false;
+									JOptionPane.showMessageDialog(frmSensTwoWay, myModel.language.message.getString("err.select_two_diff_params")); //Please select two different parameters!
+									progress.close();
+								}
+								else { //check bounds
+									String strMin1=(String)tableParams.getValueAt(row1,2);
+									String strMin2=(String)tableParams.getValueAt(row2,2);
+									String strMax1=(String)tableParams.getValueAt(row1,3);
+									String strMax2=(String)tableParams.getValueAt(row2,3);
+									if(strMin1==null || strMin1.isEmpty()) {
+										proceed=false;
+										//Error: Min value [num] is missing!
+										String msg = MessageFormat.format(myModel.language.message.getString("err.min_val_num_missing"), 1);
+										JOptionPane.showMessageDialog(frmSensTwoWay, msg);
+									}
+									if(proceed==true && (strMax1==null || strMax1.isEmpty())) {
+										proceed=false;
+										//Error: Max value [num] is missing!
+										String msg = MessageFormat.format(myModel.language.message.getString("err.max_val_num_missing"), 1);
+										JOptionPane.showMessageDialog(frmSensTwoWay, msg);
+									}
+									if(proceed==true && (strMin2==null || strMin2.isEmpty())) {
+										proceed=false;
+										//Error: Min value [num] is missing!
+										String msg = MessageFormat.format(myModel.language.message.getString("err.min_val_num_missing"), 2);
+										JOptionPane.showMessageDialog(frmSensTwoWay, msg);
+									}
+									if(proceed==true && (strMax2==null || strMax2.isEmpty())) {
+										proceed=false;
+										//Error: Max value [num] is missing!
+										String msg = MessageFormat.format(myModel.language.message.getString("err.max_val_num_missing"), 2);
+										JOptionPane.showMessageDialog(frmSensTwoWay, msg);
+									}
+								}
+
+
+								if(proceed==true && myModel.parseModel().size()>0){ //Check model
+									proceed=false;
+									JOptionPane.showMessageDialog(frmSensTwoWay, myModel.language.message.getString("err.base_case")); //Errors in base case model!
+									progress.close();
+								}
+
+								if(proceed==true) {
+									frmSensTwoWay.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+									btnRun.setEnabled(false);
+									
+									boolean error=false;
+									//Get parameters
+									intervals=Integer.parseInt(textIntervals.getText());
+
+									String strMin1=(String)tableParams.getValueAt(row1,2);
+									String strMin2=(String)tableParams.getValueAt(row2,2);
+									String strMax1=(String)tableParams.getValueAt(row1,3);
+									String strMax2=(String)tableParams.getValueAt(row2,3);
+									strMin1=strMin1.replaceAll(",", ""); //Replace any commas
+									strMin2=strMin2.replaceAll(",", "");
+									strMax1=strMax1.replaceAll(",", "");
+									strMax2=strMax2.replaceAll(",", "");
+									min1=Double.parseDouble(strMin1);
+									min2=Double.parseDouble(strMin2);
+									max1=Double.parseDouble(strMax1);
+									max2=Double.parseDouble(strMax2);
+									step1=(max1-min1)/(intervals*1.0);
+									step2=(max2-min2)/(intervals*1.0);
+									curParam1=myModel.parameters.get(row1);
+									curParam2=myModel.parameters.get(row2);
+									//record min/max
+									curParam1.sensMin=strMin1;
+									curParam1.sensMax=strMax1;
+									curParam2.sensMin=strMin2;
+									curParam2.sensMax=strMax2;
+
+									Numeric origValue1=curParam1.value.copy();
+									Numeric origValue2=curParam2.value.copy();
+									baselineParamValue1=origValue1.getValue();
+									baselineParamValue2=origValue2.getValue();
+
+									int dim=comboDimensions.getSelectedIndex();
+									DimInfo info=myModel.dimInfo;
+									int analysisType=0; //Analysis type for current 2-way, default EV
+
+									double ceThresh=0;
+									String lblOutcome="";
+									if(info.analysisType==0){ //EV
+										lblOutcome = info.dimNames[dim];
+									}
+									else{	
+										if(dim==comboDimensions.getItemCount()-1){ //ICER or NMB selected
+											if(info.analysisType==1){
+												lblOutcome=myModel.language.analysis.getString("cea.icer")+" ("+info.dimSymbols[info.costDim]+"/"+info.dimSymbols[info.effectDim]+")"; //ICER
+												ceThresh=Double.parseDouble(textCEThresh.getText().replaceAll(",", ""));
+												analysisType=1;
+											}
+											else if(info.analysisType==2){
+												lblOutcome=myModel.language.analysis.getString("bca.nmb")+" ("+info.dimSymbols[info.effectDim]+"-"+info.dimSymbols[info.costDim]+")"; //NMB
+												analysisType=2;
+											}
+										}
+										else{
+											lblOutcome = info.dimNames[dim];
+										}
+									}
+
+									boolean max=true;
+									if(comboMinMax.getSelectedIndex()==0){max=false;}
+
+									//Test parameters at min and max...
+									curParam1.value.setDouble(min1); curParam2.value.setDouble(min2);
+									curParam1.locked=true; curParam2.locked=true;
+									ArrayList<String> errorsMin=myModel.parseModel();
+									curParam1.value.setDouble(max1); curParam2.value.setDouble(max2);
+									curParam1.locked=true; curParam2.locked=true;
+									ArrayList<String> errorsMax=myModel.parseModel();
+									curParam1.value=origValue1; curParam2.value=origValue2; //Reset
+									if(errorsMin.size()>0){
+										error=true;
+										curParam1.locked=false; curParam2.locked=false;
+										myModel.validateModelObjects();
+										JOptionPane.showMessageDialog(frmSensTwoWay, myModel.language.message.getString("err.min_value")); //Error: Min value
+										progress.close();
+										frmSensTwoWay.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+									}
+									if(errorsMax.size()>0){
+										error=true;
+										curParam1.locked=false; curParam2.locked=false;
+										myModel.validateModelObjects();
+										JOptionPane.showMessageDialog(frmSensTwoWay, myModel.language.message.getString("err.max_value")); //Error: Max value
+										progress.close();
+										frmSensTwoWay.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+									}
+
+									if(error==false){
+										boolean cancelled=false;
+										//Run model...
+
+										boolean origShowTrace=false;
+										if(myModel.type==1) {
+											origShowTrace=myModel.markov.showTrace;
+											myModel.markov.showTrace=false;
+										}
+
+										int group=-1;
+										if(comboGroup.isEnabled()){group=comboGroup.getSelectedIndex()-1;}
+
+										int numStrat=myModel.strategyNames.length;
+										//dataEV=new double[numStrat][2][(intervals+1)*(intervals+1)];
+										dataSurface=new double[numStrat][intervals+1][intervals+1];
+										bestStrategy=new int[intervals+1][intervals+1];
+										param1Vals=new double[intervals+1][intervals+1];
+										param2Vals=new double[intervals+1][intervals+1];
+										int numRuns=(intervals+1)*(intervals+1);
+										progress.setMaximum(numRuns);
+
+										long startTime=System.currentTimeMillis();
+										//progress.setMillisToDecideToPopup(0);
+										//progress.setMillisToPopup(0);
+										
+										int count=0;
+										for(int i=0; i<=intervals; i++){
+											double curVal1=min1+(step1*i);
+											curParam1.value.setDouble(curVal1);
+											
+											for(int j=0; j<=intervals; j++){
+												//Update progress
+												double prog=(count/(numRuns*1.0))*100;
+												long remTime=(long) ((System.currentTimeMillis()-startTime)/prog); //Number of miliseconds per percent
+												remTime=(long) (remTime*(100-prog));
+												remTime=remTime/1000;
+												String seconds = Integer.toString((int)(remTime % 60));
+												String minutes = Integer.toString((int)(remTime/60));
+												if(seconds.length()<2){seconds="0"+seconds;}
+												if(minutes.length()<2){minutes="0"+minutes;}
+												progress.setProgress(count);
+												if(count>0) {
+													progress.setNote(myModel.language.message.getString("info.time_left")+": "+minutes+":"+seconds); //Time left
+												}
+												
+												double curVal2=min2+(step2*j);
+												param1Vals[i][j]=curVal1;
+												param2Vals[i][j]=curVal2;
+												
+												curParam2.value.setDouble(curVal2);
+												curParam1.locked=true; curParam2.locked=true;
+												myModel.parseModel();
+												myModel.runModel(null, false);
+
+												if(analysisType==0){ //EV
+													double maxEV=Double.NEGATIVE_INFINITY;
+													double minEV=Double.POSITIVE_INFINITY;
+													int maxStrat=-1, minStrat=-1;
+													for(int s=0; s<numStrat; s++){
+														//dataEV[s][0][count]=curVal1;
+														//dataEV[s][1][count]=Double.NaN;
+														double curOutcome;
+														if(group==-1){curOutcome=myModel.getStrategyEV(s, dim);}
+														else{curOutcome=myModel.getSubgroupEV(group, s, dim);}
+														if(curOutcome>maxEV){maxEV=curOutcome; maxStrat=s;}
+														if(curOutcome<minEV){minEV=curOutcome; minStrat=s;}
+														dataSurface[s][i][j]=curOutcome;
+													}
+													if(max){
+														//dataEV[maxStrat][1][count]=curVal2;
+														bestStrategy[i][j]=maxStrat;
+													}
+													else{
+														//dataEV[minStrat][1][count]=curVal2;
+														bestStrategy[i][j]=minStrat;
+													}
+												}
+												else { //CEA or BCA
+													//get best strategy
+													double wtp=myModel.dimInfo.WTP;
+													int costDim=myModel.dimInfo.costDim;
+													int effectDim=myModel.dimInfo.effectDim;
+													double maxNMB=Double.NEGATIVE_INFINITY;
+													int bestStrat=-1;
+
+													for(int s=0; s<numStrat; s++) {
+														double cost=0, effect=0;
+														if(group==-1){
+															cost=myModel.getStrategyEV(s, costDim);
+															effect=myModel.getStrategyEV(s, effectDim);
+														}
+														else{
+															cost=myModel.getSubgroupEV(group, s, costDim);
+															effect=myModel.getSubgroupEV(group, s, effectDim);
+														}
+														double curNMB=(effect*wtp)-cost;
+														if(curNMB>maxNMB) {
+															maxNMB=curNMB;
+															bestStrat=s;
+														}
+													}
+													bestStrategy[i][j]=bestStrat;
+
+													//get ICERs or NMBs
+													if(analysisType==1){ //CEA
+														Object table[][]=new CEAHelper().calculateICERs(myModel,group,true);
+														double bestICER=Double.NEGATIVE_INFINITY;
+														bestStrat=-1;
+														for(int s=0; s<table.length; s++){	
+															int origStrat=(int) table[s][0];
+															if(origStrat!=-1){
+																//dataEV[origStrat][0][count]=curVal1;
+																//dataEV[origStrat][1][count]=Double.NaN;
+																double curICER=(double)table[s][4];
+																if(curICER>bestICER && curICER<=ceThresh){
+																	bestICER=curICER;
+																	bestStrat=origStrat;
+																}
+																dataSurface[origStrat][i][j]=curICER;
+															}
+														}
+														if(bestStrat!=-1){
+															//dataEV[bestStrat][1][count]=curVal2;
+														}
+													}
+													else if(analysisType==2){ //BCA
+														Object table[][]=new CEAHelper().calculateNMB(myModel,group,true);
+														maxNMB=Double.NEGATIVE_INFINITY;
+														int maxStrat=-1;
+														for(int s=0; s<table.length; s++){	
+															int origStrat=(int) table[s][0];
+															//dataEV[origStrat][0][count]=curVal1;
+															//dataEV[origStrat][1][count]=Double.NaN;
+															double curNMB=(double)table[s][4];
+															if(curNMB>maxNMB){
+																maxNMB=curNMB;
+																maxStrat=origStrat;
+															}
+															dataSurface[origStrat][i][j]=curNMB;
+														}
+														//dataEV[maxStrat][1][count]=curVal2;
+													}
+												}
+
+												count++;
+												
+												if(progress.isCanceled()){ //End loop
+													cancelled=true;
+													j=intervals+1;
+													i=intervals+1;
+												}
+											}
+										}
+										//Reset parameter values
+										curParam1.value=origValue1; curParam2.value=origValue2;
+										curParam1.locked=false; curParam2.locked=false;
+										myModel.validateModelObjects();
+
+										if(myModel.type==1) {
+											myModel.markov.showTrace=origShowTrace;
+										}
+
+										if(cancelled==false){
+											//Update chart
+											chart.getXYPlot().getDomainAxis().setLabel(curParam1.name);
+											chart.getXYPlot().getRangeAxis().setLabel(curParam2.name);
+
+											if(chartData.getSeriesCount()>0){
+												for(int s=0; s<numStrat; s++){
+													chartData.removeSeries(myModel.strategyNames[s]);
+												}
+											}
+											
+											double blank[][]=new double[2][1];
+											blank[0][0]=Double.NaN;
+											blank[1][0]=Double.NaN;
+											for(int s=0; s<numStrat; s++){ //add series so legend will be created
+												chartData.addSeries(myModel.strategyNames[s],blank);
+											}
+
+											XYPlot plot = chart.getXYPlot();
+											XYLineAndShapeRenderer renderer1 = new XYLineAndShapeRenderer(false,true);
+											Shape square=new Rectangle(-3,-3,6,6);
+											//Paint paints[]=new Paint[numStrat];
+											//DefaultDrawingSupplier supplier = new DefaultDrawingSupplier();
+											for(int s=0; s<numStrat; s++){
+												//paints[s]=supplier.getNextPaint();
+												renderer1.setSeriesPaint(s, seriesPaints[s]);
+												renderer1.setSeriesShape(s, square);
+											}
+											plot.setRenderer(renderer1);
+											
+											plot.getDomainAxis().setRange(min1,max1);
+											plot.getRangeAxis().setRange(min2,max2);
+											plot.getDomainAxis().setDefaultAutoRange(new Range(min1,max1));
+											plot.getRangeAxis().setDefaultAutoRange(new Range(min2,max2));
+																																	
+											plot.clearAnnotations();
+											double w1=step1, w2=step2;
+											
+											for(int i=0; i<=intervals; i++){
+												double curVal1=min1+(step1*i);
+												for(int j=0; j<=intervals; j++){
+													double curVal2=min2+(step2*j);
+													Shape shape =  new Rectangle.Double(curVal1-w1/2.0, curVal2-w2/2.0, w1, w2);
+													XYShapeAnnotation annotation=new XYShapeAnnotation(shape,new BasicStroke(1.f),Color.LIGHT_GRAY,seriesPaints[bestStrategy[i][j]]);
+													plot.addAnnotation(annotation);
+												}
+											}
+
+											//add baseline value
+											XYLineAnnotation annotation=new XYLineAnnotation(baselineParamValue1,baselineParamValue2-w2/4.0,baselineParamValue1,baselineParamValue2+w2/4.0, new BasicStroke(3.f),Color.black);
+											plot.addAnnotation(annotation);
+											
+											XYLineAnnotation annotation1=new XYLineAnnotation(baselineParamValue1-w1/4.0,baselineParamValue2,baselineParamValue1+w1/4.0,baselineParamValue2, new BasicStroke(3.f),Color.black);
+											plot.addAnnotation(annotation1);
+											
+
+											//Update surface chart
+											int strat=comboStrategy.getSelectedIndex();
+											surfaceModel = new SurfaceModel(dataSurface,strat,intervals,min1,max1,min2,max2,curParam1.name,curParam2.name,lblOutcome);
+											surfacePanel.setModel(surfaceModel);
+											surfacePanel.repaint();
+
+											btnExport.setEnabled(true);
+											tabbedPane.setEnabledAt(1, true);
+										}
+										progress.close();
+									}
+									
+									frmSensTwoWay.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+									btnRun.setEnabled(true);
+									progress.close();
+								}
+							} catch (Exception e) {
+								curParam1.locked=false; curParam2.locked=false;
+								myModel.validateModelObjects();
+								e.printStackTrace();
+								progress.close();
+								JOptionPane.showMessageDialog(frmSensTwoWay, e.getMessage());
+								myModel.errorLog.recordError(e);
+								frmSensTwoWay.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+								btnRun.setEnabled(true);
+							}
+						}
+					};
+					SimThread.start();
+				}
+			});
+
+			chartData = new DefaultXYDataset();
+			chart = ChartFactory.createScatterPlot(null, myModel.language.base.getString("object.parameter")+" 1", myModel.language.base.getString("object.parameter")+" 2", //Parameter 1, Parameter 2
+					chartData, PlotOrientation.VERTICAL, true, false, false);
+			chart.getXYPlot().setBackgroundPaint(new Color(1,1,1,1));
+
+			//Draw axes
+			ValueMarker marker = new ValueMarker(0);  // position is the value on the axis
+			marker.setPaint(Color.black);
+			chart.getXYPlot().addDomainMarker(marker);
+			chart.getXYPlot().addRangeMarker(marker);
+			//font
+			chart.getXYPlot().getDomainAxis().setLabelFont(myModel.language.font.deriveFont(Font.BOLD, 14f));
+			chart.getXYPlot().getRangeAxis().setLabelFont(myModel.language.font.deriveFont(Font.BOLD, 14f));
+			chart.getLegend().setItemFont(myModel.language.font);
+
+			GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
+			gbc_tabbedPane.fill = GridBagConstraints.BOTH;
+			gbc_tabbedPane.gridx = 1;
+			gbc_tabbedPane.gridy = 0;
+			frmSensTwoWay.getContentPane().add(tabbedPane, gbc_tabbedPane);
+
+			ChartPanel panelChart = new ChartPanel(chart,false);
+			tabbedPane.addTab(myModel.language.base.getString("plot.area_chart"), null, panelChart, null); //Area Chart
+			panelChart.setBorder(new LineBorder(new Color(0, 0, 0)));
+
+			int numStrat=myModel.getStrategies();
+			seriesPaints=new Paint[numStrat];
+			DefaultDrawingSupplier supplier = new DefaultDrawingSupplier();
+			for(int s=0; s<numStrat; s++) {
+				seriesPaints[s]=supplier.getNextPaint();
+			}
+			
+			//pop-up menu
+			JPopupMenu popup = panelChart.getPopupMenu();
+			JMenuItem mntmChangeColor = new JMenuItem(myModel.language.base.getString("plot.change_series_colors")+"..."); //Change Series Colors
+			mntmChangeColor.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					frmChangeSeriesColors window=new frmChangeSeriesColors(chart, chartData, seriesPaints, frmThis, myModel.language);
+					window.frmChangeSeriesColors.setVisible(true);
+				}
+			});
+			popup.insert(mntmChangeColor, 0);
+			myModel.language.installMenuFontUpdater(popup); //set font
+			myModel.language.setChartPropertiesFont(popup, 1);
+			
+			JPanel panelSurface = new JPanel();
+			panelSurface.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+			tabbedPane.addTab(myModel.language.base.getString("plot.surface_chart"), null, panelSurface, null); //Surface Chart
+			tabbedPane.setEnabledAt(1, false);
+			GridBagLayout gbl_panelSurface = new GridBagLayout();
+			gbl_panelSurface.columnWidths = new int[]{71, 196, 1, 0};
+			gbl_panelSurface.rowHeights = new int[]{0, 0, 0};
+			gbl_panelSurface.columnWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
+			gbl_panelSurface.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
+			panelSurface.setLayout(gbl_panelSurface);
+
+			surfacePanel = new SurfacePanel();
+			GridBagConstraints gbc_panel_3 = new GridBagConstraints();
+			gbc_panel_3.gridwidth = 3;
+			gbc_panel_3.insets = new Insets(0, 0, 5, 5);
+			gbc_panel_3.fill = GridBagConstraints.BOTH;
+			gbc_panel_3.gridx = 0;
+			gbc_panel_3.gridy = 0;
+			panelSurface.add(surfacePanel, gbc_panel_3);
+			surfacePanel.setLayout(new BorderLayout(0, 0));
+
+
+			JLabel lblStrategy = new JLabel(myModel.language.analysis.getString("gen.strategy")); //Strategy
+			lblStrategy.setFont(myModel.language.font);
+			GridBagConstraints gbc_lblStrategy = new GridBagConstraints();
+			gbc_lblStrategy.anchor = GridBagConstraints.WEST;
+			gbc_lblStrategy.insets = new Insets(0, 0, 0, 5);
+			gbc_lblStrategy.gridx = 0;
+			gbc_lblStrategy.gridy = 1;
+			panelSurface.add(lblStrategy, gbc_lblStrategy);
+
+			comboStrategy = new JComboBox<String>(new DefaultComboBoxModel<String>(myModel.strategyNames));
+			comboStrategy.setFont(myModel.language.font);
+			comboStrategy.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					//Update surface chart
+					int strat=comboStrategy.getSelectedIndex();
+					surfaceModel = new SurfaceModel(dataSurface,strat,surfaceModel.intervals,surfaceModel.xMin,
+							surfaceModel.xMax,surfaceModel.yMin,surfaceModel.yMax,surfaceModel.xLabel,
+							surfaceModel.yLabel,surfaceModel.zLabel);
+					surfacePanel.setModel(surfaceModel);
+					surfacePanel.repaint();
+				}
+			});
+			comboStrategy.setLightWeightPopupEnabled(false); //Ensure drop-down appears over canvas
+
+			GridBagConstraints gbc_comboBox = new GridBagConstraints();
+			gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
+			gbc_comboBox.insets = new Insets(0, 0, 0, 5);
+			gbc_comboBox.gridx = 1;
+			gbc_comboBox.gridy = 1;
+			panelSurface.add(comboStrategy, gbc_comboBox);
+
+		} catch (Exception ex){
+			ex.printStackTrace();
+			myModel.errorLog.recordError(ex);
+		}
+	
+	}
+	
+	public void updatePlot() {
+		XYPlot plot = chart.getXYPlot();
+		plot.clearAnnotations();
+		double w1=step1, w2=step2;
+		
+		for(int i=0; i<=intervals; i++){
+			double curVal1=min1+(step1*i);
+			for(int j=0; j<=intervals; j++){
+				double curVal2=min2+(step2*j);
+				Shape shape =  new Rectangle.Double(curVal1-w1/2.0, curVal2-w2/2.0, w1, w2);
+				XYShapeAnnotation annotation=new XYShapeAnnotation(shape,new BasicStroke(1.f),Color.LIGHT_GRAY,seriesPaints[bestStrategy[i][j]]);
+				plot.addAnnotation(annotation);
+			}
+		}
+
+		//add baseline value
+		XYLineAnnotation annotation=new XYLineAnnotation(baselineParamValue1,baselineParamValue2-w2/4.0,baselineParamValue1,baselineParamValue2+w2/4.0, new BasicStroke(3.f),Color.black);
+		plot.addAnnotation(annotation);
+		
+		XYLineAnnotation annotation1=new XYLineAnnotation(baselineParamValue1-w1/4.0,baselineParamValue2,baselineParamValue1+w1/4.0,baselineParamValue2, new BasicStroke(3.f),Color.black);
+		plot.addAnnotation(annotation1);
+	}
+}

@@ -1,0 +1,13 @@
+# Built-in ChatGPT connection and model chat3.2.4
+
+The existing broker uses the user's eligible ChatGPT subscription through the account's issued authorization; credentials are protected in the compatible OS credential store. Provider eligibility/allowances remain authoritative. No silent API-billing fallback is supplied.
+
+The current UI uses `chat-preview` then explicitly approved `chat-request`. A deterministic compact view carries every nonempty worksheet cell's address/value/formula/cache kind, supported document text, source hashes and the consistent current model. Blank formatting/package records stay in the complete local inventory. The exact view is hash-bound to approval; selected file hashes are rechecked. It makes one remote model-proposal call, not the legacy28/29chunk transport loop. Local `Q… = expression`, structure confirmation, validate/run and explicit one-way commands use zero inference calls.
+
+`model_chat` parses bounded JSON proposals; provider output is never executed as Python/JavaScript or accepted as arbitrary XML. Native XML is generated locally after graph/type/identifier/expression/source-reference validation. The Java application reviews proposals, rejects stale edit targets, and uses original native models/undo/full validation/calculations. Unknowns stay explicit and block execution. The full source-backed initial scientific model remains subject to human review; transport/schema validity is not domain validation.
+
+A provisional native source outline is available before inference. Missing/conflicting inputs become specific questions, not automatic retries. Partial received-character progress is emitted; Progress-aware waiting preserves the draft and stops only after the configured idle interval (default180seconds), not total elapsed time. The chat streaming read timeout uses that interval too; the legacy/account network timeout remains30seconds. Meaningful known response events advance the clock; keepalives and duplicate lifecycle events do not. Only phase/count metadata is forwarded for reasoning events; no reasoning content is logged or rendered. Source/API errors do not grant permission to invent inputs.
+
+The older `preview`/`request` chunk-review protocol remains for compatibility/tests; it is not the UI's model-generation path. The cumulative application call cap remains removed; one approved Send budgets its own exact calls. No hidden retries, account resets, global client reconfiguration or credential exports occur.
+
+Streaming event names were checked against the official OpenAI Responses event reference: https://developers.openai.com/api/reference/resources/responses/streaming-events . No API parameters or provider eligibility rules were changed.

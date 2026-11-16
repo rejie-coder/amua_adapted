@@ -1,0 +1,3 @@
+PASS chat clipboard/drop: text copy/cut/paste, platform shortcut and menus, file-list and local URI imports, screenshot pixel/privacy preservation, asynchronous image preparation, outgoing request inclusion, deduplication, stale approval invalidation, no auto-send, limits/type/symlink rejection, Clear discards late image, 340x600 layout
+2026-11-16 06:03:11.925 java[22837:552762] XType: Using static font registry.
+Warning: the fonts "Times" and "Lucida Bright" are not available for the Java logical font "Serif", which may have unexpected appearance or behavior. Re-enable the "Times" font to remove this warning.

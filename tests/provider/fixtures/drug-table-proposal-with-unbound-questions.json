@@ -1,0 +1,277 @@
+{
+  "intent": "build",
+  "message": "Transcribed the image into two strategies and four mutually exclusive outcomes. Review the input transcription and context before running.",
+  "questions": [
+    {
+      "id": "Q_HORIZON",
+      "text": "What time horizon do the supplied total costs and QALYs represent?",
+      "field": "structure",
+      "node": "model",
+      "dimension": null
+    },
+    {
+      "id": "Q_WTP",
+      "text": "What willingness-to-pay threshold should be used for choosing a strategy?",
+      "field": "parameter",
+      "parameter": "WTP",
+      "node": "nodeid"
+    },
+    {
+      "id": "Q_PERSPECTIVE",
+      "text": "What economic perspective and currency year apply?",
+      "field": "context",
+      "node": "all"
+    }
+  ],
+  "model": {
+    "name": "Drug A vs Drug B",
+    "dimensions": [
+      {
+        "name": "Cost ($)",
+        "symbol": "C"
+      },
+      {
+        "name": "Effectiveness (QALYs)",
+        "symbol": "Q"
+      }
+    ],
+    "settings": {
+      "analysisType": 1,
+      "objective": 0,
+      "objectiveDim": 1,
+      "costDim": 0,
+      "effectDim": 1,
+      "baseScenario": "Drug A"
+    },
+    "parameters": [
+      {
+        "name": "p_A_success",
+        "expression": "0.70",
+        "sources": [
+          "drug-table.png"
+        ],
+        "notes": "User image, row 1: Drug A / Success. Probability (unitless). No uncertainty distribution or bounds supplied."
+      },
+      {
+        "name": "cost_A_success",
+        "expression": "1000",
+        "sources": [
+          "drug-table.png"
+        ],
+        "notes": "User image, row 1: Drug A / Success. Total cost ($; currency unspecified). No uncertainty distribution or bounds supplied."
+      },
+      {
+        "name": "qaly_A_success",
+        "expression": "2.0",
+        "sources": [
+          "drug-table.png"
+        ],
+        "notes": "User image, row 1: Drug A / Success. Total effectiveness (QALYs). No uncertainty distribution or bounds supplied."
+      },
+      {
+        "name": "p_A_failure",
+        "expression": "0.30",
+        "sources": [
+          "drug-table.png"
+        ],
+        "notes": "User image, row 2: Drug A / Failure. Probability (unitless). No uncertainty distribution or bounds supplied."
+      },
+      {
+        "name": "cost_A_failure",
+        "expression": "500",
+        "sources": [
+          "drug-table.png"
+        ],
+        "notes": "User image, row 2: Drug A / Failure. Total cost ($; currency unspecified). No uncertainty distribution or bounds supplied."
+      },
+      {
+        "name": "qaly_A_failure",
+        "expression": "0.5",
+        "sources": [
+          "drug-table.png"
+        ],
+        "notes": "User image, row 2: Drug A / Failure. Total effectiveness (QALYs). No uncertainty distribution or bounds supplied."
+      },
+      {
+        "name": "p_B_success",
+        "expression": "0.60",
+        "sources": [
+          "drug-table.png"
+        ],
+        "notes": "User image, row 3: Drug B / Success. Probability (unitless). No uncertainty distribution or bounds supplied."
+      },
+      {
+        "name": "cost_B_success",
+        "expression": "2000",
+        "sources": [
+          "drug-table.png"
+        ],
+        "notes": "User image, row 3: Drug B / Success. Total cost ($; currency unspecified). No uncertainty distribution or bounds supplied."
+      },
+      {
+        "name": "qaly_B_success",
+        "expression": "3.0",
+        "sources": [
+          "drug-table.png"
+        ],
+        "notes": "User image, row 3: Drug B / Success. Total effectiveness (QALYs). No uncertainty distribution or bounds supplied."
+      },
+      {
+        "name": "p_B_failure",
+        "expression": "0.40",
+        "sources": [
+          "drug-table.png"
+        ],
+        "notes": "User image, row 4: Drug B / Failure. Probability (unitless). No uncertainty distribution or bounds supplied."
+      },
+      {
+        "name": "cost_B_failure",
+        "expression": "800",
+        "sources": [
+          "drug-table.png"
+        ],
+        "notes": "User image, row 4: Drug B / Failure. Total cost ($; currency unspecified). No uncertainty distribution or bounds supplied."
+      },
+      {
+        "name": "qaly_B_failure",
+        "expression": "1.0",
+        "sources": [
+          "drug-table.png"
+        ],
+        "notes": "User image, row 4: Drug B / Failure. Total effectiveness (QALYs). No uncertainty distribution or bounds supplied."
+      }
+    ],
+    "nodes": [
+      {
+        "id": "decision",
+        "parent": null,
+        "type": "decision",
+        "name": "Choose treatment",
+        "notes": "Reproduced from the user-supplied image. Rows are treated as mutually exclusive, exhaustive outcomes per strategy; costs and QALYs are total outcomes per person, not additional repeated charges. Time horizon, perspective, exact dollar currency and currency year were not supplied. No willingness-to-pay threshold was supplied; the native WTP field is zero only as a required software placeholder. Amua uses it for root net-benefit optimization: do not interpret the automatic root choice until a real threshold is supplied. Only the per-strategy outcomes and incremental ICER are verified here. Drug A is the reference for incremental comparisons only. No preferred treatment is asserted.",
+        "cost": [
+          "0",
+          "0"
+        ],
+        "payoff": [
+          "0",
+          "0"
+        ],
+        "sources": [
+          "drug-table.png"
+        ]
+      },
+      {
+        "id": "drug_A",
+        "parent": "decision",
+        "type": "chance",
+        "name": "Drug A",
+        "cost": [
+          "0",
+          "0"
+        ],
+        "payoff": [
+          "0",
+          "0"
+        ],
+        "notes": "Success and failure probabilities come directly from the supplied table. No extra strategy-level costs added.",
+        "sources": [
+          "drug-table.png"
+        ]
+      },
+      {
+        "id": "A_success",
+        "parent": "drug_A",
+        "type": "terminal",
+        "name": "Success",
+        "probability": "p_A_success",
+        "cost": [
+          "0",
+          "0"
+        ],
+        "payoff": [
+          "cost_A_success",
+          "qaly_A_success"
+        ],
+        "sources": [
+          "drug-table.png"
+        ],
+        "notes": "Source row 1: probability 0.70, total cost $1000, effectiveness 2.0 QALYs. Cost is stored in the terminal payoff for the Cost dimension; native terminal cost fields stay zero."
+      },
+      {
+        "id": "A_failure",
+        "parent": "drug_A",
+        "type": "terminal",
+        "name": "Failure",
+        "probability": "p_A_failure",
+        "cost": [
+          "0",
+          "0"
+        ],
+        "payoff": [
+          "cost_A_failure",
+          "qaly_A_failure"
+        ],
+        "sources": [
+          "drug-table.png"
+        ],
+        "notes": "Source row 2: probability 0.30, total cost $500, effectiveness 0.5 QALYs. Cost is stored in the terminal payoff for the Cost dimension; native terminal cost fields stay zero."
+      },
+      {
+        "id": "drug_B",
+        "parent": "decision",
+        "type": "chance",
+        "name": "Drug B",
+        "cost": [
+          "0",
+          "0"
+        ],
+        "payoff": [
+          "0",
+          "0"
+        ],
+        "notes": "Success and failure probabilities come directly from the supplied table. No extra strategy-level costs added.",
+        "sources": [
+          "drug-table.png"
+        ]
+      },
+      {
+        "id": "B_success",
+        "parent": "drug_B",
+        "type": "terminal",
+        "name": "Success",
+        "probability": "p_B_success",
+        "cost": [
+          "0",
+          "0"
+        ],
+        "payoff": [
+          "cost_B_success",
+          "qaly_B_success"
+        ],
+        "sources": [
+          "drug-table.png"
+        ],
+        "notes": "Source row 3: probability 0.60, total cost $2000, effectiveness 3.0 QALYs. Cost is stored in the terminal payoff for the Cost dimension; native terminal cost fields stay zero."
+      },
+      {
+        "id": "B_failure",
+        "parent": "drug_B",
+        "type": "terminal",
+        "name": "Failure",
+        "probability": "p_B_failure",
+        "cost": [
+          "0",
+          "0"
+        ],
+        "payoff": [
+          "cost_B_failure",
+          "qaly_B_failure"
+        ],
+        "sources": [
+          "drug-table.png"
+        ],
+        "notes": "Source row 4: probability 0.40, total cost $800, effectiveness 1.0 QALYs. Cost is stored in the terminal payoff for the Cost dimension; native terminal cost fields stay zero."
+      }
+    ]
+  }
+}

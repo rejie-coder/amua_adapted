@@ -1,0 +1,66 @@
+{
+  "remote_response": "synthetic fixture; not live account/vision acceptance",
+  "image_sent_to_provider": [
+    {
+      "model": "synthetic-image-model",
+      "image_sha256": "d349c61aea0a5bfb77c1add396c3fd8d7fb4298c6f602a7796f4251d1f035d6c"
+    }
+  ],
+  "proposal_nodes": 7,
+  "question_bindings_retained": [
+    {
+      "question": "Q_HORIZON",
+      "action": "retained as whole-model clarification",
+      "original_target": {
+        "field": "structure",
+        "node": "model",
+        "dimension": null
+      }
+    },
+    {
+      "question": "Q_WTP",
+      "action": "invalid numeric binding retained as unbound clarification",
+      "original_target": {
+        "field": "parameter",
+        "node": "nodeid",
+        "parameter": "WTP"
+      }
+    },
+    {
+      "question": "Q_PERSPECTIVE",
+      "action": "retained as whole-model clarification",
+      "original_target": {
+        "field": "context",
+        "node": "all"
+      }
+    }
+  ],
+  "unreviewed_calculation_blocked": true,
+  "explicit_synthetic_reviews": [
+    "approve structure",
+    "approve inputs"
+  ],
+  "original_engine_results": [
+    {
+      "strategy": "Drug A",
+      "outcome": "Cost ($)",
+      "value": 850.0
+    },
+    {
+      "strategy": "Drug A",
+      "outcome": "Effectiveness (QALYs)",
+      "value": 1.5499999999999998
+    },
+    {
+      "strategy": "Drug B",
+      "outcome": "Cost ($)",
+      "value": 1520.0
+    },
+    {
+      "strategy": "Drug B",
+      "outcome": "Effectiveness (QALYs)",
+      "value": 2.1999999999999997
+    }
+  ],
+  "incremental_icer": 1030.769230769231
+}

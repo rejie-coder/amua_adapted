@@ -1,0 +1,92 @@
+{
+  "compile-checks": {
+    "exit_code": 0,
+    "log": "compile-checks.txt"
+  },
+  "provider-final": {
+    "exit_code": 0,
+    "log": "provider-final.txt"
+  },
+  "workflow-final": {
+    "exit_code": 1,
+    "log": "workflow-final.txt"
+  },
+  "bridge-final": {
+    "exit_code": 0,
+    "log": "bridge-final.txt"
+  },
+  "hardening-engine": {
+    "exit_code": 0,
+    "log": "hardening-engine.txt"
+  },
+  "image-chat-pipeline": {
+    "exit_code": 0,
+    "log": "image-chat-pipeline.txt"
+  },
+  "image-chat-controller": {
+    "exit_code": 0,
+    "log": "image-chat-controller.txt"
+  },
+  "chat-attachments": {
+    "exit_code": 0,
+    "log": "chat-attachments.txt"
+  },
+  "atomic-save": {
+    "exit_code": 0,
+    "log": "atomic-save.txt"
+  },
+  "native-controller": {
+    "exit_code": 0,
+    "log": "native-controller.txt"
+  },
+  "hardening-controller": {
+    "exit_code": 0,
+    "log": "hardening-controller.txt"
+  },
+  "progress-ui": {
+    "exit_code": 0,
+    "log": "progress-ui.txt"
+  },
+  "approval-wire-types": {
+    "exit_code": 0,
+    "log": "approval-wire-types.txt"
+  },
+  "engine-candidate": {
+    "exit_code": 0,
+    "log": "engine-candidate.txt"
+  },
+  "engine-original": {
+    "exit_code": 0,
+    "log": "engine-original.txt"
+  },
+  "engine-equivalence": {
+    "exact_equal": true,
+    "cases": [
+      "RESULT 0 0 Treatment 40.0",
+      "RESULT 0 0 Control 30.0",
+      "RESULT 0 1 Treatment 40.624",
+      "RESULT 0 1 Control 29.672",
+      "RESULT 1 0 Treatment 30507.8125",
+      "RESULT 1 0 Control 15500.0",
+      "RESULT 1 1 Treatment 151710.0",
+      "RESULT 1 1 Control 77712.0"
+    ],
+    "exit_code": 0
+  },
+  "native-presentation": {
+    "exit_code": 0,
+    "log": "native-presentation.txt"
+  },
+  "source-package-final": {
+    "exit_code": 0,
+    "log": "source-package-final.txt"
+  },
+  "codesign-final": {
+    "exit_code": 0,
+    "log": "codesign-final.txt"
+  },
+  "signature-identity": {
+    "exit_code": 0,
+    "log": "signature-identity.txt"
+  }
+}

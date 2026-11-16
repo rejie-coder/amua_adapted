@@ -1,0 +1,17 @@
+{
+  "version": "3.2.4",
+  "provider_pass": 124,
+  "bridge_pass": 10,
+  "workflow_pass": 37,
+  "workflow_total": 38,
+  "retained_failure": "actual native scanned-PDF OCR",
+  "image_pipeline": "controlled remote response; production local path passed",
+  "chat_clipboard_drop": "real handlers/private clipboard passed; physical desktop pending",
+  "engine_exact_outputs": 8,
+  "unchanged_tree_markov_math_classes": 145,
+  "source_package_matches": 94,
+  "signature": "ad hoc; deep strict passes",
+  "candidate_jar_sha256": "ab559792a6693557a6097e5c93dbe7b18bc16a6fcca2eadcc2bac6a7bfda152e",
+  "live_vision_acceptance": false,
+  "prior_release_and_working_model_preserved": true
+}

@@ -1,0 +1,3 @@
+PASS image-chat sidebar: preliminary/final separation, safe retry, no outline contamination, reviewed replacement, input guard, Undo/Redo, 7 nodes/2 dimensions, original engine 850/1.55 and 1520/2.20, comparison-table ICER 1030.7692
+2026-11-16 06:03:10.133 java[22835:552716] XType: Using static font registry.
+Warning: the fonts "Times" and "Lucida Bright" are not available for the Java logical font "Serif", which may have unexpected appearance or behavior. Re-enable the "Times" font to remove this warning.

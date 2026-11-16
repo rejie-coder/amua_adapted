@@ -1,0 +1,26 @@
+Amua 3.2.4 for Intel Mac — preview
+
+Requirements: Intel x86_64 Mac, macOS 14 or later.
+Java and Python are bundled. This is not a native Apple Silicon build.
+
+1. Drag Amua.app to Applications.
+2. Eject this disk image.
+3. Open Amua from Applications.
+4. Preserve your original model files and save new work separately.
+
+This preview is ad hoc signed, not Apple-notarized. macOS may block first launch.
+Verify the download checksum and review the normal macOS Privacy & Security
+Open Anyway option if you choose to trust this preview. Do not disable Gatekeeper.
+
+AI requires an eligible connected ChatGPT account/workspace and internet access.
+Manual modelling works without AI sign-in. Check all AI-derived values and
+assumptions, resolve questions and run full validation before calculations.
+Scanned-PDF OCR has an unresolved environment-specific test failure.
+
+Downloads, source, checksums, instructions and known issues:
+https://github.com/rejie-coder/amua_adapted
+https://github.com/rejie-coder/amua_adapted/releases
+
+Original Amua by Zachary J. Ward.
+Adapted and developed by Dr. Rejinten Jayawardhana.
+GPLv3-or-later; original copyright and third-party notices retained.

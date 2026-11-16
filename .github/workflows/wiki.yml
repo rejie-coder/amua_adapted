@@ -1,0 +1,19 @@
+name: Sync wiki
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [docs/wiki/**, scripts/sync_wiki.py]
+permissions:
+  contents: write
+jobs:
+  wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Publish reviewed wiki pages
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/sync_wiki.py

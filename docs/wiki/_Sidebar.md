@@ -1,0 +1,12 @@
+[Home](https://github.com/rejie-coder/amua_adapted/wiki)
+
+- [Installing](https://github.com/rejie-coder/amua_adapted/wiki/Installing)
+- [AI Workflow](https://github.com/rejie-coder/amua_adapted/wiki/AI-Workflow)
+- [Drug Example](https://github.com/rejie-coder/amua_adapted/wiki/Drug-Example)
+- [Model Validation](https://github.com/rejie-coder/amua_adapted/wiki/Model-Validation)
+- [MCP](https://github.com/rejie-coder/amua_adapted/wiki/MCP)
+- [Privacy](https://github.com/rejie-coder/amua_adapted/wiki/Privacy)
+- [Troubleshooting](https://github.com/rejie-coder/amua_adapted/wiki/Troubleshooting)
+- [Building](https://github.com/rejie-coder/amua_adapted/wiki/Building)
+- [Releasing](https://github.com/rejie-coder/amua_adapted/wiki/Releasing)
+- [Third Party](https://github.com/rejie-coder/amua_adapted/wiki/Third-Party)

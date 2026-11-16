@@ -1,0 +1,10 @@
+{
+  "Drug A": {
+    "Cost ($)": 850.0,
+    "Effectiveness (QALYs)": 1.55
+  },
+  "Drug B": {
+    "Cost ($)": 1520.0,
+    "Effectiveness (QALYs)": 2.2
+  }
+}

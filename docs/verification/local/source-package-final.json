@@ -1,0 +1,385 @@
+{
+  "resources": "/Users/rejie/Desktop/Amua/3.2.4/Amua.app/Contents/Resources",
+  "checked_source_files": 94,
+  "source_files": [
+    {
+      "file": "workflow_helper.py",
+      "sha256": "416d756ed5f9c6946e1df51266a6ac2821763772d90b02e9ed0bc43781635c03"
+    },
+    {
+      "file": "engine_helper.py",
+      "sha256": "16535d45424b42e4c56c5c944e7cb76813ee1e2504e1ad8ce356533a242ddf40"
+    },
+    {
+      "file": "bootstrap.js",
+      "sha256": "26e9d3bfa55ed2dc1f427db1009869f680556495a99825fbe952908f9749f870"
+    },
+    {
+      "file": "amua_mcp.py",
+      "sha256": "30aa9d96d840c8ac7434350a53b86b62961a079495b359ddea48808da669ea81"
+    },
+    {
+      "file": "pythonlib/workflow/mixed_formats.py",
+      "sha256": "cd89c57fa7140cc744df429efe83750c90322e5e9747a11b01b7383bfbdfc47d"
+    },
+    {
+      "file": "pythonlib/workflow/__init__.py",
+      "sha256": "25aeafd64cda5b9c12c551554aee6d90a53e23edf05c07e6ad591ffe5ae245f7"
+    },
+    {
+      "file": "pythonlib/workflow/core.py",
+      "sha256": "cc8ab5759a65ac3a77be14a783b960d40f880b551b8adadbe30342fdad9d6a84"
+    },
+    {
+      "file": "pythonlib/workflow/batches.py",
+      "sha256": "c3c6c5a3f711bd105e153134a5a23c6d8093ae22d6f4756542d2a9873df4b53f"
+    },
+    {
+      "file": "pythonlib/workflow/__main__.py",
+      "sha256": "8020bd929de0e85434270c3651cff04d1bb0c0e1a419fdc714a142c5fed659a0"
+    },
+    {
+      "file": "pythonlib/provider/provider_helper.py",
+      "sha256": "838d1c3e440814559142e77d3723fdb318f39399c38ec1b33c9a12b14a4e6ef4"
+    },
+    {
+      "file": "pythonlib/provider/transport.py",
+      "sha256": "ab3dd09ecbd58f16abc31f77e1689e3c3fea6ba5806d0dc288a96a6caefa5512"
+    },
+    {
+      "file": "pythonlib/provider/budget.py",
+      "sha256": "9f6b518c8b61a0b128bd57bd586c034e4206251e234462d44aefc16049bdeade"
+    },
+    {
+      "file": "pythonlib/provider/review_cache.py",
+      "sha256": "ee73623398def96694296fb6e9a07566e91d8ef53ff76e2d57bc1dc58e976b49"
+    },
+    {
+      "file": "pythonlib/provider/proposal_contract.py",
+      "sha256": "4d07a38b29cb0c013c19a7ecbdbe6e917fcbed0cd913dae18d49da1199cd752d"
+    },
+    {
+      "file": "pythonlib/provider/progress_watch.py",
+      "sha256": "53dae84ac380cae5a373c138c92e12f7b2f676c4b9113109b2e9398451c29004"
+    },
+    {
+      "file": "pythonlib/provider/broker.py",
+      "sha256": "c84826f61851e9930198af0f57deaafeef879fb700f45844b79447701178ecef"
+    },
+    {
+      "file": "pythonlib/provider/chunks.py",
+      "sha256": "c6f2e112ecc72f829707c5553b02a3f346ce3f56f87662265857793400e5dac0"
+    },
+    {
+      "file": "pythonlib/provider/hardening.py",
+      "sha256": "3855fd324e8faaa47509ee40199bab1a5bb0054804a5b62eb0ae506c1ca83ecf"
+    },
+    {
+      "file": "pythonlib/provider/model_chat.py",
+      "sha256": "0b74c0ae56b65b3d404d89ce7acc3ec14512a4e1a980fc75590a3df87f2a7f0a"
+    },
+    {
+      "file": "provider_helper.py",
+      "sha256": "838d1c3e440814559142e77d3723fdb318f39399c38ec1b33c9a12b14a4e6ef4"
+    },
+    {
+      "file": "transport.py",
+      "sha256": "ab3dd09ecbd58f16abc31f77e1689e3c3fea6ba5806d0dc288a96a6caefa5512"
+    },
+    {
+      "file": "budget.py",
+      "sha256": "9f6b518c8b61a0b128bd57bd586c034e4206251e234462d44aefc16049bdeade"
+    },
+    {
+      "file": "review_cache.py",
+      "sha256": "ee73623398def96694296fb6e9a07566e91d8ef53ff76e2d57bc1dc58e976b49"
+    },
+    {
+      "file": "proposal_contract.py",
+      "sha256": "4d07a38b29cb0c013c19a7ecbdbe6e917fcbed0cd913dae18d49da1199cd752d"
+    },
+    {
+      "file": "progress_watch.py",
+      "sha256": "53dae84ac380cae5a373c138c92e12f7b2f676c4b9113109b2e9398451c29004"
+    },
+    {
+      "file": "broker.py",
+      "sha256": "c84826f61851e9930198af0f57deaafeef879fb700f45844b79447701178ecef"
+    },
+    {
+      "file": "chunks.py",
+      "sha256": "c6f2e112ecc72f829707c5553b02a3f346ce3f56f87662265857793400e5dac0"
+    },
+    {
+      "file": "hardening.py",
+      "sha256": "3855fd324e8faaa47509ee40199bab1a5bb0054804a5b62eb0ae506c1ca83ecf"
+    },
+    {
+      "file": "model_chat.py",
+      "sha256": "0b74c0ae56b65b3d404d89ce7acc3ec14512a4e1a980fc75590a3df87f2a7f0a"
+    },
+    {
+      "file": "pythonlib/pypdf-7.1.0.dist-info/RECORD",
+      "sha256": "825523027c4efc0236ccad9be95240bcc887eeb000c2f4dc1e3011d33c51c04f"
+    },
+    {
+      "file": "pythonlib/pypdf-7.1.0.dist-info/WHEEL",
+      "sha256": "acb244f0e2cf0596f3eedab1b35c83fb003e0036b511ce4fb9853e63f3cd5832"
+    },
+    {
+      "file": "pythonlib/pypdf-7.1.0.dist-info/METADATA",
+      "sha256": "6eed13be8af3a3693917815b1a858ac22861af177510ad52bc5a3bf70673389f"
+    },
+    {
+      "file": "pythonlib/pypdf/_page_labels.py",
+      "sha256": "b4f70f5270c63797a359b7aa32506b30cad101edec9eac22541f084630ec7742"
+    },
+    {
+      "file": "pythonlib/pypdf/_protocols.py",
+      "sha256": "d577878c10086fbda7ffc2a894cf70cd0aa896cb801023c1eb55d4b93a25f508"
+    },
+    {
+      "file": "pythonlib/pypdf/_version.py",
+      "sha256": "beb424e9c386fee93480ea8de2a87b3510b17b35dfbe1bfdb53edbc181f24dc9"
+    },
+    {
+      "file": "pythonlib/pypdf/_encryption.py",
+      "sha256": "f5ed97cc1f0d7b8e03e6a23ce5410e1c6fa8036b8ac93cb3247d7675e4aec964"
+    },
+    {
+      "file": "pythonlib/pypdf/_writer.py",
+      "sha256": "ed869929cab3eee617579d63aeb8bc812e953518c935c5be6e04e08d0c8c38d2"
+    },
+    {
+      "file": "pythonlib/pypdf/pagerange.py",
+      "sha256": "2be4da4dc1df7b316c3106889bb1601158d94da96147a780c66daf08cdf0dae5"
+    },
+    {
+      "file": "pythonlib/pypdf/constants.py",
+      "sha256": "1e5caf05a85f11829bc848473aa3ea78793ed684073a3591d341f2ceb2d8d687"
+    },
+    {
+      "file": "pythonlib/pypdf/__init__.py",
+      "sha256": "d7786f1b3cb2e52e28b1085f0ea150fa7f029baad252b29af7415c790871f7df"
+    },
+    {
+      "file": "pythonlib/pypdf/_reader.py",
+      "sha256": "7a85bb5353a28fa47d80bb36efd63b91d6302d32707c7df1943b9535c702db55"
+    },
+    {
+      "file": "pythonlib/pypdf/types.py",
+      "sha256": "eb283ad86ea4e5206e8ded325cd7e0eaf4f6951b997e68dd72e86a949f4185a1"
+    },
+    {
+      "file": "pythonlib/pypdf/xmp.py",
+      "sha256": "4c4956bab086ca99c75624096326f5a577d78b0a010d48b7fa12df50e5dce07c"
+    },
+    {
+      "file": "pythonlib/pypdf/_page.py",
+      "sha256": "fe81e92789c5af7ac31a0e7ef8e68e3a1271579ae5aa3ae22349b4bf938096c0"
+    },
+    {
+      "file": "pythonlib/pypdf/_doc_common.py",
+      "sha256": "c93f07095a769ddb8cc5f72e1b8208fe2ce3f66489cc766691001600f7698b80"
+    },
+    {
+      "file": "pythonlib/pypdf/py.typed",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "pythonlib/pypdf/_cmap.py",
+      "sha256": "e8eed582cf05800eeb7e441a435e3ab6840eb0af2ecb13a023f4a0a6d8091ad1"
+    },
+    {
+      "file": "pythonlib/pypdf/errors.py",
+      "sha256": "070d56f61c4eb03830ab053a628436974f89894c93aba979423542afe5b81850"
+    },
+    {
+      "file": "pythonlib/pypdf/_configuration.py",
+      "sha256": "fc5dcaf4e83f532293dd55af864e36f2608df0727c0a70a1c9290c775e23a085"
+    },
+    {
+      "file": "pythonlib/pypdf/filters.py",
+      "sha256": "ac2276d7acc53c8a894947e43af7601bb8045cbb078562c8c2747936ec42d5f9"
+    },
+    {
+      "file": "pythonlib/pypdf/_utils.py",
+      "sha256": "7529fc21ba8a6a5da7e5f43d9698738c884fb7711c901873e9f7def168b2b075"
+    },
+    {
+      "file": "pythonlib/pypdf/papersizes.py",
+      "sha256": "e93cf9b1f34dff724e51aa58f3753e95a928867a57600d2148440d98e54b14bf"
+    },
+    {
+      "file": "pythonlib/pypdf-7.1.0.dist-info/licenses/LICENSE",
+      "sha256": "a97ac230e5f33ef10a5367a850eb01f91f1a0b064e34742c7794d2294557f524"
+    },
+    {
+      "file": "pythonlib/pypdf/_crypt_providers/_base.py",
+      "sha256": "34505711d85bae0f64d353d57cd37f93b94401897606481720e8b9a1f53ff91f"
+    },
+    {
+      "file": "pythonlib/pypdf/_crypt_providers/_cryptography.py",
+      "sha256": "12cee92afac0a1ecc1ecb7036a26365af4b3920d310dadb05f66651485f6cd16"
+    },
+    {
+      "file": "pythonlib/pypdf/_crypt_providers/__init__.py",
+      "sha256": "c5441b160310bca31a38e4f7454756ddb4bc7d94a147c3c13b3eab7ac7f05855"
+    },
+    {
+      "file": "pythonlib/pypdf/_crypt_providers/_pycryptodome.py",
+      "sha256": "bd9102129a13f4ebe9a46ebb74aec456de51e5aa491bd5fce588a3479ed2a6f6"
+    },
+    {
+      "file": "pythonlib/pypdf/_crypt_providers/_fallback.py",
+      "sha256": "8ea49f2cd05a99bbbaebe38e0ab5067c0632470af4f55caed3bcdb934a456230"
+    },
+    {
+      "file": "pythonlib/pypdf/annotations/_base.py",
+      "sha256": "608453cd3764aa3f035164939b2d1fae47d3af88e87b91d41b344e5287f8a08a"
+    },
+    {
+      "file": "pythonlib/pypdf/annotations/_non_markup_annotations.py",
+      "sha256": "3c515ef1b6916d0be44272cc928e43cd3ed5c37307f6cd5abd8d241da66c9806"
+    },
+    {
+      "file": "pythonlib/pypdf/annotations/__init__.py",
+      "sha256": "7f693ffa3027dfd082076ecac50fdef771a29e7ce40076d49e749e1899758f21"
+    },
+    {
+      "file": "pythonlib/pypdf/annotations/_markup_annotations.py",
+      "sha256": "db21daaa564b2547fddd9be8466cb938ed64412dd762a2a837991ed3f5b04177"
+    },
+    {
+      "file": "pythonlib/pypdf/_text_extraction/__init__.py",
+      "sha256": "dfc5146f9165523250893764eecd54908dbc3aeafdf3376f1881bddd21c23dbc"
+    },
+    {
+      "file": "pythonlib/pypdf/_text_extraction/_text_extractor.py",
+      "sha256": "af20c1ef91aa764b28cba2ba8b090dd3eb131975c4d62ec176c49ab5e514cc8e"
+    },
+    {
+      "file": "pythonlib/pypdf/actions/__init__.py",
+      "sha256": "d8bdd81ef60846bab097640490991e4b63bd6b521eb0356ed696e24854299518"
+    },
+    {
+      "file": "pythonlib/pypdf/actions/_actions.py",
+      "sha256": "669a3c3f08082d586031c3bd26331bac6a0914e1beb884d8c8d7b7a8da35a67a"
+    },
+    {
+      "file": "pythonlib/pypdf/generic/_base.py",
+      "sha256": "89f692a309a62a3c229eada17e02bd514bff7681f94c015b692cc42300aa778c"
+    },
+    {
+      "file": "pythonlib/pypdf/generic/_color.py",
+      "sha256": "8477a7e6d03331cc6ab8b1eaeaa31a5192f244e24070de99f039f35d926f7745"
+    },
+    {
+      "file": "pythonlib/pypdf/generic/_viewerpref.py",
+      "sha256": "e8203221eda8e418d673feee106499fa776ec923108fc3be79bb9c609b8cce6c"
+    },
+    {
+      "file": "pythonlib/pypdf/generic/__init__.py",
+      "sha256": "3bbfbe5ca9a0e6fd1f3f7718960def531794e3c35ceec6b204cb03119eb546b5"
+    },
+    {
+      "file": "pythonlib/pypdf/generic/_files.py",
+      "sha256": "5a582054cca80cd045b128fdc90ab293ff15d63b75895265302a86f03d277966"
+    },
+    {
+      "file": "pythonlib/pypdf/generic/_image_inline.py",
+      "sha256": "a708cc06e98c88b0972a6367e6513282b0fd35599c8429c26ff0573a0058f7cc"
+    },
+    {
+      "file": "pythonlib/pypdf/generic/_outline.py",
+      "sha256": "298a30b6ccb2ac056b4590b822d29e3c63132d0927274d239a1a626c39a7034f"
+    },
+    {
+      "file": "pythonlib/pypdf/generic/_image_xobject.py",
+      "sha256": "512c6d68280bd51eb6c7ff397dc89fc1dcf441ff11b15f9997510302069b8784"
+    },
+    {
+      "file": "pythonlib/pypdf/generic/_font.py",
+      "sha256": "03628263532c0da3dc56d97166cb1a3d89671ebee88af34692c9758d14dbb462"
+    },
+    {
+      "file": "pythonlib/pypdf/generic/_appearance_stream.py",
+      "sha256": "4f572ec49a2c290b0389ed7b30758ac21855f1c3b8efc71eeb013e29ebfe22b4"
+    },
+    {
+      "file": "pythonlib/pypdf/generic/_data_structures.py",
+      "sha256": "a13c2f6540213eec91c031bb918b1b05bde2910f45527130ab692e22eff27049"
+    },
+    {
+      "file": "pythonlib/pypdf/generic/_rectangle.py",
+      "sha256": "393006cf361f7cd918869193e3184edb15223c9c2cd306f05e609a51a1926824"
+    },
+    {
+      "file": "pythonlib/pypdf/generic/_link.py",
+      "sha256": "f5ad377dc84f0aa617a4b83d15d21f7bd8ac61dd10a581487e7b9dd22d3e1d0f"
+    },
+    {
+      "file": "pythonlib/pypdf/generic/_fit.py",
+      "sha256": "1bf721b67435d40fdc2b7187ee56eff7b7aa6da2d7d66a2b6c2ff1ebac17d7ae"
+    },
+    {
+      "file": "pythonlib/pypdf/generic/_utils.py",
+      "sha256": "501df586049c76c136a55cbcf09b4fd9dc43c6541f1ee78a548b6dad550d463a"
+    },
+    {
+      "file": "pythonlib/pypdf/_codecs/adobe_glyphs.py",
+      "sha256": "69ac4e46ea50409ee46cb0c76e35a280b67aa60f06f7fe5ea832a2349c72923e"
+    },
+    {
+      "file": "pythonlib/pypdf/_codecs/core_font_metrics.py",
+      "sha256": "dbb26cac9a39511246215ed90ce09427259f066e8b0567aaeefdce5b3a05f21f"
+    },
+    {
+      "file": "pythonlib/pypdf/_codecs/std.py",
+      "sha256": "0f240cb84a40184a52f6ecb58d67f87278fe92a4a13ce0228f9b08ed0d580fc1"
+    },
+    {
+      "file": "pythonlib/pypdf/_codecs/__init__.py",
+      "sha256": "574b0332eb98897f512be3fafb06e7724b81618c1f03014ca49823e13683dffe"
+    },
+    {
+      "file": "pythonlib/pypdf/_codecs/symbol.py",
+      "sha256": "a65c125f9a8d5a4cd750fa4104621dc2ff75238b305f7176566c50f507ef4272"
+    },
+    {
+      "file": "pythonlib/pypdf/_codecs/pdfdoc.py",
+      "sha256": "c5f4af30562cbf1b9a490d14bbdbd90ca681d16bbce61d6e0a20758bdac07145"
+    },
+    {
+      "file": "pythonlib/pypdf/_codecs/_codecs.py",
+      "sha256": "5744ef86f7ef96e42cc02aa0582d508a8abf04aa020a367a60e12bf4a73bf95c"
+    },
+    {
+      "file": "pythonlib/pypdf/_codecs/zapfding.py",
+      "sha256": "bb42160371dcf65235b4bdbeeadcddd2df733f281bc2ca103915484425b0c0ba"
+    },
+    {
+      "file": "pythonlib/pypdf/_text_extraction/_layout_mode/_fixed_width_page.py",
+      "sha256": "23e232c98ab0700d7269b88b517e0e3bfeb3e9cc6bf7d04def28b05901e692b6"
+    },
+    {
+      "file": "pythonlib/pypdf/_text_extraction/_layout_mode/_text_state_params.py",
+      "sha256": "cc6e956be1c726402d30864df688ec3740c109ee74f64f73babdd94bf465cdab"
+    },
+    {
+      "file": "pythonlib/pypdf/_text_extraction/_layout_mode/__init__.py",
+      "sha256": "56adb80f37575f9af91995d319579011c9212ed332099acdf207db4a506efecc"
+    },
+    {
+      "file": "pythonlib/pypdf/_text_extraction/_layout_mode/_text_state_manager.py",
+      "sha256": "f1a9e114381df0118eef2d0673c25eff8499a3c44d1dcd26ab8989e81899cfb8"
+    },
+    {
+      "file": "libexec/amua-ocr",
+      "sha256": "9b532907296d4395a363f422672f6cb135943d6ea92b6578a8813b6165872203"
+    }
+  ],
+  "imports": "pypdf=7.1.0",
+  "candidate_jar_sha256": "ab559792a6693557a6097e5c93dbe7b18bc16a6fcca2eadcc2bac6a7bfda152e",
+  "account_or_network_actions": false
+}

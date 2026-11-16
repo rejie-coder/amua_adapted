@@ -1,0 +1,8 @@
+{
+  "observed_3_2_3_failure": "invalid_question_target",
+  "raw_failed_service_response_available": false,
+  "terminal_keychain": "keychain_unavailable",
+  "finder_launch": "Launch Services -10822; service unavailable",
+  "live_inference_used": false,
+  "previous_working_model": "preserved in 3.2.3; not input to image-only replay"
+}

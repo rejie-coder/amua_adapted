@@ -1,0 +1,7 @@
+{
+  "upstream": "https://github.com/zward/Amua",
+  "upstream_baseline_commit": "fcce8ebbf8bf5ab03a49f7388868f323812ec7f8",
+  "local_adaptation_history_head": "ebb20b3d381053db3164fee376640ac7cf81672f",
+  "working_tree_modifications_included": true,
+  "source_identity": "Build manifest hashes the actual distributed sources; history head alone is not their identity."
+}

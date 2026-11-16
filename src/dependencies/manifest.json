@@ -1,0 +1,21 @@
+{
+  "dependency_container": {
+    "file": "baseline-fat-dependencies.jar",
+    "sha256": "a302b61cf2a855804dcdadbe06b2b5fceff25eb835ed7b7c04b706a6a469fa18",
+    "role": "third-party dependency classes/resources, engine classes rebuilt from complete upstream source"
+  },
+  "icons": {
+    "Amua.icns": "79bfbaa742df1b5fdbc0dcfbac82bd1d1ab46aa993ef7c3185a1cd9e9e2c1f7e",
+    "Amua.png": "c9a077fbf5f531d5e99c5bffe95228a7dd571e148c69775ed60c42148eaca5c0"
+  },
+  "upstream_declared_libraries": [
+    "jfreechart 1.0.19",
+    "jcommon 1.0.23",
+    "commons-math3 3.6.1",
+    "JAXB RI 2.4.0-b180830.0438 (baseline fat container)"
+  ],
+  "toolchain_manifests": [
+    "../../scripts/toolchains-intel.json",
+    "../../scripts/toolchains-intel.json"
+  ]
+}
