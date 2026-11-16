@@ -3,7 +3,10 @@
 import json
 import sys
 import signal
-import resource
+try:
+    import resource
+except ImportError:
+    resource=None
 import os
 import threading
 from workflow.core import (WorkflowError, intake, d2p_draft, save_project,
@@ -47,20 +50,30 @@ def dispatch(request):
 
 def main():
     def cancelled(signum,frame):raise SystemExit(128+signum)
-    for sig in (signal.SIGTERM,signal.SIGINT,signal.SIGHUP):signal.signal(sig,cancelled)
-    def deadline(signum,frame):raise WorkflowError('Local parsing reached its 120-second budget; narrow the source or use a PDF page batch')
-    def memory_limit(signum,frame):raise WorkflowError('Local parsing reached its 768 MiB memory budget; select smaller source groups')
-    signal.signal(signal.SIGUSR1,memory_limit)
-    def monitor_memory():
-        while True:
-            import time
-            time.sleep(.25)
-            peak=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-            if sys.platform!='darwin':peak*=1024
-            if peak>768*1024*1024:os.kill(os.getpid(),signal.SIGUSR1);return
-    threading.Thread(target=monitor_memory,daemon=True,name='Amua source memory budget').start()
-    signal.signal(signal.SIGALRM,deadline);signal.alarm(120)
-    resource.setrlimit(resource.RLIMIT_CPU,(90,95))
+    for name in ('SIGTERM','SIGINT','SIGHUP'):
+        if hasattr(signal,name):signal.signal(getattr(signal,name),cancelled)
+    if os.name=='nt':
+        from windows_process import limit_current_process
+        try:limit_current_process()
+        except OSError:
+            sys.stdout.write(json.dumps({'ok':False,'error':{'category':'resource_guard_unavailable','message':'Windows could not establish safe parsing limits; no input was processed.'}}));return
+        def expired():
+            sys.stdout.write(json.dumps({'ok':False,'error':{'category':'source_deadline','message':'Local parsing reached its 120-second budget; select smaller source groups.'}}));sys.stdout.flush();os._exit(124)
+        watchdog=threading.Timer(120,expired);watchdog.daemon=True;watchdog.start()
+    else:
+        def deadline(signum,frame):raise WorkflowError('Local parsing reached its 120-second budget; narrow the source or use a PDF page batch')
+        def memory_limit(signum,frame):raise WorkflowError('Local parsing reached its 768 MiB memory budget; select smaller source groups')
+        signal.signal(signal.SIGUSR1,memory_limit)
+        def monitor_memory():
+            while True:
+                import time
+                time.sleep(.25)
+                peak=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+                if sys.platform!='darwin':peak*=1024
+                if peak>768*1024*1024:os.kill(os.getpid(),signal.SIGUSR1);return
+        threading.Thread(target=monitor_memory,daemon=True,name='Amua source memory budget').start()
+        signal.signal(signal.SIGALRM,deadline);signal.alarm(120)
+        resource.setrlimit(resource.RLIMIT_CPU,(90,95))
     try:
         data=sys.stdin.buffer.read(32*1024*1024+1)
         if len(data)>32*1024*1024:raise WorkflowError('Request limit exceeded')
@@ -71,7 +84,8 @@ def main():
         # Whitelisted validation messages; never dump exception paths/content.
         message=str(exc) if isinstance(exc,WorkflowError) else 'Selected input or project could not be processed; no executable output was produced.'
         result={'ok':False,'error':{'category':type(exc).__name__,'message':message}}
-    signal.alarm(0)
+    if os.name=='nt':watchdog.cancel()
+    else:signal.alarm(0)
     output=json.dumps(result,ensure_ascii=False,allow_nan=False)
     if len(output.encode())>24*1024*1024:output=json.dumps({'ok':False,'error':{'category':'project_limit','message':'Prepared inventory exceeds 24 MiB transport budget; select smaller source groups.'}})
     sys.stdout.write(output)

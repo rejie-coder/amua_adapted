@@ -17,7 +17,10 @@ import tempfile
 import time
 import uuid
 import zipfile
-import fcntl
+try:
+    import fcntl
+except ImportError:
+    import windows_locking as fcntl
 from collections import Counter, defaultdict, deque
 from decimal import Decimal
 from pathlib import Path, PurePosixPath
@@ -496,11 +499,12 @@ def save_project(project,path,expected_hash=None,fault=None):
         now=digest(path.read_bytes()) if path.exists() else None
         if now!=current:raise WorkflowError('Conflicting writer changed destination')
         os.replace(stage,path);stage=None;check('publish')
-        directory=os.open(path.parent,os.O_RDONLY)
-        try:os.fsync(directory)
-        finally:os.close(directory)
+        if os.name!='nt':
+            directory=os.open(path.parent,os.O_RDONLY)
+            try:os.fsync(directory)
+            finally:os.close(directory)
         check('directory-sync');unpack(path.read_bytes())
-        return {'sha256':digest(data),'bytes':len(data),'generation_id':generation['generation_id'],'durability':'tested local atomic replace + fsync; no network/cloud filesystem guarantee'}
+        return {'sha256':digest(data),'bytes':len(data),'generation_id':generation['generation_id'],'durability':('file fsync + verified replace; Windows directory power-loss durability not established' if os.name=='nt' else 'tested local atomic replace + fsync; no network/cloud filesystem guarantee')}
     finally:
         os.close(fd)
         if stage and stage.exists():stage.unlink()

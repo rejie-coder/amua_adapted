@@ -9,7 +9,10 @@ import sys
 sys.dont_write_bytecode = True
 import argparse
 import base64
-import fcntl
+try:
+    import fcntl
+except ImportError:
+    import windows_locking as fcntl
 import json
 import math
 import re
@@ -20,8 +23,9 @@ import sys
 import time
 import uuid
 
-APP = Path(__file__).resolve().parents[2] if Path(__file__).resolve().parent.name == 'Resources' else Path(__file__).resolve().parents[2] / 'Amua.app'
-SUPPORT = Path.home() / 'Library/Application Support/Amua-v3.2.4'
+WINDOWS=sys.platform=='win32'
+APP=(Path(__file__).resolve().parent.parent/'Amua.exe') if WINDOWS else (Path(__file__).resolve().parents[2] if Path(__file__).resolve().parent.name=='Resources' else Path(__file__).resolve().parents[2]/'Amua.app')
+SUPPORT=(Path(os.environ.get('AMUA_TEST_SUPPORT',str(Path(os.environ.get('LOCALAPPDATA',str(Path.home()/'AppData/Local')))/'Amua-v3.2.4'))) if WINDOWS else Path.home()/'Library/Application Support/Amua-v3.2.4')
 BRIDGE = SUPPORT / 'bridge'
 VERSION = '3.2.4'
 os.umask(0o077)
@@ -71,9 +75,13 @@ def state():
             return dict(stopped,state='invalid-status')
         if not isinstance(result.get('instance'),str) or not result['instance']: return dict(stopped,state='invalid-status')
         alive=False
-        try: os.kill(pid,0); alive=True
-        except PermissionError: alive=True
-        except OSError: pass
+        if WINDOWS:
+            from windows_process import pid_alive
+            alive=pid_alive(pid)
+        else:
+            try:os.kill(pid,0);alive=True
+            except PermissionError:alive=True
+            except OSError:pass
         age=time.time()*1000-heartbeat
         fresh= -1000 <= age < 5000
         result.update(running=result['running'] and alive,ready=result['ready'] and alive,
@@ -106,7 +114,8 @@ def request(method, params=None, timeout=15):
             # A background Java window may have its timers throttled by macOS.
             # Send a normal reopen event to wake its window; do not disable
             # system power management or mistake this for process termination.
-            subprocess.run(['/usr/bin/open','-g',str(APP)],capture_output=True,timeout=5)
+            if WINDOWS:subprocess.Popen([str(APP)],creationflags=subprocess.CREATE_NO_WINDOW)
+            else:subprocess.run(['/usr/bin/open','-g',str(APP)],capture_output=True,timeout=5)
         ident = uuid.uuid4().hex
         sent = BRIDGE / (ident + '.request.json')
         received = BRIDGE / (ident + '.response.json')
@@ -140,17 +149,12 @@ def request(method, params=None, timeout=15):
 
 def launch(params=None):
     params = params or {}
-    if not APP.is_dir():
-        raise RuntimeError('Amua.app is not installed at '+str(APP))
-    if state().get('ready'):
-        if not state().get('responsive'):
-            subprocess.run(['/usr/bin/open',str(APP)],check=True,capture_output=True,timeout=5)
-            return state()
-        return request('activate')
-    # LaunchServices supplies the normal macOS app lifecycle and Dock behavior.
-    opened = subprocess.run(['/usr/bin/open', str(APP)], capture_output=True, text=True)
-    if opened.returncode:
-        raise RuntimeError('macOS could not launch Amua: '+opened.stderr.strip())
+    if not (APP.is_file() if WINDOWS else APP.is_dir()):raise RuntimeError('Amua is not installed at '+str(APP))
+    if state().get('ready') and state().get('responsive'):return request('activate')
+    if WINDOWS:subprocess.Popen([str(APP)],creationflags=subprocess.CREATE_NO_WINDOW)
+    else:
+        opened=subprocess.run(['/usr/bin/open',str(APP)],capture_output=True,text=True)
+        if opened.returncode:raise RuntimeError('macOS could not launch Amua: '+opened.stderr.strip())
     deadline = time.monotonic()+25
     while time.monotonic() < deadline:
         if state().get('ready'):
@@ -173,7 +177,7 @@ def tool(operation, description, properties=None, required=None, read=False):
 
 ID = prop('string', 'Component id returned by amua_inspect, e.g. c42.')
 TOOLS = [
-    tool('launch', 'Launch or focus the installed Intel Mac Amua app. Does not open or alter a model.'),
+    tool('launch', 'Launch or focus the installed Amua app. Does not open or alter a model.'),
     tool('status', 'Read process state, UI responsiveness and operations. A completed Run click starts AMUA’s own worker; inspect console for analysis completion.', {'operation_id':prop('string')},read=True),
     tool('inspect', 'Read visible AMUA windows and Swing controls, including menus, labels, editable fields, tables and stable component ids. Inspect before acting; inspect again after a dialog opens.',
          {'max_nodes':prop('integer',minimum=1,maximum=3000), 'window':prop('string')}, read=True),

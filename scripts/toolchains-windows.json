@@ -1,0 +1,32 @@
+{
+  "zig": {
+    "version": "0.17.1",
+    "tarball": "https://ziglang.org/download/0.17.1/zig-x86_64-macos-0.17.1.tar.xz",
+    "shasum": "9af07b20319fbd0c92ee46ad23e81d6a782b1aaea2cfb8dcbff35f1d2c7ddbb7",
+    "size": "59496824"
+  },
+  "java": {
+    "checksum": "ae1ae12f817d7735477c6555107eece73854da0654da69077309ef9bff0b78bf",
+    "checksum_link": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u512-b09/OpenJDK8U-jre_x64_windows_hotspot_8u512b09.zip.sha256.txt",
+    "download_count": 23826,
+    "link": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u512-b09/OpenJDK8U-jre_x64_windows_hotspot_8u512b09.zip",
+    "metadata_link": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u512-b09/OpenJDK8U-jre_x64_windows_hotspot_8u512b09.zip.json",
+    "name": "OpenJDK8U-jre_x64_windows_hotspot_8u512b09.zip",
+    "signature_link": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u512-b09/OpenJDK8U-jre_x64_windows_hotspot_8u512b09.zip.sig",
+    "size": 40124908
+  },
+  "python": {
+    "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20261110/cpython-3.12.16%2B20261110-x86_64-pc-windows-msvc-install_only.tar.gz",
+    "sha256": "e23fe5b16926de1d81661b1a97352e89fb167549c55a6825796ccd0f32ec7f1b",
+    "name": "cpython-3.12.16+20261110-x86_64-pc-windows-msvc-install_only.tar.gz"
+  },
+  "zig_windows": {
+    "tarball": "https://ziglang.org/download/0.17.1/zig-x86_64-windows-0.17.1.zip",
+    "shasum": "b03f477a1943673e02aca0f570e8030dffd536ce1f45cbc4d3326ec31159562e",
+    "size": "100343666"
+  },
+  "jdk": {
+    "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u512-b09/OpenJDK8U-jdk_x64_windows_hotspot_8u512b09.zip",
+    "sha256": "20f248ddd600f900cd9b235d50d54cdb27e7b750f140d381176a7612c53663cd"
+  }
+}

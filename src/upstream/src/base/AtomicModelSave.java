@@ -62,7 +62,9 @@ public final class AtomicModelSave {
                     else Files.move(temporary,target,StandardCopyOption.ATOMIC_MOVE,StandardCopyOption.REPLACE_EXISTING);
                     fault.at("published");
                     if(!Arrays.equals(expected,hash(target)))throw new IOException("Published model verification failed; recover previous generation.");
-                    try(FileChannel dir=FileChannel.open(target.getParent(),StandardOpenOption.READ)){dir.force(true);}
+                    if(!System.getProperty("os.name","").toLowerCase(java.util.Locale.ROOT).startsWith("windows")){
+                        try(FileChannel dir=FileChannel.open(target.getParent(),StandardOpenOption.READ)){dir.force(true);}
+                    }
                     bindings.put(model,new Binding(target,expected));fault.at("durable");
                 }finally{Files.deleteIfExists(temporary);if(backupTemp!=null)Files.deleteIfExists(backupTemp);}
             }finally{lock.release();}

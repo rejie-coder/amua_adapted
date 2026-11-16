@@ -88,13 +88,13 @@ public final class McpAccess {
         root.add(feedback,BorderLayout.SOUTH);return root;
     }
     private static String resources(){return System.getProperty("amua.resources","");}
-    static String shell(String value){return "'"+value.replace("'","'\"'\"'")+"'";}
-    public static String launchCommand(String resources){return shell(WorkflowPanel.pythonExecutable(resources))+" -B "+shell(resources+"/amua_mcp.py");}
+    static String shell(String value){if(WorkflowPanel.isWindows())return "\'"+value.replace("\'","\'\'")+"\'";return "'"+value.replace("'","'\"'\"'")+"'";}
+    public static String launchCommand(String resources){return (WorkflowPanel.isWindows()?"& ":"")+shell(WorkflowPanel.pythonExecutable(resources))+" -B "+shell(resources+"/amua_mcp.py");}
     public static String serverJson(String resources){Map<String,Object> entry=new LinkedHashMap<>();entry.put("command",WorkflowPanel.pythonExecutable(resources));entry.put("args",Arrays.asList("-B",resources+"/amua_mcp.py"));return WorkflowPanel.json(entry);}
     public static String configuration(String client,String resources){
         String executable=WorkflowPanel.pythonExecutable(resources),script=resources+"/amua_mcp.py",command=launchCommand(resources);
-        if("Codex".equals(client))return "codex mcp add "+SERVER+" -- "+command;
-        if("Claude Code".equals(client))return "claude mcp add --transport stdio --scope user "+SERVER+" -- "+command;
+        if("Codex".equals(client))return "codex mcp add "+SERVER+" -- "+(WorkflowPanel.isWindows()?command.substring(2):command);
+        if("Claude Code".equals(client))return "claude mcp add --transport stdio --scope user "+SERVER+" -- "+(WorkflowPanel.isWindows()?command.substring(2):command);
         if("OpenClaw".equals(client))return "openclaw mcp set "+SERVER+" "+shell(serverJson(resources))+"\nopenclaw mcp probe "+SERVER;
         if("Hermes".equals(client))return "mcp_servers:\n  "+SERVER+":\n    command: "+WorkflowPanel.json(executable)+"\n    args: [\"-B\", "+WorkflowPanel.json(script)+"]\n    timeout: 120\n";
         return "{\n  \"mcpServers\": {\n    \""+SERVER+"\": "+serverJson(resources)+"\n  }\n}";

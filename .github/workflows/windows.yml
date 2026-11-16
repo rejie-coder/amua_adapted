@@ -1,0 +1,48 @@
+name: Windows x64 build and red team checks
+on:
+  push:
+    branches: [windows-3.2.4]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-2022
+    timeout-minutes: 35
+    env:
+      PYTHONUTF8: '1'
+      PYTHONIOENCODING: utf-8
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Verify and fetch native Windows compilers and runtimes
+        shell: pwsh
+        run: python scripts/bootstrap_windows.py
+      - name: Build native portable Windows app
+        shell: pwsh
+        env:
+          AMUA_JAVA_HOME: ${{ github.workspace }}\build\toolchains\jdk8u512-b09
+        run: build/toolchains/python/python.exe -B scripts/build_windows.py *> evidence/windows-build.log
+      - name: Validate package and run native Windows red team checks
+        shell: pwsh
+        run: Amua/Resources/python/python.exe -B tests/windows/run_checks.py
+      - name: Package portable ZIP and verification
+        shell: pwsh
+        run: Amua/Resources/python/python.exe -B scripts/package_windows.py
+      - name: Emit native verification for local package comparison
+        if: always()
+        shell: pwsh
+        run: python scripts/emit_windows_evidence.py
+      - name: Retain app and complete evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: Amua-3.2.4-Windows-x64
+          path: |
+            dist/
+            evidence/
+            build/windows-build-manifest.json
+          retention-days: 14
+          if-no-files-found: warn

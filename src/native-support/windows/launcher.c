@@ -1,5 +1,9 @@
+#ifndef UNICODE
 #define UNICODE
+#endif
+#ifndef _UNICODE
 #define _UNICODE
+#endif
 #include <windows.h>
 #include <shellapi.h>
 #include <stdlib.h>
@@ -16,10 +20,14 @@ static int quoted(const wchar_t *value){
  while(slash--)if(!put(L'\\')||!put(L'\\'))return 0;
  return put(L'"')&&put(L' ');
 }
-static int error(const wchar_t *message){MessageBoxW(NULL,message,L"Amua 2.1 candidate",MB_OK|MB_ICONERROR);return 1;}
+static int error(const wchar_t *message){MessageBoxW(NULL,message,L"Amua 3.2.4 for Windows",MB_OK|MB_ICONERROR);return 1;}
 int WINAPI wWinMain(HINSTANCE instance,HINSTANCE previous,PWSTR ignored,int show){
  wchar_t folder[32768],python[32768],script[32768];
  DWORD n=GetModuleFileNameW(NULL,folder,32768);if(!n||n>=32000)return error(L"Move the extracted Amua folder to a shorter local path.");
+ // Ignore host Python customizations before starting the bundled supervisor.
+ SetEnvironmentVariableW(L"PYTHONPATH",NULL);SetEnvironmentVariableW(L"PYTHONHOME",NULL);
+ SetEnvironmentVariableW(L"PYTHONSTARTUP",NULL);SetEnvironmentVariableW(L"PYTHONINSPECT",NULL);
+ SetEnvironmentVariableW(L"PYTHONUTF8",L"1");SetEnvironmentVariableW(L"PYTHONIOENCODING",L"utf-8");SetEnvironmentVariableW(L"PYTHONNOUSERSITE",L"1");
  wchar_t *last=wcsrchr(folder,L'\\');if(!last)return 1;*last=0;
  if(swprintf(python,32768,L"%ls\\Resources\\python\\pythonw.exe",folder)<0||swprintf(script,32768,L"%ls\\launch.py",folder)<0)return 1;
  if(GetFileAttributesW(python)==INVALID_FILE_ATTRIBUTES||GetFileAttributesW(script)==INVALID_FILE_ATTRIBUTES)return error(L"Extract the complete ZIP before opening Amua.exe. Its bundled runtime is missing.");

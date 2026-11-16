@@ -104,7 +104,8 @@ def docx(data,source_id):
 def native_ocr_helper():
     """Find only the app-owned helper or this checkout's explicit build tool."""
     location=Path(__file__).resolve()
-    candidates=[location.parents[2]/'libexec/amua-ocr',location.parents[2]/'build/tools/amua-ocr']
+    executable='amua-ocr.py' if os.name=='nt' else 'amua-ocr'
+    candidates=[location.parents[2]/'libexec'/executable,location.parents[2]/'build/tools'/executable]
     for candidate in candidates:
         if candidate.is_file() and os.access(candidate,os.X_OK):return candidate
     return None
@@ -125,10 +126,11 @@ class LocalOCR:
             fd,path=tempfile.mkstemp(prefix='amua-ocr-',suffix='.pdf')
             self.snapshot=Path(path)
             with os.fdopen(fd,'wb') as out:
-                os.fchmod(out.fileno(),0o600);out.write(self.data);out.flush()
-        command=[str(self.helper),'--pdf',str(self.snapshot),'--page',str(number),'--max-pixels','8000000']
+                if hasattr(os,'fchmod'):os.fchmod(out.fileno(),0o600)
+                out.write(self.data);out.flush()
+        command=([sys.executable,str(self.helper)] if os.name=='nt' else [str(self.helper)])+['--pdf',str(self.snapshot),'--page',str(number),'--max-pixels','8000000']
         try:
-            result=subprocess.run(command,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=20,env={'PATH':'/usr/bin:/bin','LANG':'en_US.UTF-8'},check=False)
+            result=subprocess.run(command,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=20,env=({**os.environ,'PYTHONUTF8':'1','PYTHONIOENCODING':'utf-8'} if os.name=='nt' else {'PATH':'/usr/bin:/bin','LANG':'en_US.UTF-8'}),check=False)
         except subprocess.TimeoutExpired:return {'status':'unsupported','reason_category':'timeout','language':'en-US'}
         except OSError:return {'status':'unsupported','reason_category':'helper-launch-failed','language':'en-US'}
         if len(result.stdout)>4*1024*1024:return {'status':'unsupported','reason_category':'helper-output-limit','language':'en-US'}
@@ -145,7 +147,7 @@ class LocalOCR:
             if isinstance(value,bool) or not isinstance(value,(int,float)) or not math.isfinite(value) or not 0<=value<=1:return {'status':'unsupported','reason_category':'invalid-helper-confidence','language':'en-US'}
         if reply.get('language','en-US') not in ('en','en-US'):return {'status':'unsupported','reason_category':'unsupported-language','language':reply.get('language')}
         if result.returncode!=0 and reply.get('status')=='ok':return {'status':'unsupported','reason_category':'helper-failed','language':'en-US'}
-        reply['helper']='Apple Vision/PDFKit local English OCR';reply['review_status']='unreviewed; verify recognized values and scientific meaning'
+        reply['helper']='Windows PDF/English OCR' if os.name=='nt' else 'Apple Vision/PDFKit local English OCR';reply['review_status']='unreviewed; verify recognized values and scientific meaning'
         return reply
 
 def pdf(data,source_id,ocr_helper=None,ocr_start=1,ocr_count=20):
@@ -223,7 +225,7 @@ def pdf(data,source_id,ocr_helper=None,ocr_start=1,ocr_count=20):
                 add('page:'+str(number+1)+':failure','pdf-page-failure','Page extraction failed',page=number+1,error_category=type(exc).__name__)
     catalog=reader.trailer.get('/Root',{}).get_object()
     return {'kind':'pdf','document_format':'PDF','parser':'pypdf '+pypdf.__version__,'pages':pages,'records':records,'metadata':metadata,'parse_issues':issues,
-            'page_count':count,'extraction_status':'incomplete' if issues else 'text-extracted-unreviewed','ocr':'local English Apple Vision/PDFKit OCR helper where available; recognized text remains unreviewed' if any('ocr' in p and p['ocr'].get('helper') for p in pages) else 'unavailable; no OCR performed','active_content':{'open_action_present':'/OpenAction' in catalog,'names_present':'/Names' in catalog,'executed':False},
+            'page_count':count,'extraction_status':'incomplete' if issues else 'text-extracted-unreviewed','ocr':'local platform PDF/English OCR helper where available; recognized text remains unreviewed' if any('ocr' in p and p['ocr'].get('helper') for p in pages) else 'unavailable; no OCR performed','active_content':{'open_action_present':'/OpenAction' in catalog,'names_present':'/Names' in catalog,'executed':False},
             'limitations':['Text order/layout/tables/figures/footnotes require review; extracted text is not proof of semantic completeness','Embedded actions, scripts, attachments and URLs are never executed or fetched']}
 
 class ArticleParser(HTMLParser):
