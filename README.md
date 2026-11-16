@@ -6,7 +6,7 @@ Amua adapted is a desktop decision-tree and Markov modelling application based o
 
 [Download releases](https://github.com/rejie-coder/amua_adapted/releases) · [Install on Mac](docs/Installing.md) · [User guide](docs/AI-Workflow.md) · [Documentation](docs/README.md) · [Wiki](https://github.com/rejie-coder/amua_adapted/wiki) · [Build from source](docs/Building.md)
 
-The first Intel release is being prepared. Its download is available only once the build and packaging checks complete and the release appears on the Releases page.
+**Published Intel preview:** [Download the installation DMG](https://github.com/rejie-coder/amua_adapted/releases/download/v3.2.4/Amua-3.2.4-macOS-Intel.dmg). [Release assets and checksums](https://github.com/rejie-coder/amua_adapted/releases/tag/v3.2.4) include the app ZIP, application source, installation instructions and build verification. For the full repository and regression fixtures, download the [tagged source archive](https://github.com/rejie-coder/amua_adapted/archive/refs/tags/v3.2.4.tar.gz).
 
 ## Install
 
@@ -22,7 +22,7 @@ AI features require an eligible connected ChatGPT account/workspace and internet
 
 ## Verified scope and known limits
 
-The local 3.2.4 candidate passes 124 provider tests, 10 bridge tests, native image/sidebar/clipboard checks and eight exact original-engine comparisons. Workflow tests pass 37/38: actual scanned-PDF OCR remains unresolved in that environment. [Verification evidence](docs/Verification-3.2.4.md) distinguishes controlled service responses from live account acceptance.
+The local 3.2.4 candidate passes 124 provider tests, 10 bridge tests, native image/sidebar/clipboard checks and eight exact original-engine comparisons. Workflow tests pass 37/38: actual scanned-PDF OCR remains unresolved in that local environment. The published Intel build passed its GitHub runner checks with **zero OCR waivers**, and all 717 application classes matched the checked candidate. This adds evidence on the build runner; live account, physical desktop and clean-machine acceptance remain separate. [Verification evidence](docs/Verification-3.2.4.md) distinguishes controlled service responses from live account acceptance.
 
 AI output is a proposal. Check the image transcription, dimensions, units, probabilities, costs, QALYs and assumptions before approving inputs. Structure approval does not approve numerical inputs. A valid calculation is not scientific validation or a treatment recommendation. Missing perspective, time horizon, comparator, currency context or willingness-to-pay must be resolved explicitly.
 
