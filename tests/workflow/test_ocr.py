@@ -14,6 +14,8 @@ from workflow.mixed_formats import pdf, LocalOCR, native_ocr_helper
 from workflow.core import intake,source_scope_draft,build_chunk_ledger,source_items,validate_graph
 from collections import Counter
 
+sys.path.insert(0,str(ROOT/'tests'))
+from platform_privacy import assert_private_file
 FIXTURE=ROOT/'tests/workflow/fixtures/synthetic-scanned-english.pdf'
 
 class OCRTests(unittest.TestCase):
@@ -27,13 +29,16 @@ class OCRTests(unittest.TestCase):
     def test_private_snapshot_cleanup_and_low_confidence_is_unreviewed(self):
         seen=[]
         def fake_run(command,**kwargs):
-            path=Path(command[command.index('--pdf')+1]);seen.append(path)
-            self.assertEqual(stat.S_IMODE(path.stat().st_mode),0o600)
-            self.assertEqual(path.read_bytes(),FIXTURE.read_bytes())
+            if os.name=='nt':
+                self.assertIn('--stdin',command);self.assertEqual(kwargs['input'],FIXTURE.read_bytes())
+            else:
+                path=Path(command[command.index('--pdf')+1]);seen.append(path)
+                assert_private_file(self,path)
+                self.assertEqual(path.read_bytes(),FIXTURE.read_bytes())
             self.assertEqual(kwargs['timeout'],20);self.assertEqual(command[-1],'8000000')
             return SimpleNamespace(returncode=0,stdout=json.dumps({'status':'ok','page':1,'text':'Price 125 LKR','confidence':0.4,'language':'en-US','regions':[{'text':'Price 125 LKR','confidence':0.4,'bounds':[0,0,1,1]}]}).encode())
         with patch('workflow.mixed_formats.subprocess.run',side_effect=fake_run):
-            f=pdf(FIXTURE.read_bytes(),'low-confidence',ocr_helper=Path('/usr/bin/true'))
+            f=pdf(FIXTURE.read_bytes(),'low-confidence',ocr_helper=Path(sys.executable).resolve())
         self.assertEqual(f['pages'][0]['status'],'ocr-low-confidence-unreviewed')
         self.assertEqual(f['pages'][0]['original_extracted_text'],'')
         self.assertTrue(any(r['kind']=='pdf-ocr-region' for r in f['records']))
@@ -46,7 +51,7 @@ class OCRTests(unittest.TestCase):
                 response=SimpleNamespace(returncode=0,stdout=json.dumps(scenario).encode()) if isinstance(scenario,dict) else None
                 options={'side_effect':scenario} if isinstance(scenario,Exception) else {'return_value':response}
                 with patch('workflow.mixed_formats.subprocess.run',**options):
-                    f=pdf(FIXTURE.read_bytes(),'failed-helper',ocr_helper=Path('/usr/bin/true'))
+                    f=pdf(FIXTURE.read_bytes(),'failed-helper',ocr_helper=Path(sys.executable).resolve())
                 self.assertEqual(len(f['pages']),1);self.assertEqual(f['pages'][0]['status'],'unreadable-scanned-page');self.assertTrue(f['parse_issues']);self.assertFalse(f['pages'][0]['text'])
     @unittest.skipUnless(native_ocr_helper() is not None,'Native local Vision/PDFKit helper has not been built')
     def test_actual_english_scanned_pdf_local_ocr(self):

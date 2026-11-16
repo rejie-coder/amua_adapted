@@ -12,6 +12,7 @@ def main():
  OUT.mkdir(exist_ok=True)
  run('package-static',[PYTHON,'-B',ROOT/'scripts/verify_windows_package.py'])
  zig=next((ROOT/'build/toolchains').glob('zig-*/zig.exe'));run('compile-output-guard-stub',[zig,'cc','-target','x86_64-windows-gnu','-O2',ROOT/'tests/windows/output_stub.c','-o',ROOT/'build/windows-output-stub.exe'])
+ run('compile-stop-guard-stub',[zig,'cc','-target','x86_64-windows-gnu','-DSLOW_ONLY','-O2',ROOT/'tests/windows/output_stub.c','-o',ROOT/'build/windows-slow-stub.exe'])
  run('windows-native',[PYTHON,'-B','-m','unittest','discover','-v','-s',ROOT/'tests/windows','-p','test_native.py'],180)
  run('native-ocr-diagnostic',[PYTHON,'-B',ROOT/'tests/windows/report_ocr.py'])
  run('provider-regression',[PYTHON,'-B',ROOT/'tests/windows/run_provider.py'])

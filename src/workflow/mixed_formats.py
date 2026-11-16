@@ -122,15 +122,20 @@ class LocalOCR:
     def page(self,number):
         if self.helper is None:return {'status':'unsupported','reason_category':'native-helper-unavailable','language':'en-US'}
         if not self.helper.is_absolute() or not self.helper.is_file():return {'status':'unsupported','reason_category':'native-helper-unavailable','language':'en-US'}
-        if self.snapshot is None:
-            fd,path=tempfile.mkstemp(prefix='amua-ocr-',suffix='.pdf')
-            self.snapshot=Path(path)
-            with os.fdopen(fd,'wb') as out:
-                if hasattr(os,'fchmod'):os.fchmod(out.fileno(),0o600)
-                out.write(self.data);out.flush()
-        command=([sys.executable,str(self.helper)] if os.name=='nt' else [str(self.helper)])+['--pdf',str(self.snapshot),'--page',str(number),'--max-pixels','8000000']
+        if os.name=='nt':
+            command=[sys.executable,str(self.helper),'--stdin','--page',str(number),'--max-pixels','8000000']
+            input_options={'input':self.data}
+        else:
+            if self.snapshot is None:
+                fd,path=tempfile.mkstemp(prefix='amua-ocr-',suffix='.pdf')
+                self.snapshot=Path(path)
+                with os.fdopen(fd,'wb') as out:
+                    if hasattr(os,'fchmod'):os.fchmod(out.fileno(),0o600)
+                    out.write(self.data);out.flush()
+            command=([sys.executable,str(self.helper)] if os.name=='nt' else [str(self.helper)])+['--pdf',str(self.snapshot),'--page',str(number),'--max-pixels','8000000']
+            input_options={}
         try:
-            result=subprocess.run(command,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=20,env=({**os.environ,'PYTHONUTF8':'1','PYTHONIOENCODING':'utf-8'} if os.name=='nt' else {'PATH':'/usr/bin:/bin','LANG':'en_US.UTF-8'}),check=False)
+            result=subprocess.run(command,**input_options,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=20,env=({**os.environ,'PYTHONUTF8':'1','PYTHONIOENCODING':'utf-8'} if os.name=='nt' else {'PATH':'/usr/bin:/bin','LANG':'en_US.UTF-8'}),check=False)
         except subprocess.TimeoutExpired:return {'status':'unsupported','reason_category':'timeout','language':'en-US'}
         except OSError:return {'status':'unsupported','reason_category':'helper-launch-failed','language':'en-US'}
         if len(result.stdout)>4*1024*1024:return {'status':'unsupported','reason_category':'helper-output-limit','language':'en-US'}

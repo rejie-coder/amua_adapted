@@ -12,7 +12,7 @@ def pe(path):
 def main():
  binaries={name:pe(APP/name) for name in ['Amua.exe','Resources/runtime/bin/java.exe','Resources/runtime/bin/javaw.exe','Resources/python/python.exe','Resources/python/pythonw.exe']}
  if binaries['Amua.exe']['subsystem']!=2:raise RuntimeError('Launcher must be a Windows GUI executable')
- required=[(ROOT/'src/engine_helper.py',RES/'engine_helper.py'),(ROOT/'src/workflow_helper.py',RES/'workflow_helper.py'),(ROOT/'src/native-support/bootstrap.js',RES/'bootstrap.js'),(ROOT/'src/native-support/amua_mcp.py',RES/'amua_mcp.py'),(ROOT/'src/native-support/windows/launch.py',APP/'launch.py')]
+ required=[(ROOT/'src/dependencies/Amua.png',RES/'Amua.png'),(ROOT/'src/engine_helper.py',RES/'engine_helper.py'),(ROOT/'src/workflow_helper.py',RES/'workflow_helper.py'),(ROOT/'src/native-support/bootstrap.js',RES/'bootstrap.js'),(ROOT/'src/native-support/amua_mcp.py',RES/'amua_mcp.py'),(ROOT/'src/native-support/windows/launch.py',APP/'launch.py')]
  for p in (ROOT/'src/native-support/windows').glob('*.py'):
   if p.name not in ['launch.py','ocr.py']:required.append((p,RES/p.name))
  required.extend([(ROOT/'src/native-support/windows/ocr.py',RES/'libexec/amua-ocr.py'),(ROOT/'src/native-support/windows/windows-ocr.ps1',RES/'libexec/windows-ocr.ps1')])

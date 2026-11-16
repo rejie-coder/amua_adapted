@@ -8,6 +8,8 @@ from unittest.mock import patch
 ROOT=Path(__file__).resolve().parents[2];sys.path[:0]=[str(ROOT/'src/provider')]
 import provider_helper
 import review_cache
+sys.path.insert(0,str(ROOT/'tests'))
+from platform_privacy import assert_private_file
 from broker import Broker,BrokerError
 from chunks import partition
 from transport import prepare_transport
@@ -52,7 +54,7 @@ class ReviewCacheTests(unittest.TestCase):
     def test_cache_permissions_no_prompt_history_or_credentials(self):
         cache=self.cache();cache.commit(self.chunks[0],'Source-only checked summary')
         data=cache.path.read_text();self.assertNotIn('PRIVATE_QUESTION_NOT_TO_STORE',data);self.assertNotIn('PRIVATE_HISTORY_NOT_TO_STORE',data);self.assertNotIn('access_token',data);self.assertNotIn('refresh_token',data)
-        self.assertEqual(cache.path.stat().st_mode & 0o777,0o600)
+        assert_private_file(self,cache.path)
         a=self.cache();a.acquire();b=self.cache()
         try:
             with self.assertRaisesRegex(BrokerError,'review_in_progress'):b.acquire()

@@ -20,8 +20,10 @@ try {
     $OcrResult = [Windows.Media.Ocr.OcrResult, Windows.Foundation, ContentType=WindowsRuntime]
     $Language = [Windows.Globalization.Language, Windows.Globalization, ContentType=WindowsRuntime]
     $PageNumber = [int]$env:AMUA_OCR_PAGE
-    $File = Wait-Operation ($StorageFile::GetFileFromPathAsync($env:AMUA_OCR_PDF)) $StorageFile
-    $Pdf = Wait-Operation ($PdfDocument::LoadFromFileAsync($File)) $PdfDocument
+    $PdfBytes = [Convert]::FromBase64String([Console]::In.ReadToEnd())
+    $SourceMemory = [System.IO.MemoryStream]::new([byte[]]$PdfBytes, $false)
+    $PdfStream = [System.IO.WindowsRuntimeStreamExtensions]::AsRandomAccessStream($SourceMemory)
+    $Pdf = Wait-Operation ($PdfDocument::LoadFromStreamAsync($PdfStream)) $PdfDocument
     if ($PageNumber -lt 1 -or $PageNumber -gt $Pdf.PageCount) { throw 'invalid page' }
     $Page = $Pdf.GetPage($PageNumber - 1)
     $MaxPixels = [Math]::Min(8000000, [int]$env:AMUA_OCR_PIXELS)
@@ -45,7 +47,7 @@ try {
         }
     }
     @{status='ok'; text=$Result.Text; confidence=0; confidence_note='Windows OCR does not expose confidence; no estimate invented'; regions=$Regions; language='en-US'; page=$PageNumber} | ConvertTo-Json -Depth 6 -Compress
-    $Page.Dispose(); $Stream.Dispose(); $Image.Dispose()
+    $Page.Dispose(); $Stream.Dispose(); $Image.Dispose(); $PdfStream.Dispose(); $SourceMemory.Dispose()
 } catch {
     $Issue = $_.Exception; for ($i=0; $i -lt 4 -and $null -ne $Issue.InnerException; $i++) { $Issue = $Issue.InnerException }; $Code = '0x' + $Issue.HResult.ToString('X8')
     @{status='unsupported'; reason_category='windows-ocr-unavailable-or-unreadable'; diagnostic_code=$Code; language='en-US'; page=[int]$env:AMUA_OCR_PAGE} | ConvertTo-Json -Compress

@@ -1,5 +1,6 @@
 """Original engine on an immutable snapshot with owned child cancellation."""
 import json, os, signal, subprocess, sys, tempfile, time
+from contextlib import ExitStack
 from pathlib import Path
 child=None
 
@@ -32,9 +33,15 @@ def main():
         request=json.loads(raw)
         if request.get('action')!='engine-analysis' or request.get('operation') not in ('run','sensitivity'):raise ValueError('Unsupported analysis')
         resources=Path(__file__).resolve().parent
-        with tempfile.TemporaryDirectory(prefix='amua-analysis-') as directory:
+        with tempfile.TemporaryDirectory(prefix='amua-analysis-') as directory, ExitStack() as handles:
             temp=Path(directory);model=temp/'model.amua';command=temp/'command.json'
-            model.write_text(request['xml']);command.write_text(json.dumps(request))
+            if os.name=='nt':
+                # Keep delete-on-close handles alive. Java NIO opens share delete access.
+                # Kernel cleanup removes confidential inputs even on forced termination.
+                for path,content in [(model,request['xml']),(command,json.dumps(request))]:
+                    fd=os.open(path,os.O_CREAT|os.O_EXCL|os.O_RDWR|os.O_TEMPORARY,0o600)
+                    stream=handles.enter_context(os.fdopen(fd,'w',encoding='utf-8',newline=''));stream.write(content);stream.flush()
+            else:model.write_text(request['xml']);command.write_text(json.dumps(request))
             with tempfile.TemporaryFile(dir=temp) as output_file:
                 try:
                     args=[str(resources/('runtime/bin/java.exe' if os.name=='nt' else 'runtime/bin/java')),'-Xmx768m','-Djava.awt.headless=true',
@@ -58,7 +65,7 @@ def main():
             if not data.get('ok'):raise ValueError(data.get('error','Original engine failed; no completed analysis'))
             data['text']='Analysis completed on the inspected model snapshot.\n'+json.dumps(data,indent=2,ensure_ascii=False)
             data['target_hash']=request['target_hash']
-    except subprocess.TimeoutExpired:data={'ok':False,'error':{'category':'analysis_deadline','message':'Analysis reached 90 seconds and its process group was stopped. The live model is unchanged.'}}
+    except subprocess.TimeoutExpired:data={'ok':False,'error':{'category':'analysis_deadline','message':'Analysis reached 90 seconds and was stopped. The live model is unchanged.'}}
     except Exception as error:data={'ok':False,'error':{'category':'analysis_failed','message':str(error)[:3000]}}
     finally:terminate_child()
     print(json.dumps(data,ensure_ascii=False,allow_nan=False))

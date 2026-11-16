@@ -32,7 +32,7 @@ def main():
   if not java.is_file() or not jar.is_file():raise RuntimeError('The complete application must be extracted before launching')
   args=[str(java),'-Xms64m','-Xmx2g','-XX:+UseG1GC','-Dsun.net.client.defaultConnectTimeout=4000','-Dsun.net.client.defaultReadTimeout=4000','-Damua.support='+str(support),'-Damua.resources='+str(RESOURCES),'-cp',str(jar),'jdk.nashorn.tools.Shell',str(RESOURCES/'bootstrap.js'),'--']+[str(Path(p).resolve()) for p in sys.argv[1:] if Path(p).suffix.lower()=='.amua']
   allowed=('SystemRoot','WINDIR','USERPROFILE','LOCALAPPDATA','APPDATA','TEMP','TMP','USERNAME','USERDOMAIN','PROCESSOR_ARCHITECTURE')
-  environment={k:os.environ[k] for k in allowed if k in os.environ};environment['PATH']=str(Path(os.environ.get('SystemRoot','C:/Windows'))/'System32');environment['PYTHONUTF8']='1';environment['PYTHONIOENCODING']='utf-8';environment['PYTHONNOUSERSITE']='1'
+  environment={k:os.environ[k] for k in allowed if k in os.environ};environment['PATH']=str(Path(os.environ.get('SystemRoot','C:/Windows'))/'System32');environment['PYTHONUTF8']='1';environment['PYTHONIOENCODING']='utf-8';environment['PYTHONNOUSERSITE']='1';environment['PYTHONDONTWRITEBYTECODE']='1'
   with log.open('ab') as output:
    child=subprocess.Popen(args,cwd=str(support),env=environment,stdin=subprocess.DEVNULL,stdout=output,stderr=output,creationflags=subprocess.CREATE_NO_WINDOW)
    return child.wait()

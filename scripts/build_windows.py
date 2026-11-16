@@ -30,6 +30,7 @@ def main():
  stage=BUILD/'Amua-stage';shutil.rmtree(stage,ignore_errors=True);stage.mkdir();res=stage/'Resources';res.mkdir()
  shutil.copytree(TOOLS/'jdk8u512-b09-jre',res/'runtime',symlinks=True)
  shutil.copytree(TOOLS/'python',res/'python',symlinks=True,ignore=shutil.ignore_patterns('__pycache__','pip','pip-*.dist-info'))
+ shutil.copy2(ROOT/'src/dependencies/Amua.png',res/'Amua.png')
  shutil.copy2(jar,res/jar.name);shutil.copy2(ROOT/'src/native-support/windows/launch.py',stage/'launch.py')
  for name in ['windows_credentials.py','windows_locking.py','windows_process.py']:shutil.copy2(ROOT/'src/native-support/windows'/name,res/name)
  (res/'libexec').mkdir();(BUILD/'tools').mkdir(exist_ok=True)

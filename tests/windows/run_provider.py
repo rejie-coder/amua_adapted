@@ -9,7 +9,6 @@ replacements={
  'test_hardening.HardeningTests.test_crashed_writer_residue_recovers_live_lock_rejects':'Windows native cross-process lock test',
  'test_hardening.HardeningTests.test_stop_reaps_descendant_and_removes_snapshot':'Windows native kill-on-close job and packaged engine test',
  'test_hardening.HardeningTests.test_engine_output_budget_stops_oversized_child':'Windows native owned process test; source bound preserved',
- 'test_review_cache.ReviewCacheTests.test_cache_permissions_no_prompt_history_or_credentials':'Windows Credential Manager and native screenshot ACL checks',
 }
 loader=unittest.TestLoader();suite=loader.discover(str(ROOT/'tests/provider'))
 def walk(items):

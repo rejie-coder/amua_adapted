@@ -14,6 +14,10 @@ import urllib.request
 import unittest
 from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'src/provider'))
+import os,shutil
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+from platform_privacy import assert_private_file
+OPENSSL=shutil.which('openssl') or str(Path(os.environ.get('ProgramFiles','C:/Program Files'))/'Git/usr/bin/openssl.exe')
 import broker
 import provider_helper
 class MemoryKeys:
@@ -37,7 +41,7 @@ class ProviderTests(unittest.TestCase):
         with self.assertRaisesRegex(broker.BrokerError,'not_connected'):self.b.models()
     def test_host_stable_and_permissions(self):
         again=broker.Broker(self.temp.name,self.keys)
-        self.assertEqual(self.b.meta['host_id'],again.meta['host_id']);self.assertEqual((Path(self.temp.name)/'registration.json').stat().st_mode & 0o777,0o600)
+        self.assertEqual(self.b.meta['host_id'],again.meta['host_id']);assert_private_file(self,Path(self.temp.name)/'registration.json')
     def test_keychain_unavailable_no_fallback(self):
         self.ready()
         with patch.object(self.keys,'read',side_effect=broker.BrokerError('keychain_unavailable')):
@@ -168,12 +172,12 @@ class ProviderTests(unittest.TestCase):
         self.assertEqual(self.b.meta['active'],'oaiapp_new');self.assertEqual(errors,[])
     def test_identity_signed_and_tampered(self):
         key=Path(self.temp.name)/'key.pem'
-        subprocess.run(['/usr/bin/openssl','genrsa','-out',str(key),'2048'],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-        modulus=subprocess.check_output(['/usr/bin/openssl','rsa','-in',str(key),'-modulus','-noout'],stderr=subprocess.DEVNULL).decode().strip().split('=')[1]
+        subprocess.run([OPENSSL,'genrsa','-out',str(key),'2048'],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+        modulus=subprocess.check_output([OPENSSL,'rsa','-in',str(key),'-modulus','-noout'],stderr=subprocess.DEVNULL).decode().strip().split('=')[1]
         jwks={'keys':[{'kid':'test','kty':'RSA','n':broker.b64(bytes.fromhex(modulus)),'e':broker.b64((65537).to_bytes(3,'big'))}]}
         def token(claims):
             signed=broker.b64(json.dumps({'alg':'RS256','kid':'test'}).encode())+'.'+broker.b64(json.dumps(claims).encode())
-            signature=subprocess.check_output(['/usr/bin/openssl','dgst','-sha256','-sign',str(key)],input=signed.encode());return signed+'.'+broker.b64(signature)
+            signature=subprocess.check_output([OPENSSL,'dgst','-sha256','-sign',str(key)],input=signed.encode());return signed+'.'+broker.b64(signature)
         claims={'iss':broker.AUTH,'aud':'client','sub':'user','exp':time.time()+100,'nonce':'nonce'};valid=token(claims)
         self.assertEqual(broker.verify_identity(valid,'client','nonce',jwks)['sub'],'user')
         for client,nonce,now in [('other','nonce',None),('client','wrong',None),('client','nonce',time.time()+200)]:

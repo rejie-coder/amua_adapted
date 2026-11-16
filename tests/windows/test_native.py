@@ -73,6 +73,24 @@ class NativeWindows(unittest.TestCase):
   result=subprocess.run([str(PYTHON),str(resources/'engine_helper.py')],input=json.dumps(request),text=True,encoding='utf-8',capture_output=True,timeout=15)
   self.assertEqual(result.returncode,0,result.stderr);answer=json.loads(result.stdout);self.assertFalse(answer['ok']);self.assertIn('output limit',answer['error']['message'].lower())
   self.assertEqual(set(Path(tempfile.gettempdir()).glob('amua-analysis-*'))-before,set())
+ def test_forced_stop_removes_confidential_snapshot_files(self):
+  import shutil
+  resources=self.folder/'Stop guard resources';(resources/'runtime/bin').mkdir(parents=True)
+  shutil.copy2(ROOT/'build/windows-slow-stub.exe',resources/'runtime/bin/java.exe')
+  for name in ['engine_helper.py','windows_process.py']:shutil.copy2(RES/name,resources/name)
+  track=self.folder/'snapshot-path.txt';environment={**os.environ,'AMUA_TEST_SNAPSHOT_TRACK':str(track)}
+  helper=subprocess.Popen([str(PYTHON),str(resources/'engine_helper.py')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,encoding='utf-8',env=environment)
+  model=None
+  try:
+   helper.stdin.write(json.dumps({'action':'engine-analysis','operation':'run','xml':'CONFIDENTIAL TEST INPUT','target_hash':'test'}));helper.stdin.close();deadline=time.monotonic()+10
+   while not track.exists() and time.monotonic()<deadline:time.sleep(.05)
+   self.assertTrue(track.exists(),'Slow child did not receive the snapshot');model=Path(track.read_text());self.assertTrue(model.exists())
+   helper.kill();helper.wait(5);deadline=time.monotonic()+5
+   while model.exists() and time.monotonic()<deadline:time.sleep(.05)
+   self.assertFalse(model.exists(),'Forced termination retained confidential XML');self.assertFalse(model.with_name('command.json').exists(),'Forced termination retained command data')
+  finally:
+   if helper.poll() is None:helper.kill();helper.wait(5)
+   if model and model.parent.exists():shutil.rmtree(model.parent,ignore_errors=True)
  def test_native_app_front_door_and_single_instance(self):
   support=self.folder/'Private profile ü';environment={**os.environ,'AMUA_TEST_SUPPORT':str(support),'PYTHONUTF8':'1','PYTHONIOENCODING':'utf-8','PYTHONPATH':'X:/untrusted-must-be-cleared','PYTHONHOME':'X:/untrusted-must-be-cleared'}
   app=subprocess.Popen([str(APP/'Amua.exe')],env=environment);java_pid=None
@@ -84,7 +102,9 @@ class NativeWindows(unittest.TestCase):
      try:state=json.loads(status.read_text(encoding='utf-8'))
      except (ValueError,OSError):state={}
     if state.get('ready'):break
-    if app.poll() is not None:self.fail('GUI exited early: '+str(app.returncode))
+    if app.poll() is not None:
+     log=(support/'Amua.log').read_text(encoding='utf-8',errors='replace') if (support/'Amua.log').exists() else 'No Java startup log'
+     self.fail('GUI exited early: '+str(app.returncode)+' '+log[-3000:])
     time.sleep(.2)
    log=(support/'Amua.log').read_text(encoding='utf-8',errors='replace') if (support/'Amua.log').exists() else ''
    self.assertTrue(state.get('ready'),log[-3000:]);java_pid=state['pid'];self.assertTrue(processes.pid_alive(java_pid))
