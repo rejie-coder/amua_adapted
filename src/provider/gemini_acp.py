@@ -92,6 +92,7 @@ class ACP:
         self.seq += 1; ident = self.seq
         self.send({'jsonrpc': '2.0', 'id': ident, 'method': method, 'params': params})
         deadline = time.monotonic() + self.timeout
+        last_thought = None
         while True:
             remaining = deadline - time.monotonic()
             if remaining <= 0: raise BrokerError('model_chat_stalled')
@@ -113,7 +114,16 @@ class ACP:
                     content = update.get('content', {})
                     if content.get('type') == 'text' and isinstance(content.get('text'), str) and content['text']:
                         emit({'event': 'delta', 'text': content['text']}); deadline = time.monotonic() + self.timeout
-                # Thought contents are neither logged nor shown.
+                if update.get('sessionUpdate') == 'agent_thought_chunk':
+                    content = update.get('content', {})
+                    thought = content.get('text')
+                    if content.get('type') == 'text' and isinstance(thought, str) and thought:
+                        fingerprint = hashlib.sha256(thought.encode()).digest()
+                        if fingerprint != last_thought:
+                            emit({'event': 'inference_progress', 'phase': 'thinking'})
+                            deadline = time.monotonic() + self.timeout
+                            last_thought = fingerprint
+                # Only phase metadata escapes; thought contents are never logged or shown.
                 continue
             if event.get('id') == ident:
                 if 'error' in event: raise BrokerError('gemini_auth_required' if event['error'].get('code') == -32000 else 'gemini_request_failed')

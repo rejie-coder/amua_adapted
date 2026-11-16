@@ -1,6 +1,6 @@
 # 3.3.0 verification
 
-Local provider suite: 132 tests discovered, 130 passed, 2 existing private-fixture skips. Real Gemini CLI 0.68.0 ACP initialization and Google auth-method discovery passed on Mac; no sign-in or inference. Native Windows results are generated in evidence/windows-checks.json by Actions. Live Google account/evidence-to-tree and physical desktop acceptance remain pending. The following 3.2.4 evidence is historical, not a 3.3.0 test result.
+Local provider suite: 133 tests discovered, 131 passed, 2 existing private-fixture skips. Real Gemini CLI 0.68.0 ACP initialization and Google auth-method discovery passed on Mac; no sign-in or inference. Native Windows results are generated in evidence/windows-checks.json by Actions. Live Google account/evidence-to-tree and physical desktop acceptance remain pending. The following 3.2.4 evidence is historical, not a 3.3.0 test result.
 
 # Windows 3.2.4 verification
 

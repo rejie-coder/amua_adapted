@@ -25,9 +25,24 @@ class GeminiTests(unittest.TestCase):
    try:
     c.new_session();events=[]
     out=c.call('session/prompt',{'sessionId':c.session,'prompt':[]},events.append)
-    self.assertEqual(out['stopReason'],'end_turn');self.assertEqual(len(events),1);self.assertNotIn('PRIVATE',str(events))
+    self.assertEqual(out['stopReason'],'end_turn');self.assertEqual(len(events),2);self.assertEqual(events[0],{'event':'inference_progress','phase':'thinking'});self.assertNotIn('PRIVATE',str(events))
    finally:c.close()
    self.assertIsNotNone(c.p.poll())
+ def test_agent_permission_and_filesystem_requests_denied(self):
+  stub=FAKE.replace("elif m=='session/prompt':", """elif m=='session/prompt':
+  print(json.dumps({'jsonrpc':'2.0','id':'permission','method':'session/request_permission','params':{}}),flush=True)
+  answer=json.loads(sys.stdin.readline())
+  assert answer['result']['outcome']['outcome']=='cancelled'
+  print(json.dumps({'jsonrpc':'2.0','id':'file','method':'fs/read_text_file','params':{'path':'private'}}),flush=True)
+  answer=json.loads(sys.stdin.readline())
+  assert answer['error']['code']==-32601""")
+  with tempfile.TemporaryDirectory() as d:
+   p=Path(d);script=p/'fake.py';script.write_text(stub)
+   c=ga.ACP([sys.executable,str(script)],p/'home',timeout=2)
+   try:
+    c.new_session();events=[]
+    self.assertEqual(c.call('session/prompt',{'sessionId':c.session,'prompt':[]},events.append)['stopReason'],'end_turn')
+   finally:c.close()
  def test_stalled_child_stopped(self):
   with tempfile.TemporaryDirectory() as d:
    with self.assertRaisesRegex(BrokerError,'model_chat_stalled'):
