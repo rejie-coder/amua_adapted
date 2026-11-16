@@ -26,7 +26,7 @@ def main():
  jar=BUILD/'Amua_0.3.6.jar'
  with zipfile.ZipFile(jar,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
   for name,data in sorted(entries.items()):
-   info=zipfile.ZipInfo(name,(2026,1,1,0,0,0));info.compress_type=zipfile.ZIP_DEFLATED;info.external_attr=0o644<<16;z.writestr(info,data)
+   info=zipfile.ZipInfo(name,(2026,1,1,0,0,0));info.create_system=0;info.compress_type=zipfile.ZIP_DEFLATED;info.external_attr=0o644<<16;z.writestr(info,data)
  stage=BUILD/'Amua-stage';shutil.rmtree(stage,ignore_errors=True);stage.mkdir();res=stage/'Resources';res.mkdir()
  shutil.copytree(TOOLS/'jdk8u512-b09-jre',res/'runtime',symlinks=True)
  shutil.copytree(TOOLS/'python',res/'python',symlinks=True,ignore=shutil.ignore_patterns('__pycache__','pip','pip-*.dist-info'))
@@ -53,10 +53,18 @@ def main():
  zig=next(TOOLS.glob('zig-*/zig.exe' if os.name=='nt' else 'zig-*/zig'));resource=BUILD/'Amua.res'
  run(zig,'rc','/fo',resource,'--',rc)
  run(zig,'cc','-target','x86_64-windows-gnu','-O2','-g0','-municode','-Wl,--subsystem,windows',ROOT/'src/native-support/windows/launcher.c',resource,'-o',stage/'Amua.exe','-lshell32','-luser32')
+ # Canonical PE timestamp/checksum; executable code and resources are unchanged.
+ executable=stage/'Amua.exe';image=bytearray(executable.read_bytes());pe_offset=struct.unpack_from('<I',image,0x3c)[0];struct.pack_into('<I',image,pe_offset+8,0);struct.pack_into('<I',image,pe_offset+24+64,0);executable.write_bytes(image)
  for debug in stage.glob('*.pdb'):debug.unlink()
  if APP.exists():
   prior=BUILD/'Amua-previous';shutil.rmtree(prior,ignore_errors=True);APP.rename(prior)
  stage.rename(APP)
  manifest={'version':'3.2.4','platform':'Windows','architecture':'x86_64','authenticode_signed':False,'compiler':subprocess.check_output([str(javac),'-version'],stderr=subprocess.STDOUT,text=True).strip(),'source_sha256':{str(p.relative_to(ROOT)):sha(p) for p in (ROOT/'src').rglob('*') if p.is_file() and p.suffix in ['.py','.java','.js','.c'] and '__pycache__' not in p.parts},'files':{p.relative_to(APP).as_posix():sha(p) for p in APP.rglob('*') if p.is_file()},'jar_sha256':sha(APP/'Resources/Amua_0.3.6.jar')}
+ with zipfile.ZipFile(APP/'Resources/Amua_0.3.6.jar') as z:
+  manifest['jar_payload_sha256']=hashlib.sha256(''.join(name+'\0'+hashlib.sha256(z.read(name)).hexdigest()+'\n' for name in sorted(z.namelist())).encode()).hexdigest()
+ data=(APP/'Amua.exe').read_bytes();offset=struct.unpack_from('<I',data,0x3c)[0];count=struct.unpack_from('<H',data,offset+6)[0];section_offset=offset+24+struct.unpack_from('<H',data,offset+20)[0];sections={}
+ for i in range(count):
+  at=section_offset+40*i;name=data[at:at+8].rstrip(b'\0').decode();size,start=struct.unpack_from('<II',data,at+16);sections[name]=hashlib.sha256(data[start:start+size]).hexdigest()
+ manifest['launcher_sections_sha256']=sections
  (BUILD/'windows-build-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');print('Built',APP,'with',len(manifest['files']),'files')
 if __name__=='__main__':main()

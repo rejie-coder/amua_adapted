@@ -2,7 +2,7 @@ Amua 3.2.4 for Windows x64 — preview
 
 Extract the COMPLETE ZIP, then open Amua.exe in the extracted Amua folder.
 Keep Amua.exe, launch.py and Resources together. Java and Python are bundled.
-Target: 64-bit Windows 10/11. No administrator access is required for portable use.
+Target: 64-bit Windows 10/11; native checks run on Windows Server 2022. No administrator access is required for portable use.
 This preview is not Authenticode-signed; Windows may show a publisher warning.
 
 Manual decision-tree/Markov editing and original-engine calculations are included.

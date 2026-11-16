@@ -7,6 +7,8 @@ permissions:
   contents: read
 jobs:
   windows:
+    permissions:
+      contents: write
     runs-on: windows-2022
     timeout-minutes: 35
     env:
@@ -31,6 +33,12 @@ jobs:
       - name: Package portable ZIP and verification
         shell: pwsh
         run: Amua/Resources/python/python.exe -B scripts/package_windows.py
+      - name: Publish verified Windows preview
+        if: contains(github.event.head_commit.message, '[publish windows]')
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: Amua/Resources/python/python.exe -B scripts/publish_windows.py
       - name: Emit native verification for local package comparison
         if: always()
         shell: pwsh

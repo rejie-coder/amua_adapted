@@ -4,6 +4,10 @@ This review challenges the assumption that a Java application becomes portable s
 
 | Finding | Correction and required evidence |
 | --- | --- |
+| Actual startup exited because an expected icon was missing | Copy the root icon and verify its source/package digest; exercise real GUI startup |
+| Removing Windows system variables corrupted OS cache paths | Preserve SystemDrive/ProgramData/system program folders; launch in a disposable Unicode profile and reject literal %SystemDrive% folders |
+| Permission tests depended on blocked PowerShell module loading | Query native .NET ACLs directly, without changing machine execution policy |
+| Forced termination could retain confidential input snapshots | Hold XML/command files with Windows delete-on-close handles; force-kill test checks both disappear; OCR PDF stays in memory |
 | POSIX imports/signals/resource budgets crash Windows parsing | Windows locks, native job memory/CPU limits and a wall deadline; packaged helper intake/save/reopen test |
 | Directory fsync reports failure after a successful Windows save | Preserve file flush, backup, verified atomic replacement and lock; platform-specific directory handling; native save fault-boundary tests; power-loss durability remains unproved |
 | POSIX process-group cancellation and Java path fail on Windows | Suspended native child assigned to kill-on-close job before resume; owner-death, bounded output and snapshot-cleanup tests |

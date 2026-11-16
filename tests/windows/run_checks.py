@@ -16,7 +16,7 @@ def main():
  run('windows-native',[PYTHON,'-B','-m','unittest','discover','-v','-s',ROOT/'tests/windows','-p','test_native.py'],180)
  run('native-ocr-diagnostic',[PYTHON,'-B',ROOT/'tests/windows/report_ocr.py'])
  run('provider-regression',[PYTHON,'-B',ROOT/'tests/windows/run_provider.py'])
- for module in ['test_public_intake.py','test_mixed_formats.py','test_ocr.py']:
+ for module in ['test_public_intake.py','test_mixed_formats.py','test_ocr.py','test_hardening.py','test_batch_precision.py']:
   run(module[:-3],[PYTHON,'-B','-m','unittest','discover','-v','-s',ROOT/'tests/workflow','-p',module])
  jdk=ROOT/'build/toolchains/jdk8u512-b09';javac=jdk/'bin/javac.exe';classes=ROOT/'build/windows-testclasses';classes.mkdir(exist_ok=True)
  sources=list((ROOT/'tests/ui').glob('*.java'))+[ROOT/'tests/bridge'/n for n in ['AtomicSaveCheck.java','HeadlessEngineCheck.java','HeadlessPresentationCheck.java']]

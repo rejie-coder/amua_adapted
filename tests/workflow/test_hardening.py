@@ -1,4 +1,4 @@
-import copy,fcntl,json,subprocess,sys,tempfile,time,unittest
+import copy,json,subprocess,sys,tempfile,time,unittest
 from pathlib import Path
 from unittest.mock import patch
 from workflow.core import intake,refresh_pdf_batch,source_items,validate_graph,encoded,WorkflowError,save_project,synthetic_project
@@ -36,7 +36,7 @@ class WorkflowHardeningTests(unittest.TestCase):
     def test_killed_writer_releases_os_lock_without_manual_deletion(self):
         with tempfile.TemporaryDirectory(dir=ROOT/'build') as directory:
             path=Path(directory)/'project.amuax';lock=path.with_suffix('.amuax.lock')
-            script='import fcntl,os,sys,time;f=os.open(sys.argv[1],os.O_CREAT|os.O_RDWR,0o600);fcntl.flock(f,fcntl.LOCK_EX);print("ready",flush=True);time.sleep(30)'
+            script='import os,sys,time\ntry:import fcntl\nexcept ImportError:import windows_locking as fcntl\nf=os.open(sys.argv[1],os.O_CREAT|os.O_RDWR,0o600);fcntl.flock(f,fcntl.LOCK_EX);print("ready",flush=True);time.sleep(30)'
             writer=subprocess.Popen([sys.executable,'-c',script,str(lock)],stdout=subprocess.PIPE,text=True)
             try:
                 self.assertEqual(writer.stdout.readline().strip(),'ready')

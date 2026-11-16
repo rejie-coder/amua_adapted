@@ -1,10 +1,10 @@
-import json,subprocess,sys,tempfile,unittest
+import json,os,subprocess,sys,tempfile,unittest
 from pathlib import Path
 R=Path(__file__).resolve().parents[2];sys.path.insert(0,str(R/'src'));sys.path.insert(0,str(R/'src/dependencies/python'))
 from workflow.batches import selection_plan,intake_batch
 class BatchPrecision(unittest.TestCase):
  def test_actual_nashorn_json_roundtrip_preserves_file_metadata(self):
-  java=R/'build/toolchains/jdk8u512-b09/Contents/Home/bin/java'
+  java=R/('Amua/Resources/runtime/bin/java.exe' if os.name=='nt' else 'build/toolchains/jdk8u512-b09/Contents/Home/bin/java')
   with tempfile.TemporaryDirectory() as td:
    source=Path(td).resolve()/'source.txt';source.write_text('Selected synthetic source')
    plan=selection_plan([source]);entry=plan['entries'][0]
