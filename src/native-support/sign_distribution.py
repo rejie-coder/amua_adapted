@@ -29,7 +29,7 @@ def main():
             run('/usr/bin/codesign',*flags,path)
         run('/usr/bin/codesign','--force','--options','runtime','--timestamp','--sign',args.identity,app)
     run('/usr/bin/codesign','--verify','--deep','--strict',app)
-    archive=output/'Amua-3.2.4.zip'
+    archive=output/'Amua-3.3.3.zip'
     run('/usr/bin/ditto','-c','-k','--keepParent','--sequesterRsrc',app,archive)
     if args.notary_profile:
         run('/usr/bin/xcrun','notarytool','submit',archive,'--keychain-profile',args.notary_profile,'--wait')

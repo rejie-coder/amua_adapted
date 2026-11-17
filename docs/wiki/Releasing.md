@@ -6,7 +6,7 @@ The normal push path builds/verifies without publication. A main-branch commit c
 
 The script creates a draft release, uploads all checked assets, then exposes the preview. Existing public releases are not overwritten. If a draft upload is interrupted, inspect its commit and assets before retrying; automatic clobbering is intentionally refused. A changed application version needs updated bundle identity, expected class manifest, release tag/notes and artifact names before publication.
 
-Assets include `Amua-3.2.4-macOS-Intel.dmg`, `Amua-3.2.4-source.tar.gz`, `SHA256SUMS`, `INSTALL.txt`, `build-provenance.json` and `release-verification.json`. Exact CI logs/results remain in the workflow artifact. Do not label a release notarized, Apple Silicon native, live-account accepted or scientifically validated without the corresponding evidence.
+Assets include `Amua-3.3.3-macOS-Intel.dmg`, `Amua-3.2.4-source.tar.gz`, `SHA256SUMS`, `INSTALL.txt`, `build-provenance.json` and `release-verification.json`. Exact CI logs/results remain in the workflow artifact. Do not label a release notarized, Apple Silicon native, live-account accepted or scientifically validated without the corresponding evidence.
 
 ## Known OCR waiver
 
@@ -20,6 +20,6 @@ See [GitHub's wiki instructions](https://docs.github.com/en/communities/document
 
 ## Release order
 
-The Intel workflow preserves its existing release. The separate Windows workflow/tag publishes its own portable ZIP after native gates, source/package verification, uploaded asset digest checks and ZIP readback. See [Windows release/build guidance](https://github.com/rejie-coder/amua_adapted/wiki/Windows). Native Apple Silicon follows Windows and is not supplied by either package.
+The Intel workflow preserves its existing release. The separate Windows workflow/tag publishes its own portable ZIP after native gates, source/package verification, uploaded asset digest checks and ZIP readback. See [Windows release/build guidance](Windows.md). Native Apple Silicon follows Windows and is not supplied by either package.
 
 Private CKD/D2P acceptance workbooks and images are not distributed. Tests requiring those inputs report explicit skips; generated public XLSX cases exercise transport and intake/error/persistence guards without disclosing the private material. Public CI counts therefore differ from the earlier local 124-provider/38-workflow evidence. Exact executed/skipped cases are retained in CI outputs and the release verification asset.

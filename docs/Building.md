@@ -9,7 +9,7 @@ build/toolchains/python/bin/python3 -B src/native-support/build.py
 
 Bootstrap downloads only the pinned items in `scripts/toolchains-intel.json` and verifies SHA256 before extraction/use: original Amua 0.3.6 dependency container, Temurin Java 8u512-b09, and standalone CPython 3.12.16. No token or account secret is required for public build inputs. The original container supplies third-party classes/resources; the application engine classes are rebuilt from the included source. Original engine and dependency versions are not silently upgraded.
 
-The result is `Amua.app`; source/binary hashes are recorded in `build/build-manifest.json`. The bundle is `local.rejie.amua.v324`, with support profile `Amua-v3.2.4`. A source archive is a snapshot, not a claim that the working sources equal a historical commit: `src/upstream/ORIGIN.json` records the adaptation history, while the manifest identifies actual source files. No nested private Git history is required to build.
+The result is `Amua.app`; source/binary hashes are recorded in `build/build-manifest.json`. The bundle is `local.rejie.amua.v333`, with support profile `Amua-v3.3.3`. A source archive is a snapshot, not a claim that the working sources equal a historical commit: `src/upstream/ORIGIN.json` records the adaptation history, while the manifest identifies actual source files. No nested private Git history is required to build.
 
 ## Run checks
 
@@ -35,3 +35,8 @@ Local builds are ad hoc signed. Developer ID/notarization require a real signing
 Private CKD/D2P acceptance workbooks and images are not distributed. Tests requiring those inputs report explicit skips; generated public XLSX cases exercise transport and intake/error/persistence guards without disclosing the private material. Public CI counts therefore differ from the earlier local 124-provider/38-workflow evidence. Exact executed/skipped cases are retained in CI outputs and the release verification asset.
 
 For Windows, use the separately tagged Windows source archive and [Windows build instructions](Windows.md). Main retains the Intel source; Windows-specific native launcher/OS adapters are on `v3.2.4-windows`.
+
+
+## Mac 3.3.3runtime and package optimization
+
+The bootstrap also runs src/native-support/bootstrap_antigravity.py, verifies the official pinned 1.5.9 Intel archive and bundles the signed native executable. The builder calls optimize_bundle.py; it preserves all Java JAR entries while recompressing them and removes unused Python installation/Tk/embedding files. Node and the retired Gemini CLI are not packaged. See scripts/expected-classes-3.3.3.json, build/size-optimization.json and the final build manifest. Do not copy private account/profile or local evidence folders into a public package.

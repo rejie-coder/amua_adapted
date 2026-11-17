@@ -25,5 +25,5 @@ class BridgeTests(unittest.TestCase):
   replies=[json.loads(x) for x in p.stdout.splitlines()];self.assertEqual(len(replies),5)
   self.assertEqual([x['error']['code'] for x in replies[:4]],[-32700,-32600,-32601,-32602]);self.assertEqual(replies[-1]['result'],{})
  def test_identity(self):
-  self.assertIn('Amua-v3.2.4',str(m.SUPPORT));self.assertEqual(m.APP,ROOT/'Amua.app')
+  self.assertIn('Amua-v3.3.3',str(m.SUPPORT));self.assertEqual(m.APP,ROOT/'Amua.app')
 if __name__=='__main__':unittest.main()

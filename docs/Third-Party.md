@@ -16,3 +16,8 @@ Original copyright and licence notices remain in the source and bundled runtime 
 The release source archive contains application source, resources and build/release scripts. Runtime/dependency sources and licence exceptions remain under their vendors' terms; consult the retained distributions and upstream projects when redistributing or changing them. The original dependency container is downloaded with a pinned SHA256 rather than silently replaced by a newer binary.
 
 The Windows source tag additionally records SHA256-pinned Windows Java/Python runtime and Zig compiler inputs in `scripts/toolchains-windows.json`. Zig is a build tool, not bundled with the app. Windows OCR uses OS Windows.Media.Ocr and Windows.Data.Pdf components; these OS components are not redistributed. Runtime licenses remain inside the portable application.
+
+
+## Google runtime in Mac 3.3.3
+
+The app bundles Google Antigravity CLI 1.5.9, downloaded from the official Google release archive with SHA512 verification. The executable remains Google Developer-ID-signed. Google service terms and account eligibility apply. The old Node/Gemini CLI package is not included in this Mac version. Google integration: https://antigravity.google/docs/ide/extensions/acp/. Exact archive URL/digests: src/native-support/bootstrap_antigravity.py.

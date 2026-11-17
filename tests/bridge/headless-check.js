@@ -1,10 +1,10 @@
 
 var System=Java.type('java.lang.System');
-System.setProperty('amua.support','/Users/rejie/Desktop/Amua/3.2.4/build/headless-check');
-System.setProperty('amua.resources','/Users/rejie/Desktop/Amua/3.2.4/Amua.app/Contents/Resources');
+System.setProperty('amua.support','/Users/rejie/Desktop/Amua/3.3.3/build/headless-check');
+System.setProperty('amua.resources','/Users/rejie/Desktop/Amua/3.3.3/Amua.app/Contents/Resources');
 var Files=Java.type('java.nio.file.Files'), Paths=Java.type('java.nio.file.Paths');
-Files.createDirectories(Paths.get('/Users/rejie/Desktop/Amua/3.2.4/build/headless-check/bridge'));
-var src=String(new java.lang.String(Files.readAllBytes(Paths.get('/Users/rejie/Desktop/Amua/3.2.4/src/native-support/bootstrap.js')),java.nio.charset.StandardCharsets.UTF_8));
+Files.createDirectories(Paths.get('/Users/rejie/Desktop/Amua/3.3.3/build/headless-check/bridge'));
+var src=String(new java.lang.String(Files.readAllBytes(Paths.get('/Users/rejie/Desktop/Amua/3.3.3/src/native-support/bootstrap.js')),java.nio.charset.StandardCharsets.UTF_8));
 var stop=src.lastIndexOf('\nEventQueue.invokeLater(function() {');
 if(stop<0) throw new Error('Bootstrap startup boundary missing');
 load({script:src.substring(0,stop),name:'bootstrap-functions.js'});
@@ -34,11 +34,11 @@ try {dispatch('set_text',{id:buttonID,text:'forbidden'});throw new Error('Unsafe
 catch(e) {if(String(e).indexOf('not editable')<0) throw e;}
 try {dispatch('unknown_operation',{});throw new Error('Unknown operation accepted');}
 catch(e) {if(String(e).indexOf('Unknown AMUA operation')<0) throw e;}
-var sample=Paths.get('/Users/rejie/Desktop/Amua/3.2.4/build/headless-check/atomic.json');writeJSON(sample,{ok:true});
+var sample=Paths.get('/Users/rejie/Desktop/Amua/3.3.3/build/headless-check/atomic.json');writeJSON(sample,{ok:true});
 if(readJSON(sample).ok!==true) throw new Error('Atomic JSON roundtrip failed');
 
 var model=new (Java.type('base.AmuaModel'))();model.name='headless-roundtrip';
-var xml=Paths.get('/Users/rejie/Desktop/Amua/3.2.4/build/headless-check/model.amua');
+var xml=Paths.get('/Users/rejie/Desktop/Amua/3.3.3/build/headless-check/model.amua');
 var context=Java.type('javax.xml.bind.JAXBContext').newInstance(Java.to([model.getClass()],'java.lang.Class[]'));
 context.createMarshaller().marshal(model,xml.toFile());
 var decoded=context.createUnmarshaller().unmarshal(xml.toFile());
@@ -61,7 +61,7 @@ dispatch('set_cell',{id:componentId(typedTable),row:0,column:0,value:3.25});
 dispatch('set_cell',{id:componentId(typedTable),row:0,column:1,value:true});EventQueue.invokeAndWait(function(){});
 if(Number(typedTable.getValueAt(0,0))!==3.25 || String(typedTable.getValueAt(0,0).getClass().getName())!=='java.lang.Double') throw new Error('Numeric cell type lost');
 if(String(typedTable.getValueAt(0,1).getClass().getName())!=='java.lang.Boolean') throw new Error('Boolean cell type lost');
-var source=Paths.get('/Users/rejie/Desktop/Amua/3.2.4/build/headless-check/new.tmp'),destination=Paths.get('/Users/rejie/Desktop/Amua/3.2.4/build/headless-check/fallback.amua');
+var source=Paths.get('/Users/rejie/Desktop/Amua/3.3.3/build/headless-check/new.tmp'),destination=Paths.get('/Users/rejie/Desktop/Amua/3.3.3/build/headless-check/fallback.amua');
 Files.deleteIfExists(destination);Files.write(source,new java.lang.String('new-data').getBytes(UTF8));
 publishNewFile(source,destination,function(){throw new java.lang.UnsupportedOperationException('test unsupported links');});
 if(String(new java.lang.String(Files.readAllBytes(destination),UTF8))!=='new-data') throw new Error('No-link save fallback failed');

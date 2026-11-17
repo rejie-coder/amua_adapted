@@ -6,7 +6,7 @@ The normal push path builds/verifies without publication. A main-branch commit c
 
 The script creates a draft release, uploads all checked assets, then exposes the preview. Existing public releases are not overwritten. If a draft upload is interrupted, inspect its commit and assets before retrying; automatic clobbering is intentionally refused. A changed application version needs updated bundle identity, expected class manifest, release tag/notes and artifact names before publication.
 
-Assets include `Amua-3.2.4-macOS-Intel.dmg`, `Amua-3.2.4-source.tar.gz`, `SHA256SUMS`, `INSTALL.txt`, `build-provenance.json` and `release-verification.json`. Exact CI logs/results remain in the workflow artifact. Do not label a release notarized, Apple Silicon native, live-account accepted or scientifically validated without the corresponding evidence.
+Assets include `Amua-3.3.3-macOS-Intel.dmg`, `Amua-3.2.4-source.tar.gz`, `SHA256SUMS`, `INSTALL.txt`, `build-provenance.json` and `release-verification.json`. Exact CI logs/results remain in the workflow artifact. Do not label a release notarized, Apple Silicon native, live-account accepted or scientifically validated without the corresponding evidence.
 
 ## Known OCR waiver
 

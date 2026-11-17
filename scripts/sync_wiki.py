@@ -17,7 +17,7 @@ def main():
     if git('-C',str(wiki),*args).returncode:raise RuntimeError('Wiki staging failed')
    changed=git('-C',str(wiki),'diff','--cached','--quiet').returncode
    if changed:
-    if git('-C',str(wiki),'commit','-m','Document Amua 3.2.4 Intel preview').returncode or git('-C',str(wiki),'push','origin','HEAD').returncode:raise RuntimeError('Wiki publication failed; inspect repository permissions')
+    if git('-C',str(wiki),'commit','-m','Document Amua 3.3.3 Intel preview').returncode or git('-C',str(wiki),'push','origin','HEAD').returncode:raise RuntimeError('Wiki publication failed; inspect repository permissions')
    result={'wiki_synced':True,'url':'https://github.com/'+REPO+'/wiki','pages':len(list((ROOT/'docs/wiki').glob('*.md')))}
  (ROOT/'evidence').mkdir(exist_ok=True);(ROOT/'evidence/wiki-sync.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))
 if __name__=='__main__':main()

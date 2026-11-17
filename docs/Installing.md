@@ -5,7 +5,7 @@ Amua 3.2.4 targets **Intel x86_64 Macs with macOS 14 or later**. The launcher, J
 ## Download and install
 
 1. Open [Releases](https://github.com/rejie-coder/amua_adapted/releases) and select the 3.2.4 Intel preview.
-2. Download `Amua-3.2.4-macOS-Intel.dmg`. The other assets contain source, checksums and verification details.
+2. Download `Amua-3.3.3-macOS-Intel.dmg`. The other assets contain source, checksums and verification details.
 3. Open the DMG and drag `Amua.app` onto `Applications`.
 4. Eject the DMG and launch the app from Applications. Bundled Java and Python provide the required runtimes.
 5. Back up existing `.amua` files before editing; save initial work to a new filename.
@@ -24,6 +24,6 @@ This first package is Intel-only. On Apple Silicon, running it would require Ros
 
 ## Upgrades and local files
 
-3.2.4 keeps local state under `~/Library/Application Support/Amua-v3.2.4`. Shared compatible ChatGPT connection credentials use the OS credential store. Installing the application does not replace user `.amua` files. Quit the old version normally before replacing the app in Applications, and preserve a copy if rollback is needed.
+3.2.4 keeps local state under `~/Library/Application Support/Amua-v3.3.3`. Shared compatible ChatGPT connection credentials use the OS credential store. Installing the application does not replace user `.amua` files. Quit the old version normally before replacing the app in Applications, and preserve a copy if rollback is needed.
 
 Removing the app alone does not erase models, local support files or shared credentials. Use the app's account controls to disconnect/remove a saved connection deliberately. Do not delete shared credential entries merely to uninstall one version.

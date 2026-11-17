@@ -123,7 +123,15 @@ def prepare(command):
     return [{'role':'user','content':content}]
 
 def run(command,progress=None):
-    broker=Broker();action=command.get('action')
+    provider=command.get('provider','chatgpt')
+    if provider=='claude':
+        raise BrokerError('claude_subscription_unavailable')
+    if provider=='gemini':
+        from gemini_acp import GeminiBroker
+        broker=GeminiBroker()
+    elif provider=='chatgpt':broker=Broker()
+    else:raise BrokerError('unknown_provider')
+    action=command.get('action')
     try:
         if action=='status':return broker.status()
         if action=='connect':return broker.connect(command.get('account'),mode=command.get('mode','add'),attempt_id=command.get('attempt_id'),emit=progress or (lambda event:None))

@@ -4,7 +4,9 @@ AI Workflow builds proposals that become ordinary editable native models after r
 
 ## Connect your own account
 
-Choose Continue with ChatGPT or Accounts. Add a new connection for a different account or workspace; select an existing connection to reauthorize it. Browser authorization, account eligibility and workspace policy are controlled by the provider. A failed new sign-in preserves the previously active connection. There is no automatic paid-API fallback.
+Choose ChatGPT or Gemini in the provider selector, then Connect account or Accounts. Add a new connection for a different account or workspace; select an existing connection to reauthorize it. Browser authorization, account eligibility and workspace policy are controlled by the provider. A failed new sign-in preserves the previously active connection. There is no automatic paid-API fallback.
+
+For Gemini, Amua runs the bundled official Antigravity ACP client. First sign-in opens Google in your browser. Accounts can reconnect a signed-out connection, add another Google connection, switch, or remove one. Disconnect signs out the active Amua Google connection. New connections have separate profiles and credential namespaces; no API keys are inherited. Claude is unavailable.
 
 ## Attach sources in the chatbox
 

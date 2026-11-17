@@ -45,9 +45,12 @@ public class ChatAttachmentsCheck {
             waitImage();
             edt(()->{
                 check(ui.paths.size()==4,"Pasted screenshot was not attached");Path png=Paths.get(ui.paths.get(3));BufferedImage decoded=javax.imageio.ImageIO.read(png.toFile());check(decoded.getWidth()==4&&decoded.getHeight()==3&&decoded.getRGB(2,1)==0xff12ab34,"Screenshot pixels changed");
-                check(Files.getPosixFilePermissions(png).equals(java.nio.file.attribute.PosixFilePermissions.fromString("rw-------")),"Screenshot is not private to the user");
+                if(Files.getFileStore(png).supportsFileAttributeView("posix"))check(Files.getPosixFilePermissions(png).equals(java.nio.file.attribute.PosixFilePermissions.fromString("rw-------")),"Screenshot is not private to the user");
+                else{java.nio.file.attribute.AclFileAttributeView acl=Files.getFileAttributeView(png,java.nio.file.attribute.AclFileAttributeView.class);check(acl!=null,"Screenshot storage has no ACL view");for(java.nio.file.attribute.AclEntry entry:acl.getAcl()){String principal=entry.principal().getName().toLowerCase(java.util.Locale.ROOT);if(entry.type()==java.nio.file.attribute.AclEntryType.ALLOW&&(principal.endsWith("\\everyone")||principal.endsWith("\\authenticated users")||principal.endsWith("\\users")))check(!entry.permissions().contains(java.nio.file.attribute.AclEntryPermission.WRITE_DATA),"Screenshot grants broad write access");}}
                 check(((List)ui.chatRequest("Create a tree").get("paths")).contains(png.toString()),"Pasted image absent from normal outgoing request path");check(ui.process==null,"Image completion automatically sent a request");
-                ui.setSize(340,600);HardeningControllerCheck.layout(ui);Point location=SwingUtilities.convertPoint(ui.message,0,0,ui);check(location.y>=0&&location.y+ui.message.getHeight()<=600,"Chat entry left the small sidebar");
+                check(ui.conversation.getFont().getSize()==14&&ui.message.getFont().getSize()==14,"Chat font is too small");
+                ui.setSize(340,600);HardeningControllerCheck.layout(ui);
+                check(ui.sources.getWidth()<=340,"Controls overflow the sidebar width");Point location=SwingUtilities.convertPoint(ui.message,0,0,ui);check(location.y>=0&&location.y+ui.message.getHeight()<=600,"Chat entry left the small sidebar");
                 BufferedImage view=new BufferedImage(340,600,BufferedImage.TYPE_INT_ARGB);Graphics2D graphics=view.createGraphics();ui.printAll(graphics);graphics.dispose();javax.imageio.ImageIO.write(view,"png",Paths.get(args[0]).toFile());
                 BufferedImage abandoned=new BufferedImage(3,2,BufferedImage.TYPE_INT_ARGB);check(paste(payload(DataFlavor.imageFlavor,abandoned)),"Second image paste rejected");ui.clearSourceAttachments();check(ui.paths.isEmpty(),"Clear did not remove attachments");
             });

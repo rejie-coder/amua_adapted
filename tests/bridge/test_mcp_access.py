@@ -9,7 +9,7 @@ class McpAccessTests(unittest.TestCase):
  def tearDown(self):m.SUPPORT=self.previous;self.tmp.cleanup()
  def test_protocol_and_metadata_never_record_tool_arguments(self):
   result=m.rpc({'jsonrpc':'2.0','id':1,'method':'initialize','params':{'protocolVersion':'2025-11-25','clientInfo':{'name':'Hermes Test'}}})
-  self.assertEqual(result['serverInfo']['version'],'3.2.4');self.assertEqual(len(m.handle({'method':'tools/list'})['tools']),18)
+  self.assertEqual(result['serverInfo']['version'],'3.3.3');self.assertEqual(len(m.handle({'method':'tools/list'})['tools']),18)
   with patch.object(m,'request',return_value={'accepted':True}):m.execute('set_text',{'id':'c1','text':'PRIVATE USER MODEL TEXT'})
   data=json.loads((m.SUPPORT/'mcp-last-client.json').read_text());self.assertEqual(set(data),{'client','method','at_utc'});self.assertEqual(data['client'],'Hermes Test');self.assertNotIn('PRIVATE',json.dumps(data))
  def test_disable_blocks_existing_clients_and_reenable_restores(self):
@@ -29,5 +29,5 @@ class McpAccessTests(unittest.TestCase):
   (m.SUPPORT/'mcp-access.properties').write_text('enabled=false\n')
   with patch.object(m,'request',side_effect=AssertionError('No app access when disabled')):self.assertFalse(m.self_test()['ok'])
  def test_isolated_release_identity(self):
-  self.assertEqual(m.APP,ROOT/'Amua.app');self.assertEqual(m.VERSION,'3.2.4')
+  self.assertEqual(m.APP,ROOT/'Amua.app');self.assertEqual(m.VERSION,'3.3.3')
 if __name__=='__main__':unittest.main()

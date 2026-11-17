@@ -20,7 +20,7 @@ public class WorkflowText extends java.util.ListResourceBundle {
 {"balance_current_tree","Balance current tree"},
 {"automatically_balance_edits_current_tree","Automatically balance edits (current tree)"},
 {"reset_zoom","Reset Zoom"},
-{"version_2_1_credits_and_capability_status","Version 3.2.4 credits and capability status"},
+{"version_2_1_credits_and_capability_status","Version 3.3.3 credits and capability status"},
 {"preview_synthetic_module","Preview synthetic module"}
  };}
 }

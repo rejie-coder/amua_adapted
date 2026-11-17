@@ -27,13 +27,14 @@ jobs:
         run: python3 scripts/bootstrap_intel.py
       - name: Build native Intel app from source
         run: build/toolchains/python/bin/python3 -B src/native-support/build.py > build/build-output.txt 2>&1
-      - name: Run all checks and preserve the exact OCR limitation
+      - name: Run all required checks
         run: |
           set +e
           PYTHONDONTWRITEBYTECODE=1 Amua.app/Contents/Resources/python/bin/python3 -B tests/hardening/run_release_checks.py > evidence/release-checks-output.txt 2>&1
           check_status=$?
           set -e
           printf 'Full check runner exit: %s\n' "$check_status"
+          test "$check_status" -eq 0
           python3 scripts/verify_release.py
       - name: Build and read back installation DMG and source archive
         run: python3 scripts/package_intel.py

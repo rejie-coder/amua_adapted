@@ -21,9 +21,9 @@ import time
 import uuid
 
 APP = Path(__file__).resolve().parents[2] if Path(__file__).resolve().parent.name == 'Resources' else Path(__file__).resolve().parents[2] / 'Amua.app'
-SUPPORT = Path.home() / 'Library/Application Support/Amua-v3.2.4'
+SUPPORT = Path.home() / 'Library/Application Support/Amua-v3.3.3'
 BRIDGE = SUPPORT / 'bridge'
-VERSION = '3.2.4'
+VERSION = '3.3.3'
 os.umask(0o077)
 
 CLIENT_NAME='Local MCP client'
@@ -56,7 +56,7 @@ def self_test():
     if not enabled:return {'ok':False,'access_enabled':False,'server_version':VERSION,'tools_available':len(tools),'message':'Enable local MCP access in Amua first.'}
     observed=execute('status',{})
     ready=bool(observed.get('ready') and observed.get('responsive'))
-    return {'ok':ready,'access_enabled':True,'server_version':initialized['serverInfo']['version'],'tools_available':len(tools),'app_ready':ready,'message':'Local MCP connection is ready.' if ready else 'The server is ready; open Amua 3.2.4 to finish connecting.'}
+    return {'ok':ready,'access_enabled':True,'server_version':initialized['serverInfo']['version'],'tools_available':len(tools),'app_ready':ready,'message':'Local MCP connection is ready.' if ready else 'The server is ready; open Amua 3.3.3 to finish connecting.'}
 
 def state():
     stopped = {'running':False, 'ready':False, 'responsive':False, 'state':'stopped'}
@@ -210,8 +210,8 @@ TOOL_MAP = {t['name']:t for t in TOOLS}
 
 def execute(operation, arguments):
     if operation!='launch' and not access_enabled():
-        if operation=='status':return {'access_enabled':False,'message':'MCP access is disabled. Enable MCP Access beside Help in Amua 3.2.4.'}
-        raise RuntimeError('MCP access is disabled. Enable MCP Access beside Help in Amua 3.2.4.')
+        if operation=='status':return {'access_enabled':False,'message':'MCP access is disabled. Enable MCP Access beside Help in Amua 3.3.3.'}
+        raise RuntimeError('MCP access is disabled. Enable MCP Access beside Help in Amua 3.3.3.')
     if 'amua_'+operation in TOOL_MAP:record_client('amua_'+operation)
     if operation == 'launch':
         return launch(arguments)

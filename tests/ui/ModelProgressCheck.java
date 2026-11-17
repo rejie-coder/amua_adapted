@@ -19,7 +19,7 @@ public class ModelProgressCheck {
    ui.acceptModelProgress(progress(2,true),token-1);require(ui.lastModelProgressNanos==recent,"Late reply from old operation extended timeout");
    ui.acceptModelProgress(progress(1,true),token);require(ui.lastModelProgressNanos==recent,"Duplicate progress extended timeout");
    ui.acceptModelProgress(progress(3,false),token);require(ui.lastModelProgressNanos==recent,"Keepalive extended timeout");
-   ui.lastModelProgressNanos=System.nanoTime()-181000000000L;ui.updateActivity();require(!ui.activityTimer.isRunning()&&ui.process==null&&ui.epoch.get()>token,"Stalled operation did not stop");require(ui.conversation.getText().contains("No meaningful ChatGPT"),"Stall was not explained");
+   ui.lastModelProgressNanos=System.nanoTime()-181000000000L;ui.updateActivity();require(!ui.activityTimer.isRunning()&&ui.process==null&&ui.epoch.get()>token,"Stalled operation did not stop");require(ui.conversation.getText().contains("No meaningful AI"),"Stall was not explained");
    require(WorkspaceSnapshot.capture(model).get("sha256").equals(before),"Stall changed model");
    ui.preferences.putInt("model_chat_idle_seconds",600);req.put("idle_timeout_seconds",600);ui.beginActivity("provider",req);ui.activityStarted=System.nanoTime()-1800000000000L;ui.lastModelProgressNanos=System.nanoTime()-300000000000L;ui.updateActivity();require(ui.activityTimer.isRunning(),"User-selected10-minute idle window was ignored");ui.stop();
    require(!ui.activityTimer.isRunning()&&ui.process==null,"Stop failed");require(WorkspaceSnapshot.capture(model).get("sha256").equals(before),"Stop changed model");

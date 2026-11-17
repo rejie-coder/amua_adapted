@@ -1,25 +1,22 @@
-Amua 3.2.4 for Intel Mac — preview
+Amua 3.3.3 for Intel Mac — preview
 
-Requirements: Intel x86_64 Mac, macOS 14 or later.
-Java and Python are bundled. This is not a native Apple Silicon build.
+Requirements: Intel x86_64 Mac,macOS 14 or later. Java,Python and Google's native
+Antigravity runtime are bundled. This is not a native AppleSilicon build.
 
 1. Drag Amua.app to Applications.
-2. Eject this disk image.
-3. Open Amua from Applications.
-4. Preserve your original model files and save new work separately.
+2. Eject the disk image and open the installed app.
+3. Save new model work separately from originals.
+4. In AI Workflow choose ChatGPT or Gemini, then Connect account.
+   Gemini Accounts supports reconnect, add, switch and remove.
 
-This preview is ad hoc signed, not Apple-notarized. macOS may block first launch.
-Verify the download checksum and review the normal macOS Privacy & Security
-Open Anyway option if you choose to trust this preview. Do not disable Gatekeeper.
+The outer app is ad hoc signed,not notarized. Review normal macOS Privacy &
+Security first-launch controls if blocked. Do not disable Gatekeeper globally.
+Google/OpenAI account eligibility and limits apply. No API-key fallback is used.
+Manual modelling works without AI sign-in. Review scientific inputs and run
+full original validation before calculations.
 
-AI requires an eligible connected ChatGPT account/workspace and internet access.
-Manual modelling works without AI sign-in. Check all AI-derived values and
-assumptions, resolve questions and run full validation before calculations.
-Scanned-PDF OCR has an unresolved environment-specific test failure.
-
-Downloads, source, checksums, instructions and known issues:
-https://github.com/rejie-coder/amua_adapted
-https://github.com/rejie-coder/amua_adapted/releases
+Downloads,source,checksums and verification:
+https://github.com/rejie-coder/amua_adapted/releases/tag/v3.3.3
 
 Original Amua by Zachary J. Ward.
 Adapted and developed by Dr. Rejinten Jayawardhana.

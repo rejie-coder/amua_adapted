@@ -1,3 +1,7 @@
+#3.3.3 — Intel Mac
+
+Supported Antigravity Google login/account management, smaller self-contained package and preserved compact display/original engine. See docs/Release-Notes-3.3.3.md. Windows 3.3.2is unchanged.
+
 # Changelog
 
 ## 3.2.4 Windows x64 preview

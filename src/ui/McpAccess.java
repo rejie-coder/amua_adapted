@@ -13,12 +13,12 @@ import java.util.*;
 
 /** Local MCP access and portable, client-specific connection walkthroughs. */
 public final class McpAccess {
-    public static final String SERVER="amua_324";
+    public static final String SERVER="amua_333";
     public static final String[] CLIENTS={"Hermes","Codex","Claude Code","DeepSeek harness","OpenClaw","Any MCP client"};
     private static JDialog dialog;
     private McpAccess() {}
 
-    public static Path support(){return Paths.get(System.getProperty("amua.support",System.getProperty("user.home")+"/Library/Application Support/Amua-v3.2.4"));}
+    public static Path support(){return Paths.get(System.getProperty("amua.support",System.getProperty("user.home")+"/Library/Application Support/Amua-v3.3.3"));}
     public static boolean isEnabled(){
         Path path=support().resolve("mcp-access.properties");
         if(!Files.exists(path))return true;
@@ -55,7 +55,7 @@ public final class McpAccess {
     }
     private static void show(JFrame owner){
         if(dialog!=null&&dialog.isDisplayable()){dialog.setVisible(true);dialog.toFront();return;}
-        dialog=new JDialog(owner,"Amua 3.2.4 · MCP connection walkthrough",false);
+        dialog=new JDialog(owner,"Amua 3.3.3 · MCP connection walkthrough",false);
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);dialog.setContentPane(createPanel(owner));
         dialog.setSize(900,690);dialog.setMinimumSize(new Dimension(720,540));dialog.setLocationRelativeTo(owner);dialog.setVisible(true);
     }
@@ -69,13 +69,13 @@ public final class McpAccess {
         JLabel feedback=new JLabel("Server: "+SERVER+" · Engine 0.3.6 · MCP stdio");
         JLabel accessState=new JLabel(isEnabled()?"Access enabled · local stdio connection":"Access disabled");JPanel switchPanel=new JPanel(new GridLayout(0,1,4,4));switchPanel.add(enabled);switchPanel.add(accessState);access.add(switchPanel,BorderLayout.NORTH);
         enabled.addActionListener(e->{try{setEnabled(enabled.isSelected());accessState.setText(enabled.isSelected()?"Access enabled · local stdio connection":"Access disabled · agent tool calls will be rejected");}catch(IOException error){enabled.setSelected(isEnabled());accessState.setText("Could not save access setting: "+error.getMessage());}});
-        access.add(prose("1. Keep Amua 3.2.4 open on this Mac.\n\n2. Allow access above, then choose your agent on the next tab.\n\n3. Add the supplied local stdio server to your agent and start a new agent session.\n\nThe connection is local: there is no public server address or API key to paste into Amua. Your agent must run on this Mac, or use a local MCP execution bridge.\n\nYou can switch access off here at any time. Agent requests then stop being accepted; your models stay open."),BorderLayout.CENTER);steps.addTab("1 · Access",access);
+        access.add(prose("1. Keep Amua 3.3.3 open on this Mac.\n\n2. Allow access above, then choose your agent on the next tab.\n\n3. Add the supplied local stdio server to your agent and start a new agent session.\n\nThe connection is local: there is no public server address or API key to paste into Amua. Your agent must run on this Mac, or use a local MCP execution bridge.\n\nYou can switch access off here at any time. Agent requests then stop being accepted; your models stay open."),BorderLayout.CENTER);steps.addTab("1 · Access",access);
         JPanel setup=new JPanel(new BorderLayout(8,8));JComboBox<String> client=new JComboBox<>(CLIENTS);client.setName("MCP agent");setup.add(client,BorderLayout.NORTH);
         JTextArea instructions=prose(guide(CLIENTS[0]));instructions.setRows(5);JTextArea payload=new JTextArea(configuration(CLIENTS[0],resources()),13,70);payload.setEditable(false);payload.setFont(new Font(Font.MONOSPACED,Font.PLAIN,12));payload.setName("MCP setup configuration");
         JPanel body=new JPanel(new BorderLayout());body.add(instructions,BorderLayout.NORTH);body.add(new JScrollPane(payload),BorderLayout.CENTER);setup.add(body,BorderLayout.CENTER);
         client.addActionListener(e->{String selected=String.valueOf(client.getSelectedItem());instructions.setText(guide(selected));payload.setText(configuration(selected,resources()));payload.setCaretPosition(0);});
         JPanel copy=new JPanel(new FlowLayout(FlowLayout.LEFT));JButton copySetup=new JButton("Copy setup");copySetup.addActionListener(e->copy(payload.getText(),feedback));copy.add(copySetup);JButton copyLaunch=new JButton("Copy launch command");copyLaunch.addActionListener(e->copy(launchCommand(resources()),feedback));copy.add(copyLaunch);
-        JButton save=new JButton("Save setup…");save.addActionListener(e->{JFileChooser chooser=new JFileChooser();chooser.setSelectedFile(new File("Amua-3.2.4-MCP-setup.txt"));if(chooser.showSaveDialog(owner)!=JFileChooser.APPROVE_OPTION)return;try{Files.write(chooser.getSelectedFile().toPath(),(guide(String.valueOf(client.getSelectedItem()))+"\n\n"+payload.getText()+"\n\n"+firstTask()).getBytes(StandardCharsets.UTF_8),StandardOpenOption.CREATE_NEW);feedback.setText("Setup saved");}catch(IOException error){JOptionPane.showMessageDialog(owner,"Choose a new file name. "+error.getMessage(),"Setup not saved",JOptionPane.INFORMATION_MESSAGE);}});copy.add(save);setup.add(copy,BorderLayout.SOUTH);steps.addTab("2 · Agent setup",setup);
+        JButton save=new JButton("Save setup…");save.addActionListener(e->{JFileChooser chooser=new JFileChooser();chooser.setSelectedFile(new File("Amua-3.3.3-MCP-setup.txt"));if(chooser.showSaveDialog(owner)!=JFileChooser.APPROVE_OPTION)return;try{Files.write(chooser.getSelectedFile().toPath(),(guide(String.valueOf(client.getSelectedItem()))+"\n\n"+payload.getText()+"\n\n"+firstTask()).getBytes(StandardCharsets.UTF_8),StandardOpenOption.CREATE_NEW);feedback.setText("Setup saved");}catch(IOException error){JOptionPane.showMessageDialog(owner,"Choose a new file name. "+error.getMessage(),"Setup not saved",JOptionPane.INFORMATION_MESSAGE);}});copy.add(save);setup.add(copy,BorderLayout.SOUTH);steps.addTab("2 · Agent setup",setup);
         JPanel verify=new JPanel(new BorderLayout(8,8));JTextArea result=prose("Register the server in your agent, then ask it to call amua_status and amua_inspect. A successful local test checks the server and this app; your agent’s tool list confirms its own connection.\n\n"+lastActivity());verify.add(new JScrollPane(result),BorderLayout.CENTER);
         JButton test=new JButton("Test local connection");test.addActionListener(e->{test.setEnabled(false);result.setText("Checking the local server and Amua…");new SwingWorker<String,Void>(){
             protected String doInBackground()throws Exception{
@@ -102,12 +102,12 @@ public final class McpAccess {
     public static String guide(String client){
         if("Hermes".equals(client))return "Merge this entry into ~/.hermes/config.yaml under mcp_servers, preserving your other servers. Restart your Hermes session and ask it to use Amua.\nGuide: https://hermes-agent.nousresearch.com/docs/user-guide/features/mcp";
         if("Codex".equals(client))return "Run this registration command in Terminal on this Mac. Confirm it with codex mcp list, then start a new Codex session and check /mcp. It uses a new server name, preserving an existing amua connection.\nGuide: https://developers.openai.com/codex/mcp";
-        if("Claude Code".equals(client))return "Run this command in Terminal to register the server at user scope. Start a new Claude Code session and check /mcp for amua_324.\nGuide: https://code.claude.com/docs/en/mcp";
+        if("Claude Code".equals(client))return "Run this command in Terminal to register the server at user scope. Start a new Claude Code session and check /mcp for amua_333.\nGuide: https://code.claude.com/docs/en/mcp";
         if("OpenClaw".equals(client))return "For current OpenClaw native MCP support, stop your Gateway before changing the MCP registry. Run the setup and probe commands, then restart the Gateway/session. Older builds may need an MCP adapter such as mcporter; use the generic stdio launch details for that adapter.\nGuide: https://docs.openclaw.ai/cli/mcp/registry";
         if("DeepSeek harness".equals(client))return "Use a DeepSeek-backed harness that supports MCP tools. Add this common mcpServers entry, or copy its command and args into your harness’s stdio server settings. Restart/reload that harness and list tools. DeepSeek is the model provider; the harness supplies MCP support.";
         return "In an MCP-capable client on this Mac, add a local stdio server using this common JSON format. If its configuration format differs, copy the command and argument fields into its server settings. Restart/reload the client and list tools. Use the bundled executable, not a system Python installation.";
     }
-    public static String firstTask(){return "Use the amua_324 MCP server for my requested Amua work. Call amua_status, then amua_inspect and amua_model_summary when a model is open. Report the active model and missing inputs before editing. Use observed controls and inspect dialogs after actions. Preserve the original engine’s validation and calculations. Save new work to a new .amua path unless I request replacement. Run amua_validate_model before amua_run_model; inspect console/status for actual analysis completion. Do not invent scientific inputs. Start with inspection only.";}
+    public static String firstTask(){return "Use the amua_333 MCP server for my requested Amua work. Call amua_status, then amua_inspect and amua_model_summary when a model is open. Report the active model and missing inputs before editing. Use observed controls and inspect dialogs after actions. Preserve the original engine’s validation and calculations. Save new work to a new .amua path unless I request replacement. Run amua_validate_model before amua_run_model; inspect console/status for actual analysis completion. Do not invent scientific inputs. Start with inspection only.";}
     static void copy(String value,JLabel state){try{Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(value),null);state.setText("Copied");}catch(Exception error){state.setText("Clipboard unavailable; select the setup text and copy it manually.");}}
     static String lastActivity(){
         try {

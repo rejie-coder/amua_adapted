@@ -45,7 +45,7 @@ def main():
  if APP.exists():
   if APP.is_symlink() or not (APP/'Contents/Info.plist').is_file():raise SystemExit('Unrecognized candidate target')
   with (APP/'Contents/Info.plist').open('rb') as f:
-   if plistlib.load(f).get('CFBundleIdentifier')!='local.rejie.amua.v324':raise SystemExit('Wrong candidate identity')
+   if plistlib.load(f).get('CFBundleIdentifier')!='local.rejie.amua.v333':raise SystemExit('Wrong candidate identity')
  stage=BUILD/'Amua.app';shutil.rmtree(stage,ignore_errors=True)
  res=stage/'Contents/Resources';exe=stage/'Contents/MacOS';res.mkdir(parents=True);exe.mkdir()
  shutil.copy2(jar,res/jar.name)
@@ -56,6 +56,8 @@ def main():
  shutil.copy2(ROOT/'src/upstream/LICENSE',res/'AMUA-LICENSE.txt')
  shutil.copytree(JDK/'jre',res/'runtime',symlinks=True)
  shutil.copytree(BUILD/'toolchains/python',res/'python',symlinks=True)
+ shutil.copytree(BUILD/'toolchains/antigravity',res/'antigravity')
+ run('/usr/bin/codesign','--verify','--strict',res/'antigravity/agy')
  lib=res/'pythonlib';lib.mkdir()
  # Bundle pinned pure-Python format parsers with their package notices.
  thirdparty=ROOT/'src/dependencies/python'
@@ -73,11 +75,14 @@ def main():
    for module in helper.parent.glob('*.py'):shutil.copy2(module,res/module.name)
   source=ROOT/'src'/name
   if source.exists():shutil.copytree(source,lib/name,ignore=shutil.ignore_patterns('__pycache__'))
- plist={'CFBundleDevelopmentRegion':'en','CFBundleDisplayName':'Amua (ReyJay) V 3.2.4','CFBundleName':'Amua (ReyJay) V 3.2.4','CFBundleExecutable':'Amua','CFBundleIdentifier':'local.rejie.amua.v324','CFBundlePackageType':'APPL','CFBundleShortVersionString':'3.2.4','CFBundleVersion':'1','CFBundleIconFile':'Amua.icns','NSHighResolutionCapable':True,'LSMultipleInstancesProhibited':True,'LSMinimumSystemVersion':'14.0'}
+ plist={'CFBundleDevelopmentRegion':'en','CFBundleDisplayName':'Amua (ReyJay) V 3.3.3','CFBundleName':'Amua (ReyJay) V 3.3.3','CFBundleExecutable':'Amua','CFBundleIdentifier':'local.rejie.amua.v333','CFBundlePackageType':'APPL','CFBundleShortVersionString':'3.3.3','CFBundleVersion':'1','CFBundleIconFile':'Amua.icns','NSHighResolutionCapable':True,'LSMultipleInstancesProhibited':True,'LSMinimumSystemVersion':'14.0'}
  with (stage/'Contents/Info.plist').open('wb') as f:plistlib.dump(plist,f)
  (stage/'Contents/PkgInfo').write_text('APPL????')
  run('/usr/bin/xcrun','clang','-arch','x86_64','-mmacosx-version-min=14.0','-O2','-fobjc-arc','-framework','Cocoa',HERE/'launcher.m','-o',exe/'Amua')
  for cache in stage.rglob('__pycache__'):shutil.rmtree(cache)
+ from optimize_bundle import optimize
+ optimization=optimize(res)
+ (BUILD/'size-optimization.json').write_text(json.dumps(optimization,indent=2)+'\n')
  run('/usr/bin/codesign','--force','--sign','-',stage)
  run('/usr/bin/codesign','--verify','--strict',stage)
  target=stage
@@ -86,6 +91,6 @@ def main():
    backup=BUILD/'Amua.previous.app';shutil.rmtree(backup,ignore_errors=True);APP.rename(backup)
   stage.rename(APP);target=APP
  compiled={p.relative_to(out).as_posix() for p in out.rglob('*.class')}
- manifest={'source_sha256':{str(p.relative_to(ROOT)):sha(p) for p in (ROOT/'src').rglob('*') if p.is_file() and p.suffix in ('.java','.py','.js','.swift','.m') and '.git' not in p.parts and '__pycache__' not in p.parts},'upstream_baseline_commit':'fcce8ebbf8bf5ab03a49f7388868f323812ec7f8','source_revision':json.loads((ROOT/'src/upstream/ORIGIN.json').read_text())['local_adaptation_history_head'],'ocr':{'source_sha256':sha(HERE/'ocr.swift'),'binary_sha256':sha(target/'Contents/Resources/libexec/amua-ocr'),'architecture':'x86_64','target':'macOS14','maximum_pixels':8000000,'page_timeout_seconds':15},'source_files':len(sources),'ui_files':len(ui),'baseline_jar_sha256':sha(BASE),'candidate_jar_sha256':sha(target/'Contents/Resources'/jar.name),'missing_baseline_engine_classes':sorted(baselineclasses-compiled),'added_engine_classes':sorted(compiled-baselineclasses),'java_release':(res if False else target/'Contents/Resources/runtime/release').read_text() if (target/'Contents/Resources/runtime/release').exists() else (JDK/'release').read_text(),'python_version':subprocess.check_output([str(target/'Contents/Resources/python/bin/python3'),'--version'],text=True).strip(),'files':{p.relative_to(target).as_posix():sha(p) for p in target.rglob('*') if p.is_file() and not p.is_symlink()}}
+ manifest={'source_sha256':{str(p.relative_to(ROOT)):sha(p) for p in (ROOT/'src').rglob('*') if p.is_file() and p.suffix in ('.java','.py','.js','.swift','.m') and '.git' not in p.parts and '__pycache__' not in p.parts},'upstream_baseline_commit':'fcce8ebbf8bf5ab03a49f7388868f323812ec7f8','source_revision':os.environ.get('GITHUB_SHA',json.loads((ROOT/'src/upstream/ORIGIN.json').read_text())['local_adaptation_history_head']),'ocr':{'source_sha256':sha(HERE/'ocr.swift'),'binary_sha256':sha(target/'Contents/Resources/libexec/amua-ocr'),'architecture':'x86_64','target':'macOS14','maximum_pixels':8000000,'page_timeout_seconds':15},'source_files':len(sources),'ui_files':len(ui),'baseline_jar_sha256':sha(BASE),'candidate_jar_sha256':sha(target/'Contents/Resources'/jar.name),'missing_baseline_engine_classes':sorted(baselineclasses-compiled),'added_engine_classes':sorted(compiled-baselineclasses),'java_release':(res if False else target/'Contents/Resources/runtime/release').read_text() if (target/'Contents/Resources/runtime/release').exists() else (JDK/'release').read_text(),'google_runtime':{'provider':'Antigravity ACP','cli_version':'1.5.9','architecture':'x86_64','binary_sha256':sha(target/'Contents/Resources/antigravity/agy')},'size_optimization':optimization,'python_version':subprocess.check_output([str(target/'Contents/Resources/python/bin/python3'),'--version'],text=True).strip(),'files':{p.relative_to(target).as_posix():sha(p) for p in target.rglob('*') if p.is_file() and not p.is_symlink()}}
  (BUILD/'build-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');print(json.dumps({k:v for k,v in manifest.items() if k!='files'},indent=2))
 if __name__=='__main__':main()

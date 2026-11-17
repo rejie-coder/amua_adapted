@@ -10,7 +10,7 @@ def sha(path):
 def download(item,target):
  target.parent.mkdir(parents=True,exist_ok=True)
  if target.exists() and sha(target)==item['sha256']:return
- request=urllib.request.Request(item['url'],headers={'User-Agent':'Amua-pinned-build/3.2.4'})
+ request=urllib.request.Request(item['url'],headers={'User-Agent':'Amua-pinned-build/3.3.3'})
  with urllib.request.urlopen(request,timeout=60) as source,target.with_suffix('.download').open('wb') as dest:shutil.copyfileobj(source,dest)
  temporary=target.with_suffix('.download')
  if sha(temporary)!=item['sha256']:temporary.unlink();raise RuntimeError('SHA256 mismatch: '+target.name)
@@ -26,7 +26,7 @@ def extract(archive,destination):
     if link!=base and base not in link.parents:raise RuntimeError('Archive link escapes destination')
   tar.extractall(base)
 def main():
- p=argparse.ArgumentParser();p.add_argument('--seed',type=Path,help='Use the already retained local 3.2.4 toolchains; no downloads.');a=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--seed',type=Path,help='Use the already retained local 3.3.3 toolchains; no downloads.');a=p.parse_args()
  manifest=json.loads((ROOT/'scripts/toolchains-intel.json').read_text());baseline=ROOT/manifest['baseline']['target'];tools=ROOT/'build/toolchains';tools.mkdir(parents=True,exist_ok=True)
  if a.seed:
   source=a.seed.resolve();candidate=source/'src/dependencies/baseline-fat-dependencies.jar'
@@ -42,5 +42,6 @@ def main():
  if sha(baseline)!=manifest['baseline']['sha256']:raise RuntimeError('Baseline container is not the approved version')
  for command in [[tools/'jdk8u512-b09/Contents/Home/bin/javac','-version'],[tools/'python/bin/python3','--version']]:subprocess.run([str(c) for c in command],check=True)
  (ROOT/'build/toolchain-provenance.json').write_text(json.dumps({'inputs':manifest,'local_seed':bool(a.seed)},indent=2)+'\n')
+ subprocess.run([str(tools/'python/bin/python3'),'-B',str(ROOT/'src/native-support/bootstrap_antigravity.py')],check=True)
  print('Pinned Intel inputs ready; baseline SHA256 verified.')
 if __name__=='__main__':main()

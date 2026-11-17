@@ -12,7 +12,7 @@ public class McpWalkthroughCheck {
   try{
    final Path out=Paths.get(args[0]);Files.createDirectories(out);
    String resources="/tmp/Amua's folder/Amua.app/Contents/Resources";Map<String,Object> setups=new LinkedHashMap<>();
-   for(String client:McpAccess.CLIENTS){String payload=McpAccess.configuration(client,resources);check(payload.contains("amua_324"),"Missing server alias");check(!payload.contains("3.1.3"),"Old release reference");setups.put(client,payload);}
+   for(String client:McpAccess.CLIENTS){String payload=McpAccess.configuration(client,resources);check(payload.contains("amua_333"),"Missing server alias");check(!payload.contains("3.1.3"),"Old release reference");setups.put(client,payload);}
    Files.write(out.resolve("setup-fixtures.json"),WorkflowPanel.json(setups).getBytes(java.nio.charset.StandardCharsets.UTF_8));
    check(McpAccess.isEnabled(),"New access should be available for requested connections");McpAccess.setEnabled(false);check(!McpAccess.isEnabled(),"Access off not persisted");McpAccess.setEnabled(true);check(McpAccess.isEnabled(),"Access on not persisted");
    SwingUtilities.invokeAndWait(()->{try{

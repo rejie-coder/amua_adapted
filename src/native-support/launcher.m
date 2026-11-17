@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
     @autoreleasepool {
         umask(0077);
         NSString *resources = [[NSBundle mainBundle] resourcePath];
-        NSString *support = [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Application Support/Amua-v3.2.4"];
+        NSString *support = [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Application Support/Amua-v3.3.3"];
         NSError *error = nil;
         if (![[NSFileManager defaultManager] createDirectoryAtPath:support
                   withIntermediateDirectories:YES attributes:@{NSFilePosixPermissions:@0700} error:&error]) {
@@ -93,7 +93,7 @@ int main(int argc, char **argv) {
         NSString *jar = [resources stringByAppendingPathComponent:@"Amua_0.3.6.jar"];
         NSMutableArray<NSString *> *args = [NSMutableArray arrayWithArray:@[
             java, @"-Xms64m", @"-Xmx2g", @"-XX:+UseG1GC", @"-XX:MaxGCPauseMillis=100",
-            @"-Xdock:name=Amua (ReyJay) V 3.2.4", [@"-Xdock:icon=" stringByAppendingString:[resources stringByAppendingPathComponent:@"Amua.icns"]],
+            @"-Xdock:name=Amua (ReyJay) V 3.3.3", [@"-Xdock:icon=" stringByAppendingString:[resources stringByAppendingPathComponent:@"Amua.icns"]],
             @"-Dapple.laf.useScreenMenuBar=true", @"-Dcom.apple.macos.useScreenMenuBar=true",
             @"-Dcom.apple.mrj.application.apple.menu.about.name=Amua", @"-Dapple.awt.application.name=Amua",
             @"-Dsun.net.client.defaultConnectTimeout=4000", @"-Dsun.net.client.defaultReadTimeout=4000",

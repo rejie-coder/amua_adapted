@@ -1,3 +1,7 @@
+# Documentation
+
+Latest Intel Mac: **3.3.3** — [release notes](Release-Notes-3.3.3.md), [package size](Size-Optimization.md), [verification](Verification-3.3.3.md). Earlier version reports below are historical.
+
 # Amua documentation
 
 Start with [installation](Installing.md), then [AI Workflow](AI-Workflow.md) or the original [Amua modelling tutorials](https://github.com/zward/Amua/wiki).
@@ -19,4 +23,4 @@ Start with [installation](Installing.md), then [AI Workflow](AI-Workflow.md) or 
 
 These pages also supply the GitHub Wiki. The main repository copies remain accessible even if the Wiki has not been initialized.
 
-The Intel preview is [published as v3.2.4](https://github.com/rejie-coder/amua_adapted/releases/tag/v3.2.4). Use the [complete tagged repository archive](https://github.com/rejie-coder/amua_adapted/archive/refs/tags/v3.2.4.tar.gz) for regression testing, including the public engine parity fixtures. The accompanying application-source asset supports the application build and excludes generated evidence directories.
+The Intel preview is [published as v3.2.4](https://github.com/rejie-coder/amua_adapted/releases/tag/v3.3.3). Use the [complete tagged repository archive](https://github.com/rejie-coder/amua_adapted/archive/refs/tags/v3.2.4.tar.gz) for regression testing, including the public engine parity fixtures. The accompanying application-source asset supports the application build and excludes generated evidence directories.

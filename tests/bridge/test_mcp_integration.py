@@ -19,7 +19,7 @@ class McpIntegrationTests(unittest.TestCase):
     client=subprocess.Popen([str(RES/'python/bin/python3'),'-B','-c',wrapper,str(RES/'amua_mcp.py'),temp],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
     def rpc(ident,method,params=None):
      client.stdin.write(json.dumps({'jsonrpc':'2.0','id':ident,'method':method,'params':params or {}})+'\n');client.stdin.flush();line=client.stdout.readline();self.assertTrue(line,'MCP server stopped unexpectedly');return json.loads(line)
-    init=rpc(1,'initialize',{'protocolVersion':'2025-11-25','clientInfo':{'name':'Isolated stdio integration test'}});self.assertEqual(init['result']['serverInfo']['version'],'3.2.4')
+    init=rpc(1,'initialize',{'protocolVersion':'2025-11-25','clientInfo':{'name':'Isolated stdio integration test'}});self.assertEqual(init['result']['serverInfo']['version'],'3.3.3')
     self.assertEqual(len(rpc(2,'tools/list')['result']['tools']),18)
     def call(ident,name,args=None):return rpc(ident,'tools/call',{'name':name,'arguments':args or {}})['result']
     status=call(3,'amua_status')['structuredContent'];self.assertTrue(status['ready']);self.assertEqual(len(status['models']),1)

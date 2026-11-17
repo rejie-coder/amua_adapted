@@ -1,37 +1,35 @@
 # Amua adapted
 
-Amua adapted is a desktop decision-tree and Markov modelling application based on **Amua by Zachary J. Ward**, adapted and developed by **Dr. Rejinten Jayawardhana**. This repository contains the editable model engine, integrated AI Workflow, local MCP bridge and Intel Mac packaging source. Windows source is published with the separate Windows tag and source archive.
+Amua adapted is a desktop decision-tree and Markov modelling application based on **Amua by Zachary J. Ward**, adapted and developed by **Dr. Rejinten Jayawardhana**. This repository contains the editable engine, integrated AI Workflow, local MCP bridge and Intel Mac packaging source. Windows source and binaries have separate release tags.
 
-**Intel Mac 3.2.4 (macOS 14+) and Windows 3.3.2 previews are available.** Native Apple Silicon follows Windows; the Intel package is not a native M-series application.
+**Intel Mac 3.3.3 (macOS 14+)**: [installation DMG](https://github.com/rejie-coder/amua_adapted/releases/download/v3.3.3/Amua-3.3.3-macOS-Intel.dmg) · [all assets and checksums](https://github.com/rejie-coder/amua_adapted/releases/tag/v3.3.3) · [release notes](docs/Release-Notes-3.3.3.md).
 
-[Download releases](https://github.com/rejie-coder/amua_adapted/releases) · [Install on Mac](docs/Installing.md) · [User guide](docs/AI-Workflow.md) · [Documentation](docs/README.md) · [Wiki](https://github.com/rejie-coder/amua_adapted/wiki) · [Build from source](docs/Building.md)
+**Windows 3.3.2**: [portable ZIP](https://github.com/rejie-coder/amua_adapted/releases/download/v3.3.2-windows/Amua-3.3.2-Windows-x64.zip) · [Windows guidance](docs/Windows.md). Its older Gemini CLI needs the Google personal-account migration now implemented on Mac; the Windows Google fix has not been released. Manual modelling and its compact display correction remain available.
 
-**Published Intel preview:** [Download the installation DMG](https://github.com/rejie-coder/amua_adapted/releases/download/v3.2.4/Amua-3.2.4-macOS-Intel.dmg). [Release assets and checksums](https://github.com/rejie-coder/amua_adapted/releases/tag/v3.2.4) include the app ZIP, application source, installation instructions and build verification. For the full repository and regression fixtures, download the [tagged source archive](https://github.com/rejie-coder/amua_adapted/archive/refs/tags/v3.2.4.tar.gz).
+[Install](docs/Installing.md) · [AI Workflow](docs/AI-Workflow.md) · [Documentation](docs/README.md) · [Wiki](https://github.com/rejie-coder/amua_adapted/wiki) · [Build](docs/Building.md)
 
-**Windows preview:** [Download the complete portable ZIP](https://github.com/rejie-coder/amua_adapted/releases/download/v3.3.2-windows/Amua-3.3.2-Windows-x64.zip), extract it, then open **Amua/Amua.exe**. Windows 3.3.2 restores compact OCD trees and solid node symbols while retaining Windows display scaling and larger fonts. Java and Python are bundled. See [Windows installation/build guidance](docs/Windows.md) and the [Windows source, audit and verification assets](https://github.com/rejie-coder/amua_adapted/releases/tag/v3.3.2-windows). Windows 10/11 x64 is the target; native CI runs on Windows Server 2022. This unsigned preview still needs clean desktop/live account acceptance.
+## Mac 3.3.3
 
-## Install on Intel Mac
+- Google/Gemini sign-in uses Google's official Antigravity ACP runtime. The retired personal Gemini CLI is removed.
+- Connect/Accounts support first sign-in, reconnect, adding another Google connection, switching and removal. Separate profiles and credential namespaces keep connections apart. Provider errors show sanitized reasons.
+- Original compact OCD, terminal alignment and solid red/green/blue symbols are retained. Larger chat fonts and a responsive sidebar improve readability.
+- Java, Python, native OCR and Google's signed native runtime are bundled. No separate runtime installation is needed. The local app's file contents are64.2 MB/15.37%smaller than3.3.2; [packaging details](docs/Size-Optimization.md) explain the measurement.
+- Manual native .amua editing, original validation/calculations, proposal review, Undo/Redo and text/file/image chat attachments remain.
 
-Download **Amua-3.2.4-macOS-Intel.dmg** from the release Assets, open it and drag **Amua.app** to **Applications**. Eject the disk image, then open the installed app. Java and Python are bundled; no separate runtime installation is required. Check the supplied `SHA256SUMS` if verifying the download.
+Google browser sign-in and reuse of the saved connection were verified locally. Hosted tests use synthetic credentials and do not authenticate a real account. Google determines account eligibility and limits; there is no API-key fallback. Claude remains unavailable. Manual modelling works without AI sign-in.
 
-This preview uses a local ad hoc signature and is **not Apple-notarized**. macOS may block first launch. Follow the normal Privacy & Security review described in the [installation guide](docs/Installing.md); do not disable Gatekeeper globally. Clean-machine acceptance is still pending.
+## Install and verify
 
-## Work with models
+Download the DMG, open it and drag **Amua.app** into **Applications**. Eject the image and open the installed app. Requires Intel x86_64 and macOS 14 or later; native Apple Silicon is not included.
 
-Manual editing, native `.amua` files, full model validation and calculations use the original engine. AI Workflow can inventory source files, propose editable trees, ask unresolved questions and apply reviewed edits with Undo/Redo. Text copy/paste, pasted screenshots or files, and file drag-and-drop work in the chatbox. Attachments wait for Send and outgoing review.
+The outer app is ad hoc signed and **not Apple-notarized**. Follow normal macOS Privacy & Security review if first launch is blocked; do not disable Gatekeeper globally. Check SHA256SUMS and the release's build provenance. The native Google executable retains Google's Developer ID signature.
 
-AI features require an eligible connected ChatGPT account/workspace and internet access. Provider eligibility, limits and policies remain authoritative; a subscription alone is not a guarantee of availability. Manual modelling does not require AI sign-in. No silent paid-API fallback is included.
+The local candidate passes 20 release groups,146 provider tests,38 workflow tests(including actual English scanned-PDF OCR),10 bridge tests and a real Swing Google-picker test. The public build also gates compact original/candidate52-node geometry, signed native runtime and source/package correspondence; its exact pass/skip counts are in the downloadable verification report. All718 compiled application classes must match the checked candidate; eight original-engine results must agree.
 
-## Verified scope and known limits
-
-The local 3.2.4 candidate passes 124 provider tests, 10 bridge tests, native image/sidebar/clipboard checks and eight exact original-engine comparisons. Workflow tests pass 37/38: actual scanned-PDF OCR remains unresolved in that local environment. The published Intel build passed its GitHub runner checks with **zero OCR waivers**, and all 717 application classes matched the checked candidate. This adds evidence on the build runner; live account, physical desktop and clean-machine acceptance remain separate. [Verification evidence](docs/Verification-3.2.4.md) distinguishes controlled service responses from live account acceptance.
-
-The separate Windows release gates publication on native startup/process/credential/OCR/save/image/controller checks and eight original-engine comparisons. See its downloadable reports for explicit private/POSIX test skips. Windows 3.3.2 additionally compares every node position of a synthetic 52-node tree with original Amua for both terminal alignment modes and checks solid node rendering. The four reviewed display source files are pinned separately; 100 other numerical class files remain byte-identical.
-
-AI output is a proposal. Check the image transcription, dimensions, units, probabilities, costs, QALYs and assumptions before approving inputs. Structure approval does not approve numerical inputs. A valid calculation is not scientific validation or a treatment recommendation. Missing perspective, time horizon, comparator, currency context or willingness-to-pay must be resolved explicitly.
+AI output is a proposal. Review source transcription, probabilities, costs, outcomes, units and assumptions before approving inputs. Structure approval does not approve numerical values. A valid calculation does not establish scientific validity or a policy recommendation. Clean-machine and broader live-account/scientific acceptance remain separate.
 
 ## Source and licence
 
-Project adaptations are provided under GPLv3-or-later, with original copyright headers and [GPL licence](LICENSE) retained. [NOTICE](NOTICE.md) identifies the upstream project, adaptation and bundled dependencies. The release includes corresponding application source and build scripts; pinned third-party runtime/dependency inputs are described in [Building](docs/Building.md) and [third-party notices](docs/Third-Party.md).
+Project adaptations are GPLv3-or-later; original copyright headers and [GPL licence](LICENSE) are retained. [NOTICE](NOTICE.md) and [third-party information](docs/Third-Party.md) identify upstream and bundled runtimes. The release includes corresponding application source and build scripts. Keep the checked runtime versions when rebuilding.
 
-This is an independent adaptation, not an official release or endorsement by the original Amua author or OpenAI. [Contributions](CONTRIBUTING.md) and [security reports](SECURITY.md) are welcome; never post credentials, patient data or confidential source files in issues.
+This is an independent adaptation, not an official release or endorsement by the original Amua author or the AI providers. Never post credentials, patient data or confidential documents in public issues.

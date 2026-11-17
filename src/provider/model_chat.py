@@ -254,7 +254,7 @@ def xml_for(plan,evidence):
     def field(p,k,v):ET.SubElement(p,k).text=str(v)
     field(root,'name',m.get('name','AI model'));field(root,'type',0)
     meta=ET.SubElement(root,'Metadata')
-    for k,v in {'author':'Amua user','dateCreated':'','versionCreated':'0.3.6','modifier':'Amua AI Workflow 3.2.4','dateModified':'','versionModified':'0.3.6'}.items():field(meta,k,v)
+    for k,v in {'author':'Amua user','dateCreated':'','versionCreated':'0.3.6','modifier':'Amua AI Workflow 3.3.3','dateModified':'','versionModified':'0.3.6'}.items():field(meta,k,v)
     dim=ET.SubElement(root,'DimInfo')
     for d in m['dimensions']:
         field(dim,'dimNames',d['name']);field(dim,'dimSymbols',d['symbol']);field(dim,'decimals',4)

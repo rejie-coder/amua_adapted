@@ -1,4 +1,4 @@
-# Built-in ChatGPT connection and model chat3.2.4
+# Built-in ChatGPT connection and model chat3.3.3
 
 The existing broker uses the user's eligible ChatGPT subscription through the account's issued authorization; credentials are protected in the compatible OS credential store. Provider eligibility/allowances remain authoritative. No silent API-billing fallback is supplied.
 

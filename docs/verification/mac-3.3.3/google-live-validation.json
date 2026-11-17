@@ -1,0 +1,8 @@
+{
+  "browser_sign_in_completed": true,
+  "saved_connection_status_observed": true,
+  "separate_final_process_authenticated_session": true,
+  "fresh_profile_did_not_reuse_active_login": true,
+  "agent_sent_model_prompt_for_validation": false,
+  "two_distinct_real_google_identities_verified": false
+}

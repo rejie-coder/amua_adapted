@@ -216,7 +216,7 @@ public class frmMain {
 				exit();
 			}
 		});
-		frmMain.setTitle("Amua (ReyJay) V 3.2.4 - Engine 0.3.6");
+		frmMain.setTitle("Amua (ReyJay) V 3.3.3 - Engine 0.3.6");
 		frmMain.setIconImage(Toolkit.getDefaultToolkit().getImage(frmMain.class.getResource("/images/logo_128.png")));
 
 		frmMain.setBounds(100, 100, 800, 600);
@@ -2168,7 +2168,7 @@ public class frmMain {
 			curModel=null;
 			scrollPaneFx.setViewportView(null);
 			scrollPaneNotes.setViewportView(null);
-			frmMain.setTitle("Amua (ReyJay) V 3.2.4 - Engine 0.3.6");
+			frmMain.setTitle("Amua (ReyJay) V 3.3.3 - Engine 0.3.6");
 			modelParameters.setRowCount(0);
 			modelVariables.setRowCount(0);
 			modelTables.setRowCount(0);
@@ -2452,7 +2452,7 @@ public class frmMain {
     }
     public main.Console workflowConsole(){return console;}
     public String workflowTitle(AmuaModel model){
-        String title="Amua (ReyJay) V 3.2.4 - Engine 0.3.6";
+        String title="Amua (ReyJay) V 3.3.3 - Engine 0.3.6";
         if(model==null)return title;
         return title+" - "+(model.name==null||model.name.trim().isEmpty()?"Untitled":model.name)+" ("+(model.filepath==null?"unsaved":model.filepath)+")";
     }
