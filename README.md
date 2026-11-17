@@ -8,6 +8,8 @@ Amua adapted is a desktop decision-tree and Markov modelling application based o
 
 [Install](docs/Installing.md) · [AI Workflow](docs/AI-Workflow.md) · [Documentation](docs/README.md) · [Wiki](https://github.com/rejie-coder/amua_adapted/wiki) · [Build](docs/Building.md)
 
+The release source asset contains application sources and documentation. For the complete repository and regression fixtures, use the [tagged repository source](https://github.com/rejie-coder/amua_adapted/archive/refs/tags/v3.3.3.tar.gz) or clone this repository.
+
 ## Mac 3.3.3
 
 - Google/Gemini sign-in uses Google's official Antigravity ACP runtime. The retired personal Gemini CLI is removed.
