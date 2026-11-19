@@ -4,7 +4,7 @@ R=Path(__file__).resolve().parents[2];sys.path.insert(0,str(R/'src'));sys.path.i
 from workflow.batches import selection_plan,intake_batch
 class BatchPrecision(unittest.TestCase):
  def test_actual_nashorn_json_roundtrip_preserves_file_metadata(self):
-  java=R/'build/toolchains/jdk8u512-b09/Contents/Home/bin/java'
+  java=R/'build/toolchains/zulu8.98.0.111-ca-jdk8.0.512-macosx_aarch64/Contents/Home/bin/java'
   with tempfile.TemporaryDirectory() as td:
    source=Path(td).resolve()/'source.txt';source.write_text('Selected synthetic source')
    plan=selection_plan([source]);entry=plan['entries'][0]

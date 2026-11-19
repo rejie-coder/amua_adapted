@@ -5,7 +5,7 @@ Original copyright and licence notices remain in the source and bundled runtime 
 | Component | Included purpose and source |
 | --- | --- |
 | Amua 0.3.6 by Zachary J. Ward | Original engine/framework; GPLv3-or-later headers and full licence retained. Adapted source is in `src/upstream`; [upstream source](https://github.com/zward/Amua) and pinned original release are recorded in the build manifest. |
-| Temurin OpenJDK 8u512-b09 | Bundled Java runtime and build compiler. Its retained `LICENSE`, `ASSEMBLY_EXCEPTION` and `THIRD_PARTY_README` describe GPLv2 with Classpath Exception and third-party notices. [Vendor binaries/source](https://github.com/adoptium/temurin8-binaries/releases/tag/jdk8u512-b09). |
+| Azul Zulu OpenJDK 8u512-b09 | Bundled Java runtime and build compiler. Its retained `LICENSE`, `ASSEMBLY_EXCEPTION` and `THIRD_PARTY_README` describe GPLv2 with Classpath Exception and third-party notices. [Vendor binaries/source](https://www.azul.com/downloads/?package=jdk#zulu). |
 | CPython 3.12.16 standalone | Bundled Python runtime from python-build-standalone. Its distribution licences and library notices are retained. [CPython source](https://github.com/python/cpython), [standalone build project](https://github.com/astral-sh/python-build-standalone). Exact artifact/hash is pinned. |
 | pypdf 7.1.0 | Local PDF parsing. Vendored source and BSD licence are retained under `src/dependencies/python` and bundled Python libraries. |
 | JFreeChart 1.0.19 and JCommon 1.0.23 | Original chart dependencies, distributed within the pinned upstream container. LGPL notices/source are available from the respective [JFreeChart](https://github.com/jfree/jfreechart) and [JCommon](https://github.com/jfree/jcommon) projects. |

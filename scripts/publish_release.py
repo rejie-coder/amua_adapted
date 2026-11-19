@@ -1,4 +1,4 @@
-"""Publish checked Intel assets as a GitHub preview. GITHUB_TOKEN stays in memory."""
+"""Publish checked Apple Silicon assets as a GitHub preview. GITHUB_TOKEN stays in memory."""
 from pathlib import Path
 import hashlib,json,os,urllib.error,urllib.parse,urllib.request
 ROOT=Path(__file__).resolve().parents[1];REPO='rejie-coder/amua_adapted'
@@ -11,12 +11,12 @@ def main():
   if body is not None:headers['Content-Type']='application/octet-stream' if binary else 'application/json'
   with urllib.request.urlopen(urllib.request.Request(url,data=body,headers=headers,method=method),timeout=180) as response:return json.load(response)
  report=json.loads((ROOT/'evidence/release-verification.json').read_text());assert report['application_classes_match_local_candidate']==718
- try:release=request('GET',base+'/releases/tags/v3.3.3')
+ try:release=request('GET',base+'/releases/tags/v3.3.3-arm64')
  except urllib.error.HTTPError as error:
   if error.code!=404:raise
   release=None
  if release is not None and (not release['draft'] or release['target_commitish']!=commit):raise SystemExit('An existing release belongs to another commit or is already public; refusing to replace it')
- if release is None:release=request('POST',base+'/releases',{'tag_name':'v3.3.3','target_commitish':commit,'name':'Amua 3.3.3 for Intel Mac — preview','body':(ROOT/'docs/Release-Notes-3.3.3.md').read_text(),'draft':True,'prerelease':True})
+ if release is None:release=request('POST',base+'/releases',{'tag_name':'v3.3.3-arm64','target_commitish':commit,'name':'Amua 3.3.3 for Apple Silicon — preview','body':(ROOT/'docs/Release-Notes-3.3.3-arm64.md').read_text(),'draft':True,'prerelease':True})
  existing={a['name']:a for a in release.get('assets',[])}
  for path in sorted((ROOT/'dist').iterdir()):
   if not path.is_file():continue
@@ -25,6 +25,7 @@ def main():
  # Verify uploaded checksums, then read the DMG and ZIP back before publication.
  expected={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (ROOT/'dist').iterdir() if p.is_file()}
  current=request('GET',base+'/releases/'+str(release['id']))
+ if {a['name'] for a in current['assets']} != set(expected):raise RuntimeError('Uploaded release asset set differs from dist')
  for asset in current['assets']:
   if asset['name'] not in expected or asset.get('digest')!='sha256:'+expected[asset['name']]:raise RuntimeError('Uploaded asset digest mismatch: '+asset['name'])
  readbacks={}

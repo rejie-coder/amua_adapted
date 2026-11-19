@@ -1,6 +1,6 @@
 from pathlib import Path
 import subprocess,json,hashlib
-R=Path(__file__).resolve().parents[2];RES=R/'Amua.app/Contents/Resources';JAVA=RES/'runtime/bin/java';JAR=RES/'Amua_0.3.6.jar';JC=R/'build/toolchains/jdk8u512-b09/Contents/Home/bin/javac'
+R=Path(__file__).resolve().parents[2];RES=R/'Amua.app/Contents/Resources';JAVA=RES/'runtime/bin/java';JAR=RES/'Amua_0.3.6.jar';JC=R/'build/toolchains/zulu8.98.0.111-ca-jdk8.0.512-macosx_aarch64/Contents/Home/bin/javac'
 REPORT={}
 def run(name,cmd,**kwargs):
  p=subprocess.run([str(x) for x in cmd],text=True,capture_output=True,timeout=90,**kwargs);(R/'evidence'/(name+'.txt')).write_text(p.stdout+p.stderr);REPORT[name]={'returncode':p.returncode,'stdout':p.stdout[-5000:]};print(name,p.returncode,p.stdout[-1000:],flush=True);return p

@@ -1,21 +1,24 @@
-name: Intel Mac build and release
+name: Apple Silicon build and release
 on:
   push:
-    branches: [main]
+    branches: [macos-3.3.3-arm64]
   workflow_dispatch:
     inputs:
       publish:
-        description: Publish the verified Intel preview if this version has no public release
+        description: Publish the verified Apple Silicon preview if this version has no public release
         type: boolean
         default: false
 permissions:
   contents: read
 concurrency:
-  group: intel-mac-${{ github.ref }}
+  group: arm64-mac-${{ github.ref }}
   cancel-in-progress: false
 jobs:
-  intel:
-    runs-on: macos-15-intel
+  arm64:
+    runs-on: macos-15
+    defaults:
+      run:
+        shell: bash
     timeout-minutes: 35
     permissions:
       contents: write
@@ -23,10 +26,10 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, Node.js 24
         with:
           persist-credentials: false
-      - name: Fetch verified Intel build inputs
-        run: python3 scripts/bootstrap_intel.py
-      - name: Build native Intel app from source
-        run: build/toolchains/python/bin/python3 -B src/native-support/build.py > build/build-output.txt 2>&1
+      - name: Fetch verified Apple Silicon build inputs
+        run: python3 scripts/bootstrap_arm64.py
+      - name: Build native Apple Silicon app from source
+        run: build/toolchains/python/bin/python3 -B src/native-support/build.py 2>&1 | tee build/build-output.txt
       - name: Run all required checks
         run: |
           set +e
@@ -34,24 +37,25 @@ jobs:
           check_status=$?
           set -e
           printf 'Full check runner exit: %s\n' "$check_status"
+          cat evidence/release-checks-output.txt
           test "$check_status" -eq 0
           python3 scripts/verify_release.py
+      - name: Launch the packaged app and inspect its native window
+        run: |
+          Amua.app/Contents/Resources/python/bin/python3 -B Amua.app/Contents/Resources/amua_mcp.py --check > evidence/arm64-launch.json
+          python3 -c "import json; r=json.load(open('evidence/arm64-launch.json')); assert r['architecture'] in ('arm64','aarch64') and r['live_app_ready'] and r['visible_windows'] > 0, r; print(r)"
       - name: Build and read back installation DMG and source archive
-        run: python3 scripts/package_intel.py
-      - name: Publish Intel preview with checked assets
-        if: github.event_name == 'workflow_dispatch' && inputs.publish || github.event_name == 'push' && contains(github.event.head_commit.message, '[publish-intel]')
+        run: python3 scripts/package_arm64.py
+      - name: Publish Apple Silicon preview with checked assets
+        if: github.event_name == 'workflow_dispatch' && inputs.publish || github.event_name == 'push' && contains(github.event.head_commit.message, '[publish-arm64]')
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python3 scripts/publish_release.py
-      - name: Sync reviewed wiki pages when initialized
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: python3 scripts/sync_wiki.py
       - name: Retain exact checks and package evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2, Node.js 24
         with:
-          name: Intel-Mac-build-and-evidence
+          name: Apple-Silicon-build-and-evidence
           path: |
             dist/
             evidence/

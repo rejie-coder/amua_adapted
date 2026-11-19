@@ -26,7 +26,7 @@ def main():
     variable=ROOT/'tests/hardening/fixtures/variable-updates.amua';context=mc.context(None,{'xml':variable.read_text(),'sha256':'synthetic'})
     corrected=fixtures/'variable-corrected.amua';corrected.write_text(mc.xml_for(mc.local_answer('approve structure',context),context))
     sources=list((ROOT/'tests/ui').glob('*.java'))+[ROOT/'tests/bridge'/name for name in ('AtomicSaveCheck.java','HeadlessEngineCheck.java','HeadlessPresentationCheck.java')]
-    _,code=run('compile-checks',[ROOT/'build/toolchains/jdk8u512-b09/Contents/Home/bin/javac','-encoding','UTF-8','-cp',JAR,'-d',CLASSES,*sources])
+    _,code=run('compile-checks',[ROOT/'build/toolchains/zulu8.98.0.111-ca-jdk8.0.512-macosx_aarch64/Contents/Home/bin/javac','-encoding','UTF-8','-cp',JAR,'-d',CLASSES,*sources])
     if code:raise SystemExit(code)
     cp=str(JAR)+':'+str(CLASSES)
     def java(name,klass,*args):

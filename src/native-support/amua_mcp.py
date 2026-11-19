@@ -173,7 +173,7 @@ def tool(operation, description, properties=None, required=None, read=False):
 
 ID = prop('string', 'Component id returned by amua_inspect, e.g. c42.')
 TOOLS = [
-    tool('launch', 'Launch or focus the installed Intel Mac Amua app. Does not open or alter a model.'),
+    tool('launch', 'Launch or focus the installed Mac Amua app. Does not open or alter a model.'),
     tool('status', 'Read process state, UI responsiveness and operations. A completed Run click starts AMUA’s own worker; inspect console for analysis completion.', {'operation_id':prop('string')},read=True),
     tool('inspect', 'Read visible AMUA windows and Swing controls, including menus, labels, editable fields, tables and stable component ids. Inspect before acting; inspect again after a dialog opens.',
          {'max_nodes':prop('integer',minimum=1,maximum=3000), 'window':prop('string')}, read=True),

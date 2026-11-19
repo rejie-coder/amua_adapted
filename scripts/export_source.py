@@ -3,7 +3,7 @@ from pathlib import Path
 import tarfile
 ROOT=Path(__file__).resolve().parents[1]
 def export():
- target=ROOT/'dist/Amua-3.3.3-source.tar.gz';target.parent.mkdir(exist_ok=True)
+ target=ROOT/'dist/Amua-3.3.3-arm64-source.tar.gz';target.parent.mkdir(exist_ok=True)
  with tarfile.open(target,'w:gz') as tar:
   for item in sorted(ROOT.iterdir()):
    if item.name in {'.git','build','dist','Amua.app','evidence','__pycache__'}:continue

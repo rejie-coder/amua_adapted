@@ -1,6 +1,6 @@
-"""Fetch pinned Intel build inputs, verifying SHA256 before extraction/use."""
+"""Fetch pinned Apple Silicon build inputs, verifying SHA256 before extraction/use."""
 from pathlib import Path
-import argparse,hashlib,json,shutil,subprocess,tarfile,tempfile,urllib.request
+import platform,hashlib,json,shutil,subprocess,tarfile,tempfile,urllib.request
 ROOT=Path(__file__).resolve().parents[1]
 def sha(path):
  h=hashlib.sha256()
@@ -26,22 +26,16 @@ def extract(archive,destination):
     if link!=base and base not in link.parents:raise RuntimeError('Archive link escapes destination')
   tar.extractall(base)
 def main():
- p=argparse.ArgumentParser();p.add_argument('--seed',type=Path,help='Use the already retained local 3.3.3 toolchains; no downloads.');a=p.parse_args()
- manifest=json.loads((ROOT/'scripts/toolchains-intel.json').read_text());baseline=ROOT/manifest['baseline']['target'];tools=ROOT/'build/toolchains';tools.mkdir(parents=True,exist_ok=True)
- if a.seed:
-  source=a.seed.resolve();candidate=source/'src/dependencies/baseline-fat-dependencies.jar'
-  if sha(candidate)!=manifest['baseline']['sha256']:raise RuntimeError('Local baseline SHA256 mismatch')
-  baseline.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(candidate,baseline)
-  for name in ['jdk8u512-b09','python']:
-   if not (tools/name).exists():shutil.copytree(source/'build/toolchains'/name,tools/name,symlinks=True)
- else:
-  download(manifest['baseline'],baseline)
-  for name,sentinel in [('jdk',tools/'jdk8u512-b09/Contents/Home/bin/javac'),('python',tools/'python/bin/python3')]:
-   if not sentinel.exists():
-    archive=ROOT/'build/downloads'/(name+'.tar.gz');download(manifest[name],archive);extract(archive,tools)
+ if platform.system() != 'Darwin' or platform.machine() != 'arm64':
+  raise SystemExit('Build on a native Apple Silicon Mac.')
+ manifest=json.loads((ROOT/'scripts/toolchains-arm64.json').read_text());baseline=ROOT/manifest['baseline']['target'];tools=ROOT/'build/toolchains';tools.mkdir(parents=True,exist_ok=True)
+ download(manifest['baseline'],baseline)
+ for name,sentinel in [('jdk',tools/'zulu8.98.0.111-ca-jdk8.0.512-macosx_aarch64/Contents/Home/bin/javac'),('python',tools/'python/bin/python3')]:
+  if not sentinel.exists():
+   archive=ROOT/'build/downloads'/(name+'.tar.gz');download(manifest[name],archive);extract(archive,tools)
  if sha(baseline)!=manifest['baseline']['sha256']:raise RuntimeError('Baseline container is not the approved version')
- for command in [[tools/'jdk8u512-b09/Contents/Home/bin/javac','-version'],[tools/'python/bin/python3','--version']]:subprocess.run([str(c) for c in command],check=True)
- (ROOT/'build/toolchain-provenance.json').write_text(json.dumps({'inputs':manifest,'local_seed':bool(a.seed)},indent=2)+'\n')
+ for command in [[tools/'zulu8.98.0.111-ca-jdk8.0.512-macosx_aarch64/Contents/Home/bin/javac','-version'],[tools/'python/bin/python3','--version']]:subprocess.run([str(c) for c in command],check=True)
+ (ROOT/'build/toolchain-provenance.json').write_text(json.dumps({'inputs':manifest},indent=2)+'\n')
  subprocess.run([str(tools/'python/bin/python3'),'-B',str(ROOT/'src/native-support/bootstrap_antigravity.py')],check=True)
- print('Pinned Intel inputs ready; baseline SHA256 verified.')
+ print('Pinned Apple Silicon inputs ready; baseline SHA256 verified.')
 if __name__=='__main__':main()

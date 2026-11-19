@@ -1,4 +1,4 @@
-"""Accept no new failure; retain the exact documented OCR limitation as a preview waiver."""
+"""Require passing native checks and exact application bytecode parity."""
 from pathlib import Path
 import hashlib,json,re,zipfile
 ROOT=Path(__file__).resolve().parents[1]
@@ -10,6 +10,6 @@ def main():
   different=[n for n,v in expected.items() if hashlib.sha256(z.read(n)).hexdigest()!=v]
  if different:raise SystemExit('Compiled code differs from checked local 3.3.3: '+', '.join(different[:5]))
  skips={name:re.findall(r'^(.+?) \.\.\. skipped (.+)$',(ROOT/'evidence'/checks[name]['log']).read_text(),re.M) for name in ('provider-final','workflow-final')}
- report={'reported_skips':skips,'version':'3.3.3','architecture':'x86_64','check_groups':checks,'documented_waivers':waivers,'application_classes_match_local_candidate':len(expected),'jar_sha256':hashlib.sha256(jar.read_bytes()).hexdigest(),'release_type':'prerelease','signing':'ad hoc; not Developer ID/notarized','local_google_login_and_saved_session_verified':True,'hosted_account_tests_use_no_credentials':True,'live_account_vision_acceptance':False,'apple_silicon_native':False}
+ report={'reported_skips':skips,'version':'3.3.3','architecture':'arm64','check_groups':checks,'documented_waivers':waivers,'application_classes_match_local_candidate':len(expected),'jar_sha256':hashlib.sha256(jar.read_bytes()).hexdigest(),'release_type':'prerelease','signing':'ad hoc; not Developer ID/notarized','apple_silicon_live_google_login_verified':False,'hosted_account_tests_use_no_credentials':True,'live_account_vision_acceptance':False,'apple_silicon_native':True}
  (ROOT/'evidence/release-verification.json').write_text(json.dumps(report,indent=2)+'\n');print('Release verification passed with',len(waivers),'explicit OCR waiver(s);',len(expected),'application classes match.')
 if __name__=='__main__':main()

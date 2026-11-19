@@ -1,7 +1,7 @@
-Amua 3.3.3 for Intel Mac — preview
+Amua 3.3.3 for Apple Silicon — preview
 
-Requirements: Intel x86_64 Mac,macOS 14 or later. Java,Python and Google's native
-Antigravity runtime are bundled. This is not a native AppleSilicon build.
+Requirements: M-series Mac, macOS 14 or later. Java,Python and Google's native
+Antigravity runtime are bundled.
 
 1. Drag Amua.app to Applications.
 2. Eject the disk image and open the installed app.
@@ -16,7 +16,7 @@ Manual modelling works without AI sign-in. Review scientific inputs and run
 full original validation before calculations.
 
 Downloads,source,checksums and verification:
-https://github.com/rejie-coder/amua_adapted/releases/tag/v3.3.3
+https://github.com/rejie-coder/amua_adapted/releases/tag/v3.3.3-arm64
 
 Original Amua by Zachary J. Ward.
 Adapted and developed by Dr. Rejinten Jayawardhana.

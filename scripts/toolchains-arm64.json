@@ -1,0 +1,19 @@
+{
+  "architecture": "arm64",
+  "minimum_macos": "14.0",
+  "baseline": {
+    "url": "https://github.com/zward/Amua/releases/download/v0.3.6/Amua_0.3.6.jar",
+    "sha256": "a302b61cf2a855804dcdadbe06b2b5fceff25eb835ed7b7c04b706a6a469fa18",
+    "target": "src/dependencies/baseline-fat-dependencies.jar"
+  },
+  "jdk": {
+    "url": "https://cdn.azul.com/zulu/bin/zulu8.98.0.111-ca-jdk8.0.512-macosx_aarch64.tar.gz",
+    "sha256": "523a350b96563e1ff406cf3c55e0211a5816b482a67b5f88a5ea9ba799fd32be",
+    "directory": "build/toolchains"
+  },
+  "python": {
+    "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20261110/cpython-3.12.16%2B20261110-aarch64-apple-darwin-install_only.tar.gz",
+    "sha256": "e956e60bc9465d577ef8062059aa05cd3a2665b4b8678a2ed24e432368330b8f",
+    "directory": "build/toolchains"
+  }
+}
