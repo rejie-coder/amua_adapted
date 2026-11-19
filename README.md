@@ -1,6 +1,8 @@
 # Amua adapted
 
-Amua adapted is a desktop decision-tree and Markov modelling application based on **Amua by Zachary J. Ward**, adapted and developed by **Dr. Rejinten Jayawardhana**. This repository contains the editable engine, integrated AI Workflow, local MCP bridge and Intel Mac packaging source. Windows source and binaries have separate release tags.
+Amua adapted is a desktop decision-tree and Markov modelling application based on **Amua by Zachary J. Ward**, adapted and developed by **Dr. Rejinten Jayawardhana**. This repository contains the editable engine, integrated AI Workflow, local MCP bridge and Intel Mac packaging source. Apple Silicon and Windows source and binaries have separate release tags.
+
+**Apple Silicon 3.3.3 (M-series, macOS 14+)** · [Download the DMG](https://github.com/rejie-coder/amua_adapted/releases/download/v3.3.3-arm64/Amua-3.3.3-macOS-Apple-Silicon.dmg) · [Release notes, source and checksums](https://github.com/rejie-coder/amua_adapted/releases/tag/v3.3.3-arm64)
 
 **Intel Mac 3.3.3 (macOS 14+)**: [installation DMG](https://github.com/rejie-coder/amua_adapted/releases/download/v3.3.3/Amua-3.3.3-macOS-Intel.dmg) · [all assets and checksums](https://github.com/rejie-coder/amua_adapted/releases/tag/v3.3.3) · [release notes](docs/Release-Notes-3.3.3.md).
 
@@ -22,7 +24,7 @@ Google browser sign-in and reuse of the saved connection were verified locally. 
 
 ## Install and verify
 
-Download the DMG, open it and drag **Amua.app** into **Applications**. Eject the image and open the installed app. Requires Intel x86_64 and macOS 14 or later; native Apple Silicon is not included.
+Download the DMG, open it and drag **Amua.app** into **Applications**. Eject the image and open the installed app. Both Mac installers require macOS 14 or later. Choose the Apple Silicon DMG for an M-series Mac or the Intel DMG for an Intel Mac.
 
 The outer app is ad hoc signed and **not Apple-notarized**. Follow normal macOS Privacy & Security review if first launch is blocked; do not disable Gatekeeper globally. Check SHA256SUMS and the release's build provenance. The native Google executable retains Google's Developer ID signature.
 
